@@ -5,3 +5,55 @@ set client_min_messages to warning;
 drop schema "public" cascade;
 
 create schema "public";
+
+CREATE TABLE "public"."users" (
+	"firstname" TEXT NOT NULL,
+	"lastname" TEXT NOT NULL,
+	"createdat" TIMESTAMP NOT NULL,
+	"lastlogin" TIMESTAMP NOT NULL,
+	"password" TEXT NOT NULL,
+	"username" TEXT NOT NULL UNIQUE,
+	"email" TEXT NOT NULL UNIQUE,
+	"userId" serial NOT NULL,
+	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "public"."records" (
+	"userId" integer NOT NULL,
+	"month" integer NOT NULL,
+	"year" integer NOT NULL,
+	"day" integer NOT NULL,
+	"source" TEXT NOT NULL,
+	"inOut" BOOLEAN NOT NULL,
+	"created" TIMESTAMP NOT NULL,
+	"recordId" serial NOT NULL,
+	"numberOfItems" integer NOT NULL,
+	"totalSpent" DECIMAL NOT NULL,
+	CONSTRAINT "records_pk" PRIMARY KEY ("recordId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE "public"."items" (
+	"recordId" integer NOT NULL,
+	"category" TEXT NOT NULL,
+	"amount" DECIMAL NOT NULL,
+	"itemname" TEXT NOT NULL,
+	"itemId" serial NOT NULL,
+	CONSTRAINT "items_pk" PRIMARY KEY ("itemId")
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+
+ALTER TABLE "records" ADD CONSTRAINT "records_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
+
+ALTER TABLE "items" ADD CONSTRAINT "items_fk0" FOREIGN KEY ("recordId") REFERENCES "records"("recordId");
