@@ -52,7 +52,7 @@ app.post('/getsome/fires/record', async (req, res, next) => {
               values ($1, $2, $3, $4, $5, $6, $7, $8)
               returning *;
               `;
-  const params = [body.userId, body.month, body.day, body.year, body.source, body.inOut, body.numberOfItems, body.totalSpent];
+  const params = [1, body.month, body.day, body.year, body.source, body.inOut, body.numberOfItems, body.totalSpent];
   try {
     console.log('adding record as:', params);
     const data = await db.query(sql, params);
