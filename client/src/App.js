@@ -3,6 +3,7 @@ import './App.css';
 import { useMediaQuery } from 'react-responsive';
 import Nav from './Components/Nav';
 import AppContext from './Components/AppContext';
+import RecordForm from './Components/RecordForm';
 
 function App() {
   const isDesktopOrLaptop = useMediaQuery({
@@ -15,6 +16,7 @@ function App() {
     <AppContext.Provider value={appState}>
       <div className="App">
         <Nav />
+        <RecordForm />
       </div>
     </AppContext.Provider>
   );
