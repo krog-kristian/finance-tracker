@@ -1,4 +1,3 @@
-import CurrencyInput from 'react-currency-input-field';
 import { useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { ItemForms } from './ItemsForms.jsx';
@@ -25,8 +24,7 @@ export default function RecordForm() {
         body: JSON.stringify(Object.fromEntries(form.entries()))
       });
       if(!response.ok) throw new Error(`Server error: ${response.status}`)
-      const responseBody = await response.json();
-      console.log('Success form sent', responseBody);
+      e.target.reset();
     } catch (err) {
       console.error(err)
     }
@@ -35,7 +33,7 @@ export default function RecordForm() {
   return (
     <>
       <h1>New Record</h1>
-      <form className='container-xl p-3' style={{ backgroundColor: '#595959', color: 'white'}} onSubmit={handleSubmit}>
+      <form className='container-xl p-3' style={{ backgroundColor: '#595959', color: 'white'}} onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
 
       <div className='row g-3'>
         <div className='mb-3 col'>
@@ -60,7 +58,7 @@ export default function RecordForm() {
 
         <div className='mb-3 col'>
               <label htmlFor="total" className="form-label">Total $</label>
-              <CurrencyInput className="form-control" required id='total' name='total' placeholder='Enter total $' decimalsLimit={2} onValueChange={(value, name) => console.log(value, name)} />
+              <input type='number' placeholder='Total $' step={0.01} className="form-control" required id='total' name='total' />
         </div>
 
         <div className='mb-3 col'>
@@ -68,9 +66,13 @@ export default function RecordForm() {
               <input required className="form-control" type="date" name="date" id="date" onChange={(e) => console.log('the date', e.target.value)}/>
         </div>
       </div>
+        <div className='d-flex justify-content-evenly'>
 
-        <Button size='lg' variant='success'>Save Record</Button>
+          <Button type='submit' size='lg' variant='success'>Save Record</Button>
 
+          <Button type='reset' size='lg' variant='danger' style={{ whiteSpace: 'pre' }}>   Reset   </Button>
+
+        </div>
       <ItemForms numberOfItems={items} out={out}/>
 
     </form>

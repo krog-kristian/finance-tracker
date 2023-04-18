@@ -1,5 +1,3 @@
-import CurrencyInput from 'react-currency-input-field';
-
 export function ItemForms({ numberOfItems, out }) {
 
   const form = [];
@@ -23,7 +21,7 @@ export function ItemForms({ numberOfItems, out }) {
 
           <div className='col'>
             <label className="form-label" htmlFor={`itemAmt${i}`}>Amount</label>
-            <CurrencyInput className="form-control" required id={`itemAmt${i}`} name={`itemAmt${i}`} placeholder='Amount $' decimalsLimit={2} />
+            <input type='number' className="form-control" required id={`itemAmt${i}`} name={`itemAmt${i}`} placeholder='Amount $' step={0.01} />
           </div>
         </div>
 

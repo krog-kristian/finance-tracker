@@ -1,4 +1,3 @@
-// import { useEffect, useState } from 'react';
 import './App.css';
 import { useMediaQuery } from 'react-responsive';
 import Nav from './Components/Nav';
