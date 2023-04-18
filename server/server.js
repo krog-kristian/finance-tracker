@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express from 'express';
 import errorMiddleware from './lib/error-middleware.js';
 import pg from 'pg';
+import ClientError from './lib/client-error.js';
+import { createItemsList, createItemsSql } from './lib/form-prepare.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -41,32 +43,29 @@ app.post('/getsome/fires', async (req, res, next) => {
 });
 
 /**
- * Post for a record entry, no auth required till user accounts feature added.
- * Requires userId added to body at this point in time.
+ * Inserts the record in the records table and uses the ID returned,
+ * to insert aa varying amount of item rows into the items table.
+ * Requires userId, hard coded a demo userId into params for now.
  */
 app.post('/getsome/fires/record', async (req, res, next) => {
   const { inOut, source, numberOfItems, total, date } = req.body;
   const dateArray = date.split('-');
   const [year, month, day] = dateArray;
-  console.log('the form', req.body);
-  const sql = `
+  try {
+    const sql = `
               insert into "records" ("userId", "month", "day", "year", "source", "inOut", "numberOfItems", "totalSpent")
               values ($1, $2, $3, $4, $5, $6, $7, $8)
               returning *;
               `;
-  const params = [1, month, day, year, source, inOut, numberOfItems, total];
-  try {
-    console.log('adding record as:', params);
+    const params = [1, month, day, year, source, inOut, numberOfItems, total];
+    if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Incomplete form.');
     const data = await db.query(sql, params);
+    if (!data.rows[0]) throw new ClientError(500, 'Database failure, aborting.');
     const { recordId } = data.rows[0];
     const itemsSql = createItemsSql(numberOfItems, recordId);
-    console.log('The item sql', itemsSql);
     const items = createItemsList(req, numberOfItems, recordId);
-    console.log(items);
     const dataItems = await db.query(itemsSql, items);
-    console.log(dataItems);
     const response = { record: data.rows[0], items: dataItems.rows[0] };
-    console.log(response);
     res.status(201).json(response);
   } catch (err) {
     next(err);
@@ -82,33 +81,3 @@ app.use(errorMiddleware);
 app.listen(process.env.PORT, () => {
   process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
 });
-
-function createItemsList(req, numberOfItems, recordId) {
-  const items = [];
-  for (let i = 0; i < numberOfItems; i++) {
-    items.push(recordId, req.body[`item${i}`], req.body[`itemCat${i}`], Number(req.body[`itemAmt${i}`]));
-  }
-  return items;
-}
-
-function createItemsSql(numberOfItems, recordId) {
-  const values = (numberOfItems) => {
-    let stringValues = '(';
-    for (let i = 0; i < (numberOfItems * 4); i++) {
-      if ((i + 1) === Number(numberOfItems * 4)) {
-        stringValues += `$${i + 1})`;
-      } else if ((i + 1) % 4 === 0) {
-        stringValues += `$${i + 1}), (`;
-      } else {
-        stringValues += `$${i + 1}, `;
-      }
-    }
-    return stringValues;
-  };
-  const sql = `
-              insert into "items" ("recordId", "itemname", "category", "amount")
-              values ${values(numberOfItems)}
-              returning *;
-              `;
-  return sql;
-}
