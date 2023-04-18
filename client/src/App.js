@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import Nav from './Components/Nav';
 import AppContext from './Components/AppContext';
 import RecordForm from './Components/RecordForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const isDesktopOrLaptop = useMediaQuery({
@@ -16,6 +17,7 @@ function App() {
     <AppContext.Provider value={appState}>
       <div className="App">
         <Nav />
+        <div className='spacer' />
         <RecordForm />
       </div>
     </AppContext.Provider>

@@ -4,18 +4,14 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 import '../App.css';
 import { useContext } from 'react';
 import AppContext from './AppContext';
+import Button from 'react-bootstrap/Button';
 
 export default function Nav() {
 const { isDesktopOrLaptop } = useContext(AppContext)
 
   return (
     <div className='Nav'>
-      <div className='logo-link' style={{
-        backgroundColor: 'green',
-        width: 10,
-        height: 10
-      }}>
-      </div>
+      <a href="blank" className='.navbar-brand '>My Logo</a>
       {isDesktopOrLaptop ? <NavDesktop /> : <NavMobile />}
     </div>
   );
@@ -32,7 +28,7 @@ function NavMobile() {
 function NavDesktop() {
   return (
     <div className='nav-links'>
-      <button>Button</button>
+      <Button variant='warning'>Sign Out</Button>{' '}
     </div >
   );
 }
