@@ -49,9 +49,6 @@ app.post('/getsome/fires/record', async (req, res, next) => {
   const dateArray = date.split('-');
   const [year, month, day] = dateArray;
   console.log('the form', req.body);
-  const items = createItemsList(req, numberOfItems);
-  console.log('The items!', items);
-  // const itemsSql = createItemsSql(numberOfItems, recordId);
   const sql = `
               insert into "records" ("userId", "month", "day", "year", "source", "inOut", "numberOfItems", "totalSpent")
               values ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -63,10 +60,13 @@ app.post('/getsome/fires/record', async (req, res, next) => {
     const data = await db.query(sql, params);
     const { recordId } = data.rows[0];
     const itemsSql = createItemsSql(numberOfItems, recordId);
-    console.log(data.rows);
     console.log('The item sql', itemsSql);
-    console.log('the record:', recordId);
-    const response = { record: data.rows[0] };
+    const items = createItemsList(req, numberOfItems, recordId);
+    console.log(items);
+    const dataItems = await db.query(itemsSql, items);
+    console.log(dataItems);
+    const response = { record: data.rows[0], items: dataItems.rows[0] };
+    console.log(response);
     res.status(201).json(response);
   } catch (err) {
     next(err);
@@ -83,31 +83,31 @@ app.listen(process.env.PORT, () => {
   process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
 });
 
-function createItemsList(req, numberOfItems) {
+function createItemsList(req, numberOfItems, recordId) {
   const items = [];
   for (let i = 0; i < numberOfItems; i++) {
-    const item = [req.body[`item${i}`], req.body[`itemCat${i}`], req.body[`itemAmt${i}`]
-    ];
-    items.push(item);
+    items.push(recordId, req.body[`item${i}`], req.body[`itemCat${i}`], Number(req.body[`itemAmt${i}`]));
   }
   return items;
 }
 
 function createItemsSql(numberOfItems, recordId) {
   const values = (numberOfItems) => {
-    let stringValues = '';
-    for (let i = 0; i < numberOfItems; i++) {
-      if ((i + 1) === Number(numberOfItems)) {
-        stringValues += `($${i + 1})`;
+    let stringValues = '(';
+    for (let i = 0; i < (numberOfItems * 4); i++) {
+      if ((i + 1) === Number(numberOfItems * 4)) {
+        stringValues += `$${i + 1})`;
+      } else if ((i + 1) % 4 === 0) {
+        stringValues += `$${i + 1}), (`;
       } else {
-        stringValues += `($${i + 1}),`;
+        stringValues += `$${i + 1}, `;
       }
     }
     return stringValues;
   };
   const sql = `
-              insert into "items" ("recordId", "category", "amount", "itemname")
-              values (${values(numberOfItems)})
+              insert into "items" ("recordId", "itemname", "category", "amount")
+              values ${values(numberOfItems)}
               returning *;
               `;
   return sql;
