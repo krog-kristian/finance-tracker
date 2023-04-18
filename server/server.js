@@ -24,7 +24,7 @@ app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
 // Sign up post to insert a user, incomplete just for testing purposes.
-app.post('/getsome/fires', async (req, res, next) => {
+app.post('/api/user', async (req, res, next) => {
   console.log('hello');
   const upload = req.body;
   try {
@@ -47,7 +47,7 @@ app.post('/getsome/fires', async (req, res, next) => {
  * to insert aa varying amount of item rows into the items table.
  * Requires userId, hard coded a demo userId into params for now.
  */
-app.post('/getsome/fires/record', async (req, res, next) => {
+app.post('/api/record', async (req, res, next) => {
   const { inOut, source, numberOfItems, total, date } = req.body;
   const dateArray = date.split('-');
   const [year, month, day] = dateArray;

@@ -16,10 +16,10 @@ export default function RecordForm() {
     try {
       e.preventDefault();
       const form = new FormData(e.target)
-      const response = await fetch('/getsome/fires/record', {
+      const response = await fetch('/api/record', {
         method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(Object.fromEntries(form.entries()))
       });
@@ -37,33 +37,33 @@ export default function RecordForm() {
 
       <div className='row g-3'>
         <div className='mb-3 col'>
-              <label htmlFor="inOut" className="form-label">Select Type</label>
-          <select className='form-select' required name="inOut" id="inOut" onChange={(e) => setOut(!out)}>
+          <label htmlFor='inOut' className='form-label'>Select Type</label>
+          <select className='form-select' required name='inOut' id='inOut' onChange={(e) => setOut(!out)}>
             <option value={true}>Money Out</option>
             <option value={false}>Money In</option>
           </select>
         </div>
 
         <div className='mb-3 col'>
-              <label htmlFor="source" className="form-label">Source:</label>
-              <input required type="text" id="source" name="source" className="form-control" />
+            <label htmlFor='source' className='form-label'>Source:</label>
+            <input required type='text' id='source' name='source' className='form-control' placeholder='From where?' />
         </div>
       </div>
 
       <div className='row g-3'>
         <div className='mb-3 col'>
-              <label htmlFor="numberOfItems" className="form-label"># of Items</label>
-              <input className="form-control" required type="number" name="numberOfItems" defaultValue={1} id="numberOfItems" min={1} max={20} onChange={(e) => handleItems(e)} />
+            <label htmlFor='numberOfItems' className='form-label'># of Items</label>
+            <input className='form-control' required type='number' name='numberOfItems' defaultValue={1} id='numberOfItems' min={1} max={20} onChange={(e) => handleItems(e)} />
         </div>
 
         <div className='mb-3 col'>
-              <label htmlFor="total" className="form-label">Total $</label>
-              <input type='number' placeholder='Total $' step={0.01} className="form-control" required id='total' name='total' />
+            <label htmlFor='total' className='form-label'>Total $</label>
+            <input type='number' placeholder='Total $' step={0.01} className='form-control' required id='total' name='total' />
         </div>
 
         <div className='mb-3 col'>
-              <label htmlFor="date" className="form-label">Date</label>
-              <input required className="form-control" type="date" name="date" id="date" onChange={(e) => console.log('the date', e.target.value)}/>
+            <label htmlFor='date' className='form-label'>Date</label>
+            <input required className='form-control' type='date' name='date' id='date' />
         </div>
       </div>
         <div className='d-flex justify-content-evenly'>
