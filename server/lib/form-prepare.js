@@ -17,7 +17,9 @@ function createItemsList(req, numberOfItems, recordId) {
 }
 
 /**
- * Creates the SQl for inserting a dynamic amount of rows into the items table.
+ * Creates the SQl for inserting a dynamic amount of rows by
+ * by grouping an array of item properties into groups.
+ * Example ($1, $2, $3, $4), ($5, $6, $7, $8)
  * @param {number} numberOfItems being inserted into the table.
  * @returns SQL string.
  */
@@ -25,7 +27,7 @@ function createItemsSql(numberOfItems) {
   const values = (numberOfItems) => {
     let stringValues = '(';
     for (let i = 0; i < (numberOfItems * 4); i++) {
-      if ((i + 1) === Number(numberOfItems * 4)) {
+      if ((i + 1) === (numberOfItems * 4)) {
         stringValues += `$${i + 1})`;
       } else if ((i + 1) % 4 === 0) {
         stringValues += `$${i + 1}), (`;

@@ -1,16 +1,16 @@
 import './App.css';
 import { useMediaQuery } from 'react-responsive';
-import Nav from './Components/Nav';
-import AppContext from './Components/AppContext';
-import RecordForm from './Components/RecordForm';
+import Nav from './components/Nav';
+import AppContext from './components/AppContext';
+import RecordForm from './components/RecordForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const isDesktopOrLaptop = useMediaQuery({
+  const isLargeScreen = useMediaQuery({
     query: '(min-width: 900px)'
   });
 
-  const appState = { isDesktopOrLaptop }
+  const appState = { isLargeScreen }
 
   return (
     <AppContext.Provider value={appState}>

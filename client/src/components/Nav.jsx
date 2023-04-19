@@ -1,18 +1,16 @@
-import 'font-awesome/css/font-awesome.min.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
 import '../App.css';
 import { useContext } from 'react';
 import AppContext from './AppContext';
 import Button from 'react-bootstrap/Button';
+import { FaBars } from 'react-icons/fa'
 
 export default function Nav() {
-const { isDesktopOrLaptop } = useContext(AppContext)
+  const { isLargeScreen } = useContext(AppContext)
 
   return (
     <div className='Nav'>
       <a href="blank" className='.navbar-brand '>My Logo</a>
-      {isDesktopOrLaptop ? <NavDesktop /> : <NavMobile />}
+      {isLargeScreen ? <NavDesktop /> : <NavMobile />}
     </div>
   );
 }
@@ -20,7 +18,7 @@ const { isDesktopOrLaptop } = useContext(AppContext)
 function NavMobile() {
   return (
     <div className='icon-holder'>
-      <FontAwesomeIcon icon={faBars} size='2xl' style={{ color: "#511f31", }} />
+      {" "}<FaBars size={'2rem'} color={"#511f31"} />{" "}
     </div >
   );
 }

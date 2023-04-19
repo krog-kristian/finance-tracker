@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
-import { ItemForms } from './ItemsForms.jsx';
+import { ItemsForm } from './ItemsForm.jsx';
 
 export default function RecordForm() {
   const [items, setItems] = useState(1);
-  const [out, setOut] = useState(true);
+  const [isDebit, setIsDebit] = useState(true);
 
   function handleItems (e) {
     const numberOfItems = e.target.value;
@@ -37,33 +37,38 @@ export default function RecordForm() {
 
       <div className='row g-3'>
         <div className='mb-3 col'>
-          <label htmlFor='inOut' className='form-label'>Select Type</label>
-          <select className='form-select' required name='inOut' id='inOut' onChange={(e) => setOut(!out)}>
-            <option value={true}>Money Out</option>
-            <option value={false}>Money In</option>
-          </select>
+          <label className='form-label'>Select Type
+            <select className='form-select' required name='inOut' id='inOut' onChange={(e) => setIsDebit(!isDebit)}>
+              <option value={true}>Money Out</option>
+              <option value={false}>Money In</option>
+            </select>
+          </label>
         </div>
 
         <div className='mb-3 col'>
-            <label htmlFor='source' className='form-label'>Source:</label>
+          <label className='form-label'>Source:
             <input required type='text' id='source' name='source' className='form-control' placeholder='From where?' />
+          </label>
         </div>
       </div>
 
       <div className='row g-3'>
         <div className='mb-3 col'>
-            <label htmlFor='numberOfItems' className='form-label'># of Items</label>
+          <label className='form-label'># of Items
             <input className='form-control' required type='number' name='numberOfItems' defaultValue={1} id='numberOfItems' min={1} max={20} onChange={(e) => handleItems(e)} />
+          </label>
         </div>
 
         <div className='mb-3 col'>
-            <label htmlFor='total' className='form-label'>Total $</label>
+          <label className='form-label'>Total $
             <input type='number' placeholder='Total $' step={0.01} className='form-control' required id='total' name='total' />
+          </label>
         </div>
 
         <div className='mb-3 col'>
-            <label htmlFor='date' className='form-label'>Date</label>
+          <label className='form-label'>Date
             <input required className='form-control' type='date' name='date' id='date' />
+          </label>
         </div>
       </div>
         <div className='d-flex justify-content-evenly'>
@@ -73,7 +78,7 @@ export default function RecordForm() {
           <Button type='reset' size='lg' variant='danger' style={{ whiteSpace: 'pre' }}>   Reset   </Button>
 
         </div>
-      <ItemForms numberOfItems={items} out={out}/>
+      <ItemsForm numberOfItems={items} isDebit={isDebit}/>
 
     </form>
     </>
