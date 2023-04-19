@@ -18,8 +18,8 @@ export default function RecordsView() {
 
   useEffect(() => {
     const newRecords = getRecords()
-    setRecords(() => records.concat(newRecords))
-  }, [getRecords, records])
+    setRecords(r => r.concat(newRecords))
+  }, [getRecords])
 
 
   return (

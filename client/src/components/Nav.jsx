@@ -55,8 +55,8 @@ function NavMobile() {
 function NavDesktop() {
   return (
       <div className='d-flex justify-content-between'>
-        <Link to='/' class="btn btn-primary mx-3">Add Record</Link>
-        <Link to='records' class="btn btn-primary mx-3">Records</Link>
+        <Link to='/' className="btn btn-primary mx-3">Add Record</Link>
+        <Link to='records' className="btn btn-primary mx-3">Records</Link>
         <Button variant='warning' className='ms-3'>Sign Out</Button>{' '}
       </div>
   );
