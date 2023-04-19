@@ -72,9 +72,13 @@ app.post('/api/record', async (req, res, next) => {
   }
 });
 
+/**
+ * Retrieves the 25 most recent records for a given user,
+ * then retrives the matching items and sends back an object
+ * with the records and items.
+ */
 app.get('/api/records', async (req, res, next) => {
   try {
-    console.log('req received', Date.now());
     const user = 1;
     const { offset } = req.body;
     const sql = `
@@ -86,13 +90,12 @@ app.get('/api/records', async (req, res, next) => {
                 offset $2;
                 `;
     const params = [user, offset];
-    if (!offset || !user) throw new ClientError(400, 'Incomplete request.');
+    if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
     const records = await db.query(sql, params);
     const recordIds = getRecordIds(records.rows);
     const getItemsSql = writeGetItemsSql(recordIds);
     const items = await db.query(getItemsSql, recordIds);
     const response = { records: records.rows, items: items.rows };
-    console.log('Response object', response);
     res.status(200).json(response);
   } catch (err) {
     next(err);
