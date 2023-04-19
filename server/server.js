@@ -4,6 +4,7 @@ import errorMiddleware from './lib/error-middleware.js';
 import pg from 'pg';
 import ClientError from './lib/client-error.js';
 import { createItemsList, createItemsSql } from './lib/form-prepare.js';
+import { writeGetItemsSql, getRecordIds } from './lib/items-request.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -25,7 +26,6 @@ app.use(express.json());
 
 // Sign up post to insert a user, incomplete just for testing purposes.
 app.post('/api/user', async (req, res, next) => {
-  console.log('hello');
   const upload = req.body;
   try {
     const sql = `
@@ -72,8 +72,31 @@ app.post('/api/record', async (req, res, next) => {
   }
 });
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello World!' });
+app.get('/api/records', async (req, res, next) => {
+  try {
+    console.log('req received', Date.now());
+    const user = 1;
+    const { offset } = req.body;
+    const sql = `
+                select *
+                from "records"
+                where "userId" = $1
+                order by "year" desc, "month" desc, "day" desc
+                limit 25
+                offset $2;
+                `;
+    const params = [user, offset];
+    if (!offset || !user) throw new ClientError(400, 'Incomplete request.');
+    const records = await db.query(sql, params);
+    const recordIds = getRecordIds(records.rows);
+    const getItemsSql = writeGetItemsSql(recordIds);
+    const items = await db.query(getItemsSql, recordIds);
+    const response = { records: records.rows, items: items.rows };
+    console.log('Response object', response);
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.use(errorMiddleware);
