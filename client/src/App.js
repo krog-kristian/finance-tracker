@@ -1,30 +1,25 @@
-import { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { useMediaQuery } from 'react-responsive';
+import Nav from './components/Nav';
+import AppContext from './components/AppContext';
+import RecordForm from './components/RecordForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [serverData, setServerData] = useState("");
+  const isLargeScreen = useMediaQuery({
+    query: '(min-width: 900px)'
+  });
 
-  useEffect(() => {
-    async function getServerData() {
-      const resp = await fetch('/api/hello');
-      const data = await resp.json();
-
-      console.log('Data from server:', data);
-
-      setServerData(data.message);
-    }
-
-    getServerData();
-  }, []);
+  const appState = { isLargeScreen }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>{serverData}</h1>
-      </header>
-    </div>
+    <AppContext.Provider value={appState}>
+      <div className="App">
+        <Nav />
+        <div className='spacer' />
+        <RecordForm />
+      </div>
+    </AppContext.Provider>
   );
 }
 
