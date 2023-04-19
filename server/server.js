@@ -77,10 +77,10 @@ app.post('/api/record', async (req, res, next) => {
  * then retrives the matching items and sends back an object
  * with the records and items.
  */
-app.get('/api/records', async (req, res, next) => {
+app.get('/api/records/:offset', async (req, res, next) => {
   try {
     const user = 1;
-    const { offset } = req.body;
+    const offset = req.params.offset;
     const sql = `
                 select *
                 from "records"
@@ -90,6 +90,7 @@ app.get('/api/records', async (req, res, next) => {
                 offset $2;
                 `;
     const params = [user, offset];
+    console.log('the params', params);
     if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
     const records = await db.query(sql, params);
     const recordIds = getRecordIds(records.rows);
