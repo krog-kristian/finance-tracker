@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
-import { ItemsForm } from './ItemsForm.jsx';
+import { ItemsForm } from '../components/ItemsForm'
 
 export default function RecordForm() {
   const [items, setItems] = useState(1);
