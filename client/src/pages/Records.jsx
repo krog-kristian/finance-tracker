@@ -9,6 +9,12 @@ export default function RecordsView() {
   const [loading, setLoading] = useState();
   const [endOfRecords, setEndOfRecords] = useState(false);
 
+  /**
+   * Callback function to request the current page from the api.
+   * In a useCallback to prevent infinite loop when loading.
+   * Returns an organized array of record objects after the response is sorted.
+   * If their are no more pages sets endOfRecords to true and ends loading.
+   */
   const getRecords = useCallback(async () => {
     setLoading(true)
     try {
@@ -28,6 +34,10 @@ export default function RecordsView() {
     }
   }, [page])
 
+  /**
+   * Calls the getRecords function once first render and whenver loading is true.
+   * Takes the newRecords received and updates the records array.
+   */
   useEffect(() => {
     const fetchRecords = async () => {
       const newRecords = await getRecords();
@@ -57,6 +67,12 @@ export default function RecordsView() {
   );
 }
 
+/**
+ * Turns an object containing an array of record object and an array of item objects,
+ * and adds matching items as a propety of the corresponding object.
+ * @param {object} records is the object returned from the database.
+ * @returns an array of record objects.
+ */
 function sortRecords(records) {
   const newRecords = records.records
   for (let i = 0; i < newRecords.length; i++) {
