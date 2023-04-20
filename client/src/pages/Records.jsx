@@ -9,38 +9,68 @@ export default function RecordsView() {
       const res = await fetch(`/api/records/${offset}`);
       if (!res.ok) throw new Error(`Could not load results ${res.status}`);
       const myrecords = await res.json();
-      console.log('The records:', myrecords)
-      return myrecords
+      const sortedRecords = myrecords.records;
+      for (let i = 0; i < sortedRecords.length; i++) {
+        const sortedItems = myrecords.items.filter(item => item.recordId === sortedRecords[i].recordId)
+        sortedRecords[i].items = sortedItems;
+      }
+      console.log('Records sorted:', sortedRecords);
+      return sortedRecords
     } catch (err) {
       console.log('Error fetching:', err);
     }
   }, [offset])
 
+  // useEffect(() => {
+  //   const newRecords = getRecords()
+  //   console.log('Useeffect records:', newRecords)
+  //   setRecords(r => r.concat(newRecords))
+  // }, [getRecords])
   useEffect(() => {
-    const newRecords = getRecords()
-    setRecords(r => r.concat(newRecords))
+    const fetchRecords = async () => {
+      const newRecords = await getRecords();
+      console.log('Still an object?', newRecords)
+      setRecords(r => r.concat(newRecords))
+    }
+    fetchRecords();
   }, [getRecords])
-
 
   return (
   <>
     <h1>Your Records!</h1>
       <div className='container-xl'>
       <Accordion defaultActiveKey="0">
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>Accordion Item #1</Accordion.Header>
-          <Accordion.Body>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </Accordion.Body>
-        </Accordion.Item>
+          {records.length > 0 ? <AccordionBits records={records} /> : <p>No Records found</p>}
       </Accordion>
     </div>
   </>
   );
+}
+
+function AccordionBits ({ records }) {
+console.log('accordion records', records)
+return (
+  records.map((r, i) => {
+    return (
+      <Accordion.Item key={i} eventKey={i}>
+        <Accordion.Header key={i}>
+          Date: {`${r.month}/${r.day}/${r.year}`} Source: {r.source} Total Spent: ${r.totalSpent}
+        </Accordion.Header>
+        <Accordion.Body key={i}>
+          <ul key={i}>
+            <AccordionDropdown key={i} items={r.items} />
+          </ul>
+        </Accordion.Body>
+      </Accordion.Item>
+    )
+  })
+)
+}
+
+function AccordionDropdown ({ items }) {
+  return (
+    items.map( (item, index) => <li key={index}>
+      {`Item: ${item.itemname} Category: ${item.category} Amount: $${item.amount}`}
+    </li>)
+  )
 }
