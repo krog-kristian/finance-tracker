@@ -1,6 +1,11 @@
 import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge'
 
+/**
+ * Creates the accordion items.
+ * @param {array} records object to fill in content of an accordion items.
+ * @returns an array of accordion items.
+ */
 export default function AccordionItems({ records }) {
   return (
     records.map((r, i) => {
@@ -26,6 +31,11 @@ export default function AccordionItems({ records }) {
   )
 }
 
+/**
+ * Takes an array of items to create a list as content of an accordion.
+ * @param {array} items array for each record.
+ * @returns an array of list items for individual accodion items content.
+ */
 function AccordionDropdown({ items }) {
   return (
     items.map((item, index) => <li className='list-group-item' key={`${item.itemId}`}>
