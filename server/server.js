@@ -86,14 +86,14 @@ app.get('/api/records/:offset', async (req, res, next) => {
                 from "records"
                 where "userId" = $1
                 order by "year" desc, "month" desc, "day" desc
-                limit 25
+                limit 5
                 offset $2;
                 `;
     const params = [user, offset];
-    console.log('the params', params);
     if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
     const records = await db.query(sql, params);
     const recordIds = getRecordIds(records.rows);
+    if (!recordIds.length) throw new ClientError(200, 'no more records');
     const getItemsSql = writeGetItemsSql(recordIds);
     const items = await db.query(getItemsSql, recordIds);
     const response = { records: records.rows, items: items.rows };
