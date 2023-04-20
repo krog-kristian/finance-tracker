@@ -38,7 +38,7 @@ export default function AccordionItems({ records }) {
  */
 function AccordionDropdown({ items }) {
   return (
-    items.map((item, index) => <li className='list-group-item' key={`${item.itemId}`}>
+    items.map((item, index) => <li className='list-group-item' key={item.itemId}>
       <div className='d-flex w-100 align-items-center'>
         <h4 className='mx-1 my-auto flex-grow-1 text-start'>Item: {item.itemname}</h4>
         <p className='mx-1 fs-4 my-auto'>Category: {item.category}</p>

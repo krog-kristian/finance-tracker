@@ -8,6 +8,7 @@ export default function RecordsView() {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState();
   const [endOfRecords, setEndOfRecords] = useState(false);
+  const [isErrors, setIsErrors] = useState(false)
 
   /**
    * Callback function to request the current page from the api.
@@ -31,6 +32,8 @@ export default function RecordsView() {
       setLoading(false);
       return sortedRecords;
     } catch (err) {
+      console.error(err)
+      setIsErrors(true)
     }
   }, [page])
 
@@ -57,7 +60,7 @@ export default function RecordsView() {
     <h1>Your Records!</h1>
     <div className='container-xl'>
       <Accordion defaultActiveKey="0" alwaysOpen>
-          {records.length > 0 ? <AccordionItems records={records} /> : <p style={{color: 'white', fontSize: '2rem'}}>No Records found.</p>}
+          {records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? <p style={{ color: 'white', fontSize: '2rem' }}>Oops try again later.</p> : <p style={{ color: 'white', fontSize: '2rem' }}>No Records found.</p>)}
       </Accordion>
         <Button className={endOfRecords ? 'm-5 btn-danger' : 'm-5'} disabled={endOfRecords} onClick={handleLoadMore}>
           {endOfRecords ? 'No More Records' : 'Load More!'}
