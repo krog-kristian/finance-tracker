@@ -73,14 +73,17 @@ app.post('/api/record', async (req, res, next) => {
 });
 
 /**
- * Retrieves the 25 most recent records for a given user,
- * then retrives the matching items and sends back an object
- * with the records and items.
+ * Takes a page number from the request parameters and multiplies by 5 for the offset.
+ * Requests a limit of 5 records and extracts records Ids to generate SQL
+ * to request matching items.
+ * Returns records, items and next page to the client.
+ * If end of database returns next page as undefined.
  */
-app.get('/api/records/:offset', async (req, res, next) => {
+app.get('/api/records/:page', async (req, res, next) => {
   try {
     const user = 1;
-    const offset = req.params.offset;
+    const page = Number(req.params.page);
+    const offset = page * 5;
     const sql = `
                 select *
                 from "records"
@@ -93,10 +96,13 @@ app.get('/api/records/:offset', async (req, res, next) => {
     if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
     const records = await db.query(sql, params);
     const recordIds = getRecordIds(records.rows);
-    if (!recordIds.length) throw new ClientError(200, 'no more records');
+    if (!recordIds.length) {
+      res.status(200).json({ nextPage: undefined });
+      return;
+    }
     const getItemsSql = writeGetItemsSql(recordIds);
     const items = await db.query(getItemsSql, recordIds);
-    const response = { records: records.rows, items: items.rows };
+    const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
     res.status(200).json(response);
   } catch (err) {
     next(err);
