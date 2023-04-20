@@ -4,6 +4,7 @@ import errorMiddleware from './lib/error-middleware.js';
 import pg from 'pg';
 import ClientError from './lib/client-error.js';
 import { createItemsList, createItemsSql } from './lib/form-prepare.js';
+import { writeGetItemsSql, getRecordIds } from './lib/items-request.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -25,7 +26,6 @@ app.use(express.json());
 
 // Sign up post to insert a user, incomplete just for testing purposes.
 app.post('/api/user', async (req, res, next) => {
-  console.log('hello');
   const upload = req.body;
   try {
     const sql = `
@@ -72,8 +72,41 @@ app.post('/api/record', async (req, res, next) => {
   }
 });
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello World!' });
+/**
+ * Takes a page number from the request parameters and multiplies by 5 for the offset.
+ * Requests a limit of 5 records and extracts records Ids to generate SQL
+ * to request matching items.
+ * Returns records, items and next page to the client.
+ * If end of database returns next page as undefined.
+ */
+app.get('/api/records/:page', async (req, res, next) => {
+  try {
+    const user = 1;
+    const page = Number(req.params.page);
+    const offset = page * 5;
+    const sql = `
+                select *
+                from "records"
+                where "userId" = $1
+                order by "year" desc, "month" desc, "day" desc
+                limit 5
+                offset $2;
+                `;
+    const params = [user, offset];
+    if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
+    const records = await db.query(sql, params);
+    const recordIds = getRecordIds(records.rows);
+    if (!recordIds.length) {
+      res.status(200).json({ nextPage: undefined });
+      return;
+    }
+    const getItemsSql = writeGetItemsSql(recordIds);
+    const items = await db.query(getItemsSql, recordIds);
+    const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.use(errorMiddleware);
