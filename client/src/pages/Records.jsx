@@ -1,7 +1,7 @@
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/esm/Button';
 import { useState, useEffect, useCallback } from 'react'
-import AccordionItems from '../components/AccordionBits.jsx';
+import AccordionItems from '../components/AccordionItems.jsx';
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
