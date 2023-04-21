@@ -40,7 +40,10 @@ function NavMobile() {
         <Modal.Body>
           <ul>
             <li onClick={() => setHamburgerOpen(false)}>
-              <Link to='/'>New Record</Link>
+              <Link to='/'>Home</Link>
+            </li>
+            <li onClick={() => setHamburgerOpen(false)}>
+              <Link to='newrecord'>New Record</Link>
             </li>
             <li onClick={() => setHamburgerOpen(false)}>
               <Link to='records'>Records</Link>
@@ -55,7 +58,8 @@ function NavMobile() {
 function NavDesktop() {
   return (
       <div className='d-flex justify-content-between'>
-        <Link to='/' className="btn btn-primary mx-3">Add Record</Link>
+        <Link to='/' className="btn btn-primary mx-3">Home</Link>
+        <Link to='newrecord' className="btn btn-primary mx-3">Add Record</Link>
         <Link to='records' className="btn btn-primary mx-3">Records</Link>
         <Button variant='warning' className='ms-3'>Sign Out</Button>{' '}
       </div>
