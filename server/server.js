@@ -49,20 +49,18 @@ app.post('/api/user', async (req, res, next) => {
  */
 app.get('/api/home', async (req, res, next) => {
   try {
-    console.log('requesting home page');
     const user = 1;
     const date = new Date();
     const thisMonth = date.getMonth();
     const lastMonth = thisMonth - 1;
     const thisYear = date.getFullYear();
     const sql = `
-                select *
+                select "month", "year", "totalSpent", "inOut"
                 from "records"
-                where "year" = $1 AND "month" = $2 OR "month" = $3 AND "userId" = $4;
+                where "userId" = $1 AND "year" = $2 AND "month" = $3 OR "month" = $4;
                 `;
-    const params = [thisYear, thisMonth, lastMonth, user];
+    const params = [user, thisYear, thisMonth, lastMonth];
     const dataRecords = await db.query(sql, params);
-    console.log('this data', dataRecords.rows);
     res.status(200).json({ records: dataRecords.rows, thisMonth, lastMonth });
   } catch (err) {
     next(err);
