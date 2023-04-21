@@ -61,9 +61,9 @@ app.get('/api/home', async (req, res, next) => {
                 where "year" = $1 AND "month" = $2 OR "month" = $3 AND "userId" = $4;
                 `;
     const params = [thisYear, thisMonth, lastMonth, user];
-    const data = await db.query(sql, params);
-    console.log('this data', data.rows);
-    res.status(200).json({ records: data.rows, thisMonth, lastMonth });
+    const dataRecords = await db.query(sql, params);
+    console.log('this data', dataRecords.rows);
+    res.status(200).json({ records: dataRecords.rows, thisMonth, lastMonth });
   } catch (err) {
     next(err);
   }
@@ -87,13 +87,13 @@ app.post('/api/record', async (req, res, next) => {
               `;
     const params = [1, month, day, year, source, inOut, numberOfItems, total];
     if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Incomplete form.');
-    const data = await db.query(sql, params);
-    if (!data.rows[0]) throw new ClientError(500, 'Database failure, aborting.');
-    const { recordId } = data.rows[0];
+    const dataRecords = await db.query(sql, params);
+    if (!dataRecords.rows[0]) throw new ClientError(500, 'Database failure, aborting.');
+    const { recordId } = dataRecords.rows[0];
     const itemsSql = createItemsSql(numberOfItems, recordId);
     const items = createItemsList(req, numberOfItems, recordId);
     const dataItems = await db.query(itemsSql, items);
-    const response = { record: data.rows[0], items: dataItems.rows[0] };
+    const response = { record: dataRecords.rows[0], items: dataItems.rows[0] };
     res.status(201).json(response);
   } catch (err) {
     next(err);

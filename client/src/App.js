@@ -5,7 +5,7 @@ import AppContext from './components/AppContext';
 import RecordForm from './pages/RecordForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route } from 'react-router-dom';
-import RecordsView from './pages/Records';
+import RecordsView from './pages/RecordsView';
 import UserHome from './pages/UserHome';
 
 function App() {

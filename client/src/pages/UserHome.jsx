@@ -29,10 +29,10 @@ export default function UserHome() {
   }, []);
 
   return (
-    <div className="container-fluid">
+    <div className='container-fluid'>
     <h1>User's Home Page</h1>
-      <div className="row">
-        <div className="col d-flex justify-content-center">
+      <div className='row'>
+        <div className='col d-flex justify-content-center'>
           {monthlyTotals ? <MonthlyTotalsCard monthlyTotals={monthlyTotals}/> : <h3 style={{color: 'white'}}>Loading!</h3>}
         </div>
       </div>
