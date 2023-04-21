@@ -1,6 +1,5 @@
 
 export function getMonthlyTotals(monthsRecords) {
-  console.log('get month totals start', monthsRecords)
   const thisMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && r.inOut);
   const thisMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && !r.inOut);
   const lastMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.lastMonth && r.inOut);
@@ -12,9 +11,8 @@ export function getMonthlyTotals(monthsRecords) {
       (accumulator, record) => accumulator + Number(record.totalSpent),
       totalZero
     );
-    allMonths[month] = total;
+    allMonths[month] = total.toFixed(2);
   }
-  console.log('after totaling', allMonths);
   return { totals: allMonths, thisMonth: months[monthsRecords.thisMonth], lastMonth: months[monthsRecords.lastMonth]};
 }
 
