@@ -42,7 +42,6 @@ export default function RecordsView() {
    * Takes the newRecords received and updates the records array.
    */
   useEffect(() => {
-    console.log('records use effect runs on initial render.')
     const fetchRecords = async () => {
       const newRecords = await getRecords();
       if (!newRecords) return
