@@ -3,10 +3,18 @@ import getMonthsRecords from "../lib/api";
 import { getMonthlyTotals } from "../lib/dataSorting";
 import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
 
-
+/**
+ * Creates the users home page and displays their monthly totals.
+ * @returns the home page.
+ */
 export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
 
+  /**
+   * Calls a fetch request to the server then
+   * calls a function to format the response and
+   * set the montlyTotals.
+   */
   useEffect(() => {
     const getMonthlyRecords = async () => {
       try {

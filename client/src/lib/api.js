@@ -1,3 +1,9 @@
+
+/**
+ * A fetch request to the server for this month and last months results
+ * dates determined server side.
+ * @returns the server response.
+ */
 export default async function getMonthsRecords () {
  try {
   const res = await fetch('/api/home');

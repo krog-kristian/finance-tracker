@@ -42,6 +42,11 @@ app.post('/api/user', async (req, res, next) => {
   }
 });
 
+/**
+ * Determines the current and previous months,
+ * and queries the database for all records and
+ * returns a response with them aswell as the months 0 indexed number.
+ */
 app.get('/api/home', async (req, res, next) => {
   try {
     console.log('requesting home page');

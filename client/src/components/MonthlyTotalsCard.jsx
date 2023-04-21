@@ -1,6 +1,11 @@
 import Card from 'react-bootstrap/Card'
 import Badge from "react-bootstrap/esm/Badge";
 
+/**
+ * Takes the monthly totals and renders a card with the info.
+ * @param {object} monthlyTotals object with 3 properties totals, thisMonth, lastMonth.
+ * @returns a card component.
+ */
 export default function MonthlyTotalsCard({ monthlyTotals }) {
 
   return (

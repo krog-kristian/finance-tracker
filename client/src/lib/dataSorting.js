@@ -1,4 +1,10 @@
 
+/**
+ * Takes the records from the server and calcutlates the totals for each month and
+ * assigns the months names as properties.
+ * @param {object} monthsRecords object from the database.
+ * @returns a modifified object with three properties, totals, thisMonth and lastMonth.
+ */
 export function getMonthlyTotals(monthsRecords) {
   const thisMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && r.inOut);
   const thisMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && !r.inOut);
