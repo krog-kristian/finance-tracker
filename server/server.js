@@ -55,7 +55,7 @@ app.get('/api/home', async (req, res, next) => {
     const lastMonth = thisMonth - 1;
     const thisYear = date.getFullYear();
     const sql = `
-                select "month", "year", "totalSpent", "inOut"
+                select "month", "year", "totalSpent", "inOut", "day"
                 from "records"
                 where "userId" = $1 AND "year" = $2 AND "month" = $3 OR "month" = $4;
                 `;

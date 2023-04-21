@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import getMonthsRecords from "../lib/api";
-import { getMonthlyTotals } from "../lib/dataSorting";
+import { getMonthlyTotals, getChartData } from "../lib/dataSorting";
 import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
 
 /**
@@ -9,6 +9,7 @@ import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
  */
 export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
+  const [chartData, setChartData] = useState();
 
   /**
    * Calls a fetch request to the server then
@@ -21,13 +22,15 @@ export default function UserHome() {
         const monthlyRecords = await getMonthsRecords();
         const monthsTotals = getMonthlyTotals(monthlyRecords);
         setMonthlyTotals(monthsTotals);
+        const monthsChartData = getChartData(monthlyRecords);
+        setChartData(monthsChartData)
       } catch (err) {
         console.error(err)
       }
     }
     getMonthlyRecords();
   }, []);
-
+  if(chartData); // REMOVE ME
   return (
     <div className='container-fluid'>
     <h1>User's Home Page</h1>
