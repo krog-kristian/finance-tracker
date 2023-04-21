@@ -43,6 +43,31 @@ app.post('/api/user', async (req, res, next) => {
 });
 
 /**
+ * Determines the current and previous months,
+ * and queries the database for all records and
+ * returns a response with them aswell as the months 0 indexed number.
+ */
+app.get('/api/home', async (req, res, next) => {
+  try {
+    const user = 1;
+    const date = new Date();
+    const thisMonth = date.getMonth();
+    const lastMonth = thisMonth - 1;
+    const thisYear = date.getFullYear();
+    const sql = `
+                select "month", "year", "totalSpent", "inOut"
+                from "records"
+                where "userId" = $1 AND "year" = $2 AND "month" = $3 OR "month" = $4;
+                `;
+    const params = [user, thisYear, thisMonth, lastMonth];
+    const dataRecords = await db.query(sql, params);
+    res.status(200).json({ records: dataRecords.rows, thisMonth, lastMonth });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
  * Inserts the record in the records table and uses the ID returned,
  * to insert aa varying amount of item rows into the items table.
  * Requires userId, hard coded a demo userId into params for now.
@@ -50,7 +75,8 @@ app.post('/api/user', async (req, res, next) => {
 app.post('/api/record', async (req, res, next) => {
   const { inOut, source, numberOfItems, total, date } = req.body;
   const dateArray = date.split('-');
-  const [year, month, day] = dateArray;
+  let [year, month, day] = dateArray;
+  month = month - 1;
   try {
     const sql = `
               insert into "records" ("userId", "month", "day", "year", "source", "inOut", "numberOfItems", "totalSpent")
@@ -59,13 +85,13 @@ app.post('/api/record', async (req, res, next) => {
               `;
     const params = [1, month, day, year, source, inOut, numberOfItems, total];
     if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Incomplete form.');
-    const data = await db.query(sql, params);
-    if (!data.rows[0]) throw new ClientError(500, 'Database failure, aborting.');
-    const { recordId } = data.rows[0];
+    const dataRecords = await db.query(sql, params);
+    if (!dataRecords.rows[0]) throw new ClientError(500, 'Database failure, aborting.');
+    const { recordId } = dataRecords.rows[0];
     const itemsSql = createItemsSql(numberOfItems, recordId);
     const items = createItemsList(req, numberOfItems, recordId);
     const dataItems = await db.query(itemsSql, items);
-    const response = { record: data.rows[0], items: dataItems.rows[0] };
+    const response = { record: dataRecords.rows[0], items: dataItems.rows[0] };
     res.status(201).json(response);
   } catch (err) {
     next(err);

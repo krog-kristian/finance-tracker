@@ -5,7 +5,8 @@ import AppContext from './components/AppContext';
 import RecordForm from './pages/RecordForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route } from 'react-router-dom';
-import RecordsView from './pages/Records';
+import RecordsView from './pages/RecordsView';
+import UserHome from './pages/UserHome';
 
 function App() {
   const isLargeScreen = useMediaQuery({
@@ -19,7 +20,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path='/' element={<Nav />}>
-            <Route index element={<RecordForm />} />
+            <Route index element={<UserHome />}/>
+            <Route path='newrecord' element={<RecordForm />} />
             <Route path='records' element={<RecordsView />} />
           </Route>
         </Routes>

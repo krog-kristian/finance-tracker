@@ -35,7 +35,7 @@ export default function RecordsView() {
       console.error(err)
       setIsErrors(true)
     }
-  }, [page])
+  }, [page]);
 
   /**
    * Calls the getRecords function once first render and whenver loading is true.
