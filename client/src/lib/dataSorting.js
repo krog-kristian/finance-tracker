@@ -5,9 +5,9 @@
  * @param {object} monthsRecords object from the database.
  * @returns a modifified object with three properties, totals, thisMonth and lastMonth.
  */
-export function getMonthlyTotals(monthsRecords) {
-  const filteredMonths = filterMonths(monthsRecords)
-  const allMonths = Object.assign({}, filteredMonths)
+export function getMonthlyTotals(monthsRecords, filteredMonths) {
+  const allMonths = filteredMonths
+  console.log('totals filter', allMonths)
   const totalZero = 0;
   for (let month in allMonths) {
     const total = allMonths[month].reduce(
@@ -16,24 +16,41 @@ export function getMonthlyTotals(monthsRecords) {
     );
     allMonths[month] = total.toFixed(2);
   }
-  return { totals: allMonths, thisMonth: months[monthsRecords.thisMonth], lastMonth: months[monthsRecords.lastMonth]};
+  return { totals: allMonths, thisMonth: months[monthsRecords.thisMonth].name, lastMonth: months[monthsRecords.lastMonth].name};
 }
 
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'Jul', 'August', 'September', 'October', 'November', 'December'];
+const months = [{ name: 'January', length: 31 }, { name: 'February', length: 28 }, { name: 'March', length: 31 }, { name: 'April', length: 30 }, { name: 'May', length: 31 }, { name: 'June', length: 30 }, { name: 'Jul', length: 31 }, { name: "August", length: 31 }, { name: "September", length: 30 }, { name: "October", length: 31 }, { name: "November", length: 30 }, { name: "December", length: 31 }];
 
-function filterMonths(monthsRecords) {
+/**
+ * Filters the two months into this month and last month and by debits or credits.
+ * @param {object} monthsRecords object from the server.
+ * @returns an object with 4 properties.
+ */
+export function filterMonths(monthsRecords) {
   const thisMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && r.inOut);
   const thisMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && !r.inOut);
   const lastMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.lastMonth && r.inOut);
   const lastMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.lastMonth && !r.inOut);
   const monthsFiltered = { thisMonthsDebits, thisMonthsCredits, lastMonthsDebits, lastMonthsCredits };
-  console.log('filtered', monthsFiltered)
   return monthsFiltered;
 }
 
-export function getChartData (monthsRecords) {
-  console.log('making chart data', monthsRecords)
-  return { some: 'data' }
+
+
+export function getChartData (monthsRecords, filteredMonths) {
+  console.log('making chart data', monthsRecords);
+  console.log('chart months filtered', filteredMonths);
+  const { thisMonth, lastMonth } = monthsRecords;
+  const longestMonth = months[thisMonth].length >= months[lastMonth].length ? months[thisMonth].length : months[lastMonth].length;
+  console.log('longest month', longestMonth);
+  const chartData = [];
+  for (let i = 0; i < longestMonth; i ++) {
+    chartData.push({day: i})
+    chartData[i].thisMonthDebit = filteredMonths.thisMonthsDebits.filter((m) => m.day - 1 === i)[0]?.totalSpent ?? 0;
+    chartData[i].thisMonthCredit = filteredMonths.thisMonthsCredits.filter((m) => m.day - 1 === i)[0]?.totalSpent ?? 0;
+  }
+  console.log('making chat base:', chartData)
+  return chartData
 }
 
 const dataPoint = {
