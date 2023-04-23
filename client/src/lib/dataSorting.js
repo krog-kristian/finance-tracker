@@ -7,7 +7,6 @@
  */
 export function getMonthlyTotals(monthsRecords, filteredMonths) {
   const allMonths = filteredMonths
-  console.log('totals filter', allMonths)
   const totalZero = 0;
   for (let month in allMonths) {
     const total = allMonths[month].reduce(
@@ -38,18 +37,16 @@ export function filterMonths(monthsRecords) {
 
 
 export function getChartData (monthsRecords, filteredMonths) {
-  console.log('making chart data', monthsRecords);
-  console.log('chart months filtered', filteredMonths);
   const { thisMonth, lastMonth } = monthsRecords;
   const longestMonth = months[thisMonth].length >= months[lastMonth].length ? months[thisMonth].length : months[lastMonth].length;
-  console.log('longest month', longestMonth);
   const chartData = [];
+  const zeroValue = 0;
   for (let i = 0; i < longestMonth; i ++) {
     chartData.push({day: i})
-    chartData[i].thisMonthDebit = filteredMonths.thisMonthsDebits.filter((m) => m.day - 1 === i)[0]?.totalSpent ?? 0;
-    chartData[i].thisMonthCredit = filteredMonths.thisMonthsCredits.filter((m) => m.day - 1 === i)[0]?.totalSpent ?? 0;
+    chartData[i].thisMonthDebit = filteredMonths.thisMonthsDebits.filter((m) => m.day - 1 === i).reduce((accumulator, record) => accumulator + Number(record?.totalSpent), zeroValue);
+    chartData[i].thisMonthCredit = filteredMonths.thisMonthsCredits.filter((m) => m.day - 1 === i).reduce((accumulator, record) => accumulator + Number(record?.totalSpent), zeroValue);
   }
-  console.log('making chat base:', chartData)
+  console.log('chart data totals', chartData)
   return chartData
 }
 

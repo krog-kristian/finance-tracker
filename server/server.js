@@ -77,6 +77,7 @@ app.post('/api/record', async (req, res, next) => {
   const dateArray = date.split('-');
   let [year, month, day] = dateArray;
   month = month - 1;
+  day = day - 1;
   try {
     const sql = `
               insert into "records" ("userId", "month", "day", "year", "source", "inOut", "numberOfItems", "totalSpent")

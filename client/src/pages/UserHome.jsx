@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import getMonthsRecords from "../lib/api";
 import { getMonthlyTotals, getChartData, filterMonths } from "../lib/dataSorting";
 import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
-import { MonthlyChart } from "../components/BarChart";
+import { MonthlyChart } from "../components/MonthlyChart";
 
 /**
  * Creates the users home page and displays their monthly totals.
@@ -39,10 +39,13 @@ export default function UserHome() {
         <div className='col d-flex justify-content-center'>
           {monthlyTotals ? <MonthlyTotalsCard monthlyTotals={monthlyTotals}/> : <h3 style={{color: 'white'}}>Loading!</h3>}
         </div>
-        <div style={{backgroundColor: 'White', display: 'flex', justifyContent: 'center'}}>
-          {chartData ? <MonthlyChart chartData={chartData} /> : <h4>LOADING CHART</h4>}
-        </div>
       </div>
+        <div className="row">
+          <div className='col d-flex justify-content-center'>
+            {chartData ? <MonthlyChart chartData={chartData} /> : <h4>LOADING CHART</h4>}
+          </div>
+        </div>
+
     </div>
   );
 }
