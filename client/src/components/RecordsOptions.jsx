@@ -1,17 +1,10 @@
 import Form from 'react-bootstrap/Form'
 import Card from 'react-bootstrap/Card'
-import { useState } from 'react'
 import { categoriesOut, categoriesIn } from '../lib/catergory-data';
 
 
-export default function RecordsOptions() {
-  const [values, setValues] = useState({
-    itemsView: false,
-    debitOrCredit: '',
-    category: '',
-  });
+export default function RecordsOptions({values, setValues, handleChange }) {
 
-  const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value });
 
   return (
     <Card className='p-3 my-4'>

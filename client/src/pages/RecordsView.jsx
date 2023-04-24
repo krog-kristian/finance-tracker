@@ -9,7 +9,18 @@ export default function RecordsView() {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState();
   const [endOfRecords, setEndOfRecords] = useState(false);
-  const [isErrors, setIsErrors] = useState(false)
+  const [isErrors, setIsErrors] = useState(false);
+  const [values, setValues] = useState({
+    itemsView: false,
+    debitOrCredit: '',
+    category: '',
+  });
+
+  /**
+   * Updates the values object when inputs are changed.
+   * @param {obect} e, the event of targeted input.
+   */
+  const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value });
 
   /**
    * Callback function to request the current page from the api.
@@ -64,7 +75,7 @@ export default function RecordsView() {
     <h1>Your Records!</h1>
 
     <div className='container-xl'>
-        <RecordsOptions />
+        <RecordsOptions  values={values} setValues={setValues} handleChange={handleChange}/>
       <Accordion defaultActiveKey="0" alwaysOpen>
           {records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? errorMessage : loadingMessage)}
       </Accordion>
