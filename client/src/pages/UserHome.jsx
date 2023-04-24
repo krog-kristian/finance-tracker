@@ -14,8 +14,8 @@ export default function UserHome() {
 
   /**
    * Calls a fetch request to the server then
-   * calls a function to format the response and
-   * set the montlyTotals.
+   * calls two functions to format the data, and set
+   * the pages data states.
    */
   useEffect(() => {
     const getMonthlyRecords = async () => {
