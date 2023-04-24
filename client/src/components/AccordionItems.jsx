@@ -17,7 +17,7 @@ export default function AccordionItems({ records }) {
               <div className='my-auto'>
                 <Badge className='my-auto mx-1' style={r.inOut ? { color: 'black' } : { color: 'white' }} bg={r.inOut ? 'warning' : 'success'}>Total: ${r.totalSpent}</Badge>
               </div>
-              <p className='mx-2 my-auto'>Date: {`${r.month + 1}/${r.day}/${r.year}`}</p>
+              <p className='mx-2 my-auto'>Date: {`${r.month + 1}/${r.day + 1}/${r.year}`}</p>
             </div>
           </Accordion.Header>
           <Accordion.Body >

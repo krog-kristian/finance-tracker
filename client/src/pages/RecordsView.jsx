@@ -55,12 +55,15 @@ export default function RecordsView() {
     setLoading(true)
   }
 
+  const loadingMessage = <h3 style={{ color: 'white' }}>Loading!</h3>;
+  const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+
   return (
   <>
     <h1>Your Records!</h1>
     <div className='container-xl'>
       <Accordion defaultActiveKey="0" alwaysOpen>
-          {records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? <p style={{ color: 'white', fontSize: '2rem' }}>Oops try again later.</p> : <p style={{ color: 'white', fontSize: '2rem' }}>No Records found.</p>)}
+          {records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? errorMessage : loadingMessage)}
       </Accordion>
         <Button className={endOfRecords ? 'm-5 btn-danger' : 'm-5'} disabled={endOfRecords} onClick={handleLoadMore}>
           {endOfRecords ? 'No More Records' : 'Load More!'}

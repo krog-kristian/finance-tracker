@@ -34,7 +34,6 @@ app.post('/api/user', async (req, res, next) => {
                 returning *;
                 `;
     const params = [upload.firstname, upload.lastname, upload.password, upload.username, upload.email];
-    console.log('my params', params);
     const data = await db.query(sql, params);
     res.status(201).json(data.rows);
   } catch (err) {
@@ -55,7 +54,7 @@ app.get('/api/home', async (req, res, next) => {
     const lastMonth = thisMonth - 1;
     const thisYear = date.getFullYear();
     const sql = `
-                select "month", "year", "totalSpent", "inOut"
+                select "month", "year", "totalSpent", "inOut", "day"
                 from "records"
                 where "userId" = $1 AND "year" = $2 AND "month" = $3 OR "month" = $4;
                 `;
@@ -77,6 +76,7 @@ app.post('/api/record', async (req, res, next) => {
   const dateArray = date.split('-');
   let [year, month, day] = dateArray;
   month = month - 1;
+  day = day - 1;
   try {
     const sql = `
               insert into "records" ("userId", "month", "day", "year", "source", "inOut", "numberOfItems", "totalSpent")
