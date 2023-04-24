@@ -23,13 +23,13 @@ export default function RecordsOptions({values, setValues, handleChange }) {
           <div className='col-sm-2'>
             <Form.Label>Show Debit or Credits
               <Form.Select className='my-1' name='debitOrCredit' onChange={handleChange}>
-                <option  value=''>Both</option>
-                <option  value='debits'>Debits</option>
-                <option  value='credits'>Credits</option>
+                <option  value='null'>Both</option>
+                <option  value='true'>Debits</option>
+                <option  value='false'>Credits</option>
               </Form.Select>
             </Form.Label>
           </div>
-          {values.debitOrCredit && values.itemsView === true ? <CategoryViews handleChange={handleChange} categories={values.debitOrCredit === 'debits' ? categoriesOut : categoriesIn} /> : ''}
+          {values.debitOrCredit && values.itemsView === true ? <CategoryViews handleChange={handleChange} categories={values.debitOrCredit === 'true' ? categoriesOut : categoriesIn} /> : ''}
           <div>
             <button onClick={(e) => {
               e.preventDefault()
@@ -48,7 +48,7 @@ function CategoryViews({ categories, handleChange }) {
     <div className='col-sm-2'>
       <Form.Label>Category Options
         <Form.Select className='m-2' name='category' onChange={handleChange}>
-          <option value=''>Select Category</option>
+          <option value='null'>Select Category</option>
           {options}
         </Form.Select>
       </Form.Label>

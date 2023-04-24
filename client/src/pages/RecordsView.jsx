@@ -12,15 +12,21 @@ export default function RecordsView() {
   const [isErrors, setIsErrors] = useState(false);
   const [values, setValues] = useState({
     itemsView: false,
-    debitOrCredit: '',
-    category: '',
+    debitOrCredit: 'null',
+    category: 'null',
   });
 
   /**
    * Updates the values object when inputs are changed.
    * @param {obect} e, the event of targeted input.
    */
-  const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value })
+    setRecords([]);
+    setPage(0)
+    setLoading(true);
+    console.log('loading', loading)
+  };
 
   /**
    * Callback function to request the current page from the api.
@@ -31,7 +37,7 @@ export default function RecordsView() {
   const getRecords = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/records/${page}`);
+      const res = await fetch(`/api/records/${page}/${values.debitOrCredit}/${values.category}`);
       if (!res.ok) throw new Error(`Could not load results ${res.status}`);
       const myrecords = await res.json();
       if (!myrecords.nextPage) {
@@ -47,7 +53,7 @@ export default function RecordsView() {
       console.error(err)
       setIsErrors(true)
     }
-  }, [page]);
+  }, [page, values.debitOrCredit, values.category]);
 
   /**
    * Calls the getRecords function once first render and whenver loading is true.

@@ -105,20 +105,26 @@ app.post('/api/record', async (req, res, next) => {
  * Returns records, items and next page to the client.
  * If end of database returns next page as undefined.
  */
-app.get('/api/records/:page', async (req, res, next) => {
+app.get('/api/records/:page/:type/:category', async (req, res, next) => {
   try {
+    let filter = '';
     const user = 1;
     const page = Number(req.params.page);
-    const offset = page * 5;
+    const offset = page * 10;
+    const params = [user, offset];
+    const { type, category } = req.params;
+    if (type !== 'null') {
+      filter = 'AND "inOut" = $3';
+      params.push(type);
+    }
     const sql = `
                 select *
                 from "records"
-                where "userId" = $1
+                where "userId" = $1 ${filter}
                 order by "year" desc, "month" desc, "day" desc
-                limit 5
+                limit 10
                 offset $2;
                 `;
-    const params = [user, offset];
     if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
     const records = await db.query(sql, params);
     const recordIds = getRecordIds(records.rows);
@@ -126,9 +132,13 @@ app.get('/api/records/:page', async (req, res, next) => {
       res.status(200).json({ nextPage: undefined });
       return;
     }
-    const getItemsSql = writeGetItemsSql(recordIds);
+    const getItemsSql = writeGetItemsSql(recordIds, category);
+    if (category !== 'null') recordIds.push(category);
+    console.log('THE QUERY PARAMS', recordIds);
+    console.log('The items reuqest sql', getItemsSql);
     const items = await db.query(getItemsSql, recordIds);
-    const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
+    const response = { items: items.rows, nextPage: page + 1 };
+    if (category === 'null') response.records = records.rows;
     res.status(200).json(response);
   } catch (err) {
     next(err);
