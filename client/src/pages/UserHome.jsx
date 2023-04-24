@@ -11,6 +11,7 @@ import { MonthlyChart } from "../components/MonthlyChart";
 export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
   const [chartData, setChartData] = useState();
+  const [error, setError] = useState(false);
 
   /**
    * Calls a fetch request to the server then
@@ -27,22 +28,24 @@ export default function UserHome() {
         const monthsChartData = getChartData(monthlyRecords, filteredMonths);
         setChartData(monthsChartData)
       } catch (err) {
+        setError(true)
         console.error(err)
       }
     }
     getMonthlyRecords();
   }, []);
+
   return (
     <div className='container-fluid'>
     <h1>User's Home Page</h1>
       <div className='row'>
         <div className='col d-flex justify-content-center'>
-          {monthlyTotals ? <MonthlyTotalsCard monthlyTotals={monthlyTotals}/> : <h3 style={{color: 'white'}}>Loading!</h3>}
+          {monthlyTotals ? <MonthlyTotalsCard monthlyTotals={monthlyTotals} /> : (error ? <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3> : <h3 style={{ color: 'white' }}>Loading!</h3>)}
         </div>
       </div>
         <div className="row">
           <div className='col d-flex justify-content-center'>
-            {chartData ? <MonthlyChart chartData={chartData} /> : <h4>LOADING CHART</h4>}
+          {chartData ? <MonthlyChart chartData={chartData} /> : (error ? <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3> : <h3 style={{ color: 'white' }}>Loading!</h3>)}
           </div>
         </div>
 
