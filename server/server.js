@@ -34,7 +34,6 @@ app.post('/api/user', async (req, res, next) => {
                 returning *;
                 `;
     const params = [upload.firstname, upload.lastname, upload.password, upload.username, upload.email];
-    console.log('my params', params);
     const data = await db.query(sql, params);
     res.status(201).json(data.rows);
   } catch (err) {

@@ -35,23 +35,35 @@ export function filterMonths(monthsRecords) {
 }
 
 
-
+/**
+ * Creates an object for the chart component with 4 data points for each day of the month, defaulting to zero if no data.
+ * @param {object} monthsRecords containing the current and previous month.
+ * @param {object} filteredMonths an object with presorted records in arrays.
+ * @returns an object that is compatible with recharts.
+ */
 export function getChartData (monthsRecords, filteredMonths) {
   const { thisMonth, lastMonth } = monthsRecords;
   const longestMonth = months[thisMonth].length >= months[lastMonth].length ? months[thisMonth].length : months[lastMonth].length;
   const chartData = [];
-  const zeroValue = 0;
-  for (let i = 0; i < longestMonth; i ++) {
+  for (let i = 1; i < longestMonth + 1; i ++) {
     chartData.push({day: i})
-    chartData[i].thisMonthDebit = filteredMonths.thisMonthsDebits.filter((m) => m.day - 1 === i).reduce((accumulator, record) => accumulator + Number(record?.totalSpent), zeroValue);
-    chartData[i].thisMonthCredit = filteredMonths.thisMonthsCredits.filter((m) => m.day - 1 === i).reduce((accumulator, record) => accumulator + Number(record?.totalSpent), zeroValue);
+    chartData[i - 1].thisMonthDebit = getDay(filteredMonths.thisMonthsDebits, i);
+    chartData[i - 1].thisMonthCredit = getDay(filteredMonths.thisMonthsCredits, i);
+    chartData[i - 1].lastMonthDebit = getDay(filteredMonths.lastMonthsDebits, i);
+    chartData[i - 1].lastMonthCredit = getDay(filteredMonths.lastMonthsCredits, i);
   }
-  console.log('chart data totals', chartData)
   return chartData
 }
 
-const dataPoint = {
-  day: 1,
-  thisMonthDebit: 3,
-  thisMonthCredit: 4,
+/**
+ * Gets the total spent for a specific day from a month.
+ * @param {array} filteredMonth records of specific type for a month.
+ * @param {number} day of month.
+ * @returns a number representing the total spent for the day.
+ */
+function getDay(month, day) {
+  const zeroValue = 0;
+  const dayRecords = month.filter((m) => m.day + 1 === day);
+  const dayTotal = dayRecords.reduce((accumulator, record) => accumulator + Number(record?.totalSpent), zeroValue);
+  return dayTotal;
 }
