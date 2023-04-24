@@ -1,0 +1,64 @@
+import Form from 'react-bootstrap/Form'
+import Card from 'react-bootstrap/Card'
+import { useState } from 'react'
+import { categoriesOut, categoriesIn } from '../lib/catergory-data';
+
+
+export default function RecordsOptions() {
+  const [values, setValues] = useState({
+    itemsView: false,
+    debitOrCredit: '',
+    category: '',
+  });
+
+  const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value });
+
+  return (
+    <Card className='p-3 my-4'>
+      <Form>
+        <div className='row'>
+          <div className='col-sm-2'>
+          <Form.Label> Items View
+            <Form.Check
+              className='my-2'
+              type='switch'
+              id='itemsView'
+              name='itemsView'
+              onChange={(e) => setValues({ ...values, [e.target.name]: !values.itemsView })} />
+           </Form.Label>
+        </div>
+          <div className='col-sm-2'>
+            <Form.Label>Show Debit or Credits
+              <Form.Select className='my-1' name='debitOrCredit' onChange={handleChange}>
+                <option  value=''>Both</option>
+                <option  value='debits'>Debits</option>
+                <option  value='credits'>Credits</option>
+              </Form.Select>
+            </Form.Label>
+          </div>
+          {values.debitOrCredit && values.itemsView === true ? <CategoryViews handleChange={handleChange} categories={values.debitOrCredit === 'debits' ? categoriesOut : categoriesIn} /> : ''}
+          <div>
+            <button onClick={(e) => {
+              e.preventDefault()
+              console.log('values', values)}}>HEY</button>
+          </div>
+        </div>
+      </Form>
+    </Card>
+  )
+}
+
+function CategoryViews({ categories, handleChange }) {
+  const options = categories.map(c => <option key={c.value} value={c.value}>{c.category}</option>)
+
+  return (
+    <div className='col-sm-2'>
+      <Form.Label>Category Options
+        <Form.Select className='m-2' name='category' onChange={handleChange}>
+          <option value=''>Select Category</option>
+          {options}
+        </Form.Select>
+      </Form.Label>
+    </div>
+  )
+}

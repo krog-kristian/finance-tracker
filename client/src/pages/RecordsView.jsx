@@ -2,6 +2,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/esm/Button';
 import { useState, useEffect, useCallback } from 'react'
 import AccordionItems from '../components/AccordionItems.jsx';
+import RecordsOptions from '../components/RecordsOptions';
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
@@ -61,7 +62,9 @@ export default function RecordsView() {
   return (
   <>
     <h1>Your Records!</h1>
+
     <div className='container-xl'>
+        <RecordsOptions />
       <Accordion defaultActiveKey="0" alwaysOpen>
           {records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? errorMessage : loadingMessage)}
       </Accordion>
