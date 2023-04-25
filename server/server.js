@@ -5,6 +5,7 @@ import pg from 'pg';
 import ClientError from './lib/client-error.js';
 import { createItemsList, createItemsSql } from './lib/form-prepare.js';
 import { writeGetItemsSql, getRecordIds } from './lib/items-request.js';
+import argon2 from 'argon2';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -25,15 +26,20 @@ app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
 // Sign up post to insert a user, incomplete just for testing purposes.
-app.post('/api/user', async (req, res, next) => {
-  const upload = req.body;
+app.post('/api/home/sign-up', async (req, res, next) => {
+  console.log('signup started');
   try {
+    const { username, password, firstname, lastname, email } = req.body;
+    if (!username || !password || !firstname || !lastname || !email) {
+      throw new ClientError(400, 'all fields are required.');
+    }
     const sql = `
                 insert into "users" ("firstname", "lastname", "password", "username", "email")
                 values ($1, $2, $3, $4, $5)
                 returning *;
                 `;
-    const params = [upload.firstname, upload.lastname, upload.password, upload.username, upload.email];
+    const hashedPassword = await argon2.hash(password);
+    const params = [firstname, lastname, hashedPassword, username, email];
     const data = await db.query(sql, params);
     res.status(201).json(data.rows);
   } catch (err) {
