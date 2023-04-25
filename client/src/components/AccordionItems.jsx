@@ -13,18 +13,25 @@ export default function AccordionItems({ records }) {
         <Accordion.Item key={`${r.recordId}`} eventKey={i}>
           <Accordion.Header >
             <div className='d-flex w-100'>
+
               <h3 className='my-auto flex-grow-1 mx-1'>Source: {r.source}</h3>
+
               <div className='my-auto'>
-                <Badge className='my-auto mx-1' style={r.inOut ? { color: 'black' } : { color: 'white' }} bg={r.inOut ? 'warning' : 'success'}>Total: ${r.totalSpent}</Badge>
+                <Badge className='my-auto mx-1' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
+                  Total: ${r.totalSpent}
+                </Badge>
               </div>
+
               <p className='mx-2 my-auto'>Date: {`${r.month + 1}/${r.day + 1}/${r.year}`}</p>
             </div>
           </Accordion.Header>
+
           <Accordion.Body >
             <ul className='list-group'>
               <AccordionDropdown items={r.items} />
             </ul>
           </Accordion.Body>
+
         </Accordion.Item>
       )
     })

@@ -24,6 +24,7 @@ export default function RecordForm() {
         body: JSON.stringify(Object.fromEntries(form.entries()))
       });
       if(!response.ok) throw new Error(`Server error: ${response.status}`)
+      setItems(1);
       e.target.reset();
       setIsDebit(true)
     } catch (err) {
@@ -39,7 +40,7 @@ export default function RecordForm() {
       <div className='row g-3'>
         <div className='mb-3 col'>
           <label className='form-label'>Select Type
-            <select className='form-select' required name='inOut' id='inOut' onChange={(e) => setIsDebit((e) => !e)}>
+            <select className='form-select' required name='isDebit' id='isDebit' onChange={(e) => setIsDebit((e) => !e)}>
               <option value={true}>Money Out</option>
               <option value={false}>Money In</option>
             </select>

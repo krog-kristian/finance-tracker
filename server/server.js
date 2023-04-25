@@ -54,7 +54,7 @@ app.get('/api/home', async (req, res, next) => {
     const lastMonth = thisMonth - 1;
     const thisYear = date.getFullYear();
     const sql = `
-                select "month", "year", "totalSpent", "inOut", "day"
+                select "month", "year", "totalSpent", "isDebit", "day"
                 from "records"
                 where "userId" = $1 AND "year" = $2 AND "month" = $3 OR "month" = $4;
                 `;
@@ -72,18 +72,18 @@ app.get('/api/home', async (req, res, next) => {
  * Requires userId, hard coded a demo userId into params for now.
  */
 app.post('/api/record', async (req, res, next) => {
-  const { inOut, source, numberOfItems, total, date } = req.body;
+  const { isDebit, source, numberOfItems, total, date } = req.body;
   const dateArray = date.split('-');
   let [year, month, day] = dateArray;
   month = month - 1;
   day = day - 1;
   try {
     const sql = `
-              insert into "records" ("userId", "month", "day", "year", "source", "inOut", "numberOfItems", "totalSpent")
+              insert into "records" ("userId", "month", "day", "year", "source", "isDebit", "numberOfItems", "totalSpent")
               values ($1, $2, $3, $4, $5, $6, $7, $8)
               returning *;
               `;
-    const params = [1, month, day, year, source, inOut, numberOfItems, total];
+    const params = [1, month, day, year, source, isDebit, numberOfItems, total];
     if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Incomplete form.');
     const dataRecords = await db.query(sql, params);
     if (!dataRecords.rows[0]) throw new ClientError(500, 'Database failure, aborting.');
@@ -114,7 +114,7 @@ app.get('/api/records/:page/:type/:category', async (req, res, next) => {
     const params = [user, offset];
     const { type, category } = req.params;
     if (type !== 'null') {
-      filter = 'AND "inOut" = $3';
+      filter = 'AND "isDebit" = $3';
       params.push(type);
     }
     const sql = `
@@ -134,11 +134,8 @@ app.get('/api/records/:page/:type/:category', async (req, res, next) => {
     }
     const getItemsSql = writeGetItemsSql(recordIds, category);
     if (category !== 'null') recordIds.push(category);
-    console.log('THE QUERY PARAMS', recordIds);
-    console.log('The items reuqest sql', getItemsSql);
     const items = await db.query(getItemsSql, recordIds);
     const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
-    // if (category === 'null') response.records = records.rows;
     res.status(200).json(response);
   } catch (err) {
     next(err);

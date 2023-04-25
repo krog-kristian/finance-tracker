@@ -75,7 +75,7 @@ export default function RecordsView() {
     setLoading(true)
   }
 
-  const loadingMessage = <h3 style={{ color: 'white' }}>Loading!</h3>;
+  const loadingMessage = endOfRecords || <h3 style={{ color: 'white' }}>Loading!</h3>;
   const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
   const accordionReady = records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? errorMessage : loadingMessage)
