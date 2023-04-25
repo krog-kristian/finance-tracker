@@ -26,10 +26,10 @@ const months = [{ name: 'January', length: 31 }, { name: 'February', length: 28 
  * @returns an object with 4 properties.
  */
 export function filterMonths(monthsRecords) {
-  const thisMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && r.inOut);
-  const thisMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && !r.inOut);
-  const lastMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.lastMonth && r.inOut);
-  const lastMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.lastMonth && !r.inOut);
+  const thisMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && r.isDebit);
+  const thisMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.thisMonth && !r.isDebit);
+  const lastMonthsDebits = monthsRecords.records.filter((r) => r.month === monthsRecords.lastMonth && r.isDebit);
+  const lastMonthsCredits = monthsRecords.records.filter((r) => r.month === monthsRecords.lastMonth && !r.isDebit);
   const monthsFiltered = { thisMonthsDebits, thisMonthsCredits, lastMonthsDebits, lastMonthsCredits };
   return monthsFiltered;
 }
@@ -66,4 +66,19 @@ function getDay(month, day) {
   const dayRecords = month.filter((m) => m.day + 1 === day);
   const dayTotal = dayRecords.reduce((accumulator, record) => accumulator + Number(record?.totalSpent), zeroValue);
   return dayTotal;
+}
+
+/**
+ * Turns an object containing an array of record object and an array of item objects,
+ * and adds matching items as a propety of the corresponding object.
+ * @param {object} records is the object returned from the database.
+ * @returns an array of record objects.
+ */
+export function sortRecords(records) {
+  const newRecords = records.records
+  for (let i = 0; i < newRecords.length; i++) {
+    const sortedItems = records.items.filter(item => item.recordId === newRecords[i].recordId)
+    newRecords[i].items = sortedItems;
+  }
+  return newRecords;
 }

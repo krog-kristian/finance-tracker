@@ -43,5 +43,7 @@ export function ItemsForm({ numberOfItems, isDebit }) {
  * @returns array of option elements.
  */
 function CreateOptions({ isDebit }) {
-  return (isDebit ? categoriesOut.map((cat) => <option key={cat.value} value={cat.value}>{cat.category}</option>) : categoriesIn.map((cat) => <option key={cat.value} value={cat.value}>{cat.category}</option>));
+  const debitOptions = categoriesOut.map((cat) => <option key={cat.value} value={cat.value}>{cat.category}</option>);
+  const creditOptions = categoriesIn.map((cat) => <option key={cat.value} value={cat.value}>{cat.category}</option>)
+  return isDebit ? debitOptions : creditOptions;
 }

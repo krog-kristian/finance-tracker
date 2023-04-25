@@ -28,7 +28,7 @@ CREATE TABLE "public"."records" (
 	"year" integer NOT NULL,
 	"day" integer NOT NULL,
 	"source" TEXT NOT NULL,
-	"inOut" BOOLEAN NOT NULL,
+	"isDebit" BOOLEAN NOT NULL,
 	"created" timestamptz(6) NOT NULL default now(),
 	"recordId" serial NOT NULL,
 	"numberOfItems" integer NOT NULL,
