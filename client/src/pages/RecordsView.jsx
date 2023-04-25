@@ -2,7 +2,9 @@ import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/esm/Button';
 import { useState, useEffect, useCallback } from 'react'
 import AccordionItems from '../components/AccordionItems.jsx';
-import RecordsOptions from '../components/RecordsOptions';
+import RecordsOptions from '../components/RecordsOptions.jsx';
+import ItemsView from '../components/ItemsView.jsx';
+import { sortRecords } from '../lib/dataSorting.js';
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
@@ -93,30 +95,4 @@ export default function RecordsView() {
     </div>
   </>
   );
-}
-
-/**
- * Turns an object containing an array of record object and an array of item objects,
- * and adds matching items as a propety of the corresponding object.
- * @param {object} records is the object returned from the database.
- * @returns an array of record objects.
- */
-function sortRecords(records) {
-  const newRecords = records.records
-  for (let i = 0; i < newRecords.length; i++) {
-    const sortedItems = records.items.filter(item => item.recordId === newRecords[i].recordId)
-    newRecords[i].items = sortedItems;
-  }
-  return newRecords;
-}
-
-function ItemsView({ allRecords }) {
-  console.log('sorting', allRecords)
-  const listItems = allRecords.map(r => r.items.map( i => <li className='list-group-item' key={i.itemId}>{`Date: ${r.month + 1}/${r.day + 1}/${r.year} Item:${i.itemname} Amount: ${i.amount} From: ${r.source}`}</li>)).flat();
-  console.log('the list items', listItems)
-  return (
-    <ul className='list-group'>
-      {listItems}
-    </ul>
-  )
 }

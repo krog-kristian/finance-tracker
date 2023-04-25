@@ -1,0 +1,35 @@
+import Badge from 'react-bootstrap/Badge'
+/**
+ * Takes the array of records and creates list elements for each item
+ * in a single records array of items, using properties from the item and the record object.
+ * @param {array} allRecords is an array of record objects.
+ * @returns a jsx list of items.
+ */
+export default function ItemsView({ allRecords }) {
+  const listItems = allRecords.map((r) => {
+    return r.items.map((i) => {
+      return (
+        <li className='list-group-item d-flex' key={i.itemId}>
+          <h3 className='my-auto flex-grow-1 mx-1'>
+            Source: {r.source}
+          </h3>
+          <h4 className='my-auto flex-grow-1 mx-1'>
+            Item: {i.itemname}
+          </h4>
+          <Badge className='my-auto mx-1' style={r.inOut ? { color: 'black' } : { color: 'white' }} bg={r.inOut ? 'warning' : 'success'}>
+            Total: ${r.totalSpent}
+          </Badge>
+          <p className='mx-2 my-auto'>
+            Date: {`${r.month + 1}/${r.day + 1}/${r.year}`}
+          </p>
+        </li>)
+
+      })
+    }).flat();
+
+  return (
+    <ul className='list-group'>
+      {listItems}
+    </ul>
+  )
+}

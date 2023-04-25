@@ -67,3 +67,18 @@ function getDay(month, day) {
   const dayTotal = dayRecords.reduce((accumulator, record) => accumulator + Number(record?.totalSpent), zeroValue);
   return dayTotal;
 }
+
+/**
+ * Turns an object containing an array of record object and an array of item objects,
+ * and adds matching items as a propety of the corresponding object.
+ * @param {object} records is the object returned from the database.
+ * @returns an array of record objects.
+ */
+export function sortRecords(records) {
+  const newRecords = records.records
+  for (let i = 0; i < newRecords.length; i++) {
+    const sortedItems = records.items.filter(item => item.recordId === newRecords[i].recordId)
+    newRecords[i].items = sortedItems;
+  }
+  return newRecords;
+}
