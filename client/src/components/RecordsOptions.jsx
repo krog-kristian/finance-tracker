@@ -29,7 +29,7 @@ export default function RecordsOptions({values, setValues, handleChange }) {
               </Form.Select>
             </Form.Label>
           </div>
-          {values.debitOrCredit && values.itemsView === true ? <CategoryViews handleChange={handleChange} categories={values.debitOrCredit === 'true' ? categoriesOut : categoriesIn} /> : ''}
+          {values.debitOrCredit !== 'null' && values.itemsView === true ? <CategoryViews handleChange={handleChange} categories={values.debitOrCredit === 'true' ? categoriesOut : categoriesIn} /> : ''}
           <div>
             <button onClick={(e) => {
               e.preventDefault()

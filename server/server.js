@@ -137,8 +137,8 @@ app.get('/api/records/:page/:type/:category', async (req, res, next) => {
     console.log('THE QUERY PARAMS', recordIds);
     console.log('The items reuqest sql', getItemsSql);
     const items = await db.query(getItemsSql, recordIds);
-    const response = { items: items.rows, nextPage: page + 1 };
-    if (category === 'null') response.records = records.rows;
+    const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
+    // if (category === 'null') response.records = records.rows;
     res.status(200).json(response);
   } catch (err) {
     next(err);

@@ -25,7 +25,7 @@ export default function RecordsView() {
     setRecords([]);
     setPage(0)
     setLoading(true);
-    console.log('loading', loading)
+    setEndOfRecords(false)
   };
 
   /**
@@ -76,6 +76,8 @@ export default function RecordsView() {
   const loadingMessage = <h3 style={{ color: 'white' }}>Loading!</h3>;
   const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
+  const accordionReady = records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? errorMessage : loadingMessage)
+  const content = values.itemsView ? <ItemsView allRecords={records} /> : accordionReady
   return (
   <>
     <h1>Your Records!</h1>
@@ -83,7 +85,7 @@ export default function RecordsView() {
     <div className='container-xl'>
         <RecordsOptions  values={values} setValues={setValues} handleChange={handleChange}/>
       <Accordion defaultActiveKey="0" alwaysOpen>
-          {records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? errorMessage : loadingMessage)}
+        {content}
       </Accordion>
         <Button className={endOfRecords ? 'm-5 btn-danger' : 'm-5'} disabled={endOfRecords} onClick={handleLoadMore}>
           {endOfRecords ? 'No More Records' : 'Load More!'}
@@ -106,4 +108,15 @@ function sortRecords(records) {
     newRecords[i].items = sortedItems;
   }
   return newRecords;
+}
+
+function ItemsView({ allRecords }) {
+  console.log('sorting', allRecords)
+  const listItems = allRecords.map(r => r.items.map( i => <li className='list-group-item' key={i.itemId}>{`Date: ${r.month + 1}/${r.day + 1}/${r.year} Item:${i.itemname} Amount: ${i.amount} From: ${r.source}`}</li>)).flat();
+  console.log('the list items', listItems)
+  return (
+    <ul className='list-group'>
+      {listItems}
+    </ul>
+  )
 }
