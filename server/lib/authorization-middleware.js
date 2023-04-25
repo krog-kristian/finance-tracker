@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import ClientError from './client-error.js';
 
 export default function authorizationMiddleware(req, res, next) {
-  console.log('checking auth');
   // The token will be in the Authorization header with the format `Bearer ${token}`
   const token = req.get('authorization')?.split('Bearer ')[1];
   if (!token) {

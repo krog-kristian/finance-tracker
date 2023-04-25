@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import AppContext from '../components/AppContext';
 import Button from 'react-bootstrap/esm/Button';
 import { ItemsForm } from '../components/ItemsForm'
 
 export default function RecordForm() {
   const [items, setItems] = useState(1);
   const [isDebit, setIsDebit] = useState(true);
+  const { tokenKey } = useContext(AppContext);
 
   function handleItems (e) {
     const numberOfItems = e.target.value;
@@ -12,7 +14,7 @@ export default function RecordForm() {
   }
 
   async function handleSubmit (e) {
-
+    const token = localStorage.getItem(tokenKey);
     try {
       e.preventDefault();
       const form = new FormData(e.target)
@@ -20,6 +22,7 @@ export default function RecordForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(Object.fromEntries(form.entries()))
       });

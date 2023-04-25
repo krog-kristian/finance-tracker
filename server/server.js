@@ -32,7 +32,6 @@ app.use(express.json());
  * All fields are required.
  */
 app.post('/api/home/sign-up', async (req, res, next) => {
-  console.log('signup started');
   try {
     const { username, password, firstname, lastname, email } = req.body;
     if (!username || !password || !firstname || !lastname || !email) {
@@ -46,6 +45,7 @@ app.post('/api/home/sign-up', async (req, res, next) => {
     const hashedPassword = await argon2.hash(password);
     const params = [firstname, lastname, hashedPassword, username, email];
     const data = await db.query(sql, params);
+    if (!data.rows[0]) throw new ClientError(500, 'could not register user.');
     res.status(201).json(data.rows);
   } catch (err) {
     next(err);
@@ -57,7 +57,6 @@ app.post('/api/home/sign-up', async (req, res, next) => {
  */
 app.post('/api/home/sign-in', async (req, res, next) => {
   try {
-    console.log('attetmping sign-in');
     const { username, passwordVerify } = req.body;
     if (!username || !passwordVerify) throw new ClientError(401, 'invalid login');
     const sql = `
@@ -74,9 +73,8 @@ app.post('/api/home/sign-in', async (req, res, next) => {
       userId,
       username
     };
-    console.log('authenticated!');
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-    res.status(200).json({ payload, token });
+    res.status(200).json({ user: payload, token });
   } catch (err) {
     next(err);
   }
@@ -90,8 +88,6 @@ app.use(authorizationMiddleware);
  * returns a response with them aswell as the months 0 indexed number.
  */
 app.get('/api/home', async (req, res, next) => {
-  console.log('authorized for home!');
-  console.log('authorized user:', req.user);
   try {
     const { userId } = req.user;
     const date = new Date();
