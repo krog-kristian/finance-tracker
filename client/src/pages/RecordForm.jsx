@@ -76,15 +76,15 @@ export default function RecordForm() {
           </label>
         </div>
       </div>
-        <div className='d-flex justify-content-evenly'>
 
-          <Button type='submit' size='lg' variant='success'>Save Record</Button>
-
-          <Button type='reset' size='lg' variant='danger' style={{ whiteSpace: 'pre' }}>   Reset   </Button>
-
-        </div>
       <ItemsForm numberOfItems={items} isDebit={isDebit}/>
+      <div className='d-flex justify-content-evenly my-2'>
 
+        <Button type='submit' size='lg' variant='success'>Save Record</Button>
+
+        <Button type='reset' size='lg' variant='danger' style={{ whiteSpace: 'pre' }}>   Reset   </Button>
+
+      </div>
     </form>
     </>
   )

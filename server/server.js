@@ -53,7 +53,7 @@ app.post('/api/home/sign-up', async (req, res, next) => {
 });
 
 /**
- * Authenticates a user an send them a token for user specific requests.
+ * Authenticates a user and sends them a token for user specific requests.
  */
 app.post('/api/home/sign-in', async (req, res, next) => {
   try {

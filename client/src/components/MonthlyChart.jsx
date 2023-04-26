@@ -15,7 +15,7 @@ export function MonthlyChart({ chartData }) {
       <ResponsiveContainer aspect={2} width='100%'>
         <LineChart data={chartData}>
           <CartesianGrid stroke="#ccc" />
-          <XAxis dataKey='day' minTickGap={30} />
+          <XAxis dataKey='day' minTickGap={40} />
           <YAxis type="number" domain={[0, 'dataMax + 50']} />
           <Legend />
           <Line type="monotone" name='This Months Debits' dataKey='thisMonthDebit' stroke="#eb7134" strokeWidth={2} dot={false} />
