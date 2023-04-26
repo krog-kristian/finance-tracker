@@ -3,7 +3,7 @@
 
 -- EXAMPLE:
 
-insert into "users"
-  ("firstname", "lastname", "password", "username", "email")
-  values
-    ('John', 'Doe', 'cortana', 'MasterChief', 'email@gmail.com');
+-- insert into "users"
+--   ("firstname", "lastname", "password", "username", "email")
+--   values
+--     ('John', 'Doe', 'cortana', 'MasterChief', 'email@gmail.com');

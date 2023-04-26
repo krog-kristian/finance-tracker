@@ -1,6 +1,7 @@
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/esm/Button';
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useContext } from 'react'
+import AppContext from '../components/AppContext.jsx';
 import AccordionItems from '../components/AccordionItems.jsx';
 import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
@@ -17,6 +18,7 @@ export default function RecordsView() {
     debitOrCredit: 'null',
     category: 'null',
   });
+  const { tokenKey } = useContext(AppContext)
 
   /**
    * Updates the values object when inputs are changed.
@@ -39,7 +41,10 @@ export default function RecordsView() {
   const getRecords = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/records/${page}/${values.debitOrCredit}/${values.category}`);
+      const token = localStorage.getItem(tokenKey);
+      const res = await fetch(`/api/records/${page}/${values.debitOrCredit}/${values.category}`, {
+        headers: { 'Authorization': `Bearer ${token}`}
+      });
       if (!res.ok) throw new Error(`Could not load results ${res.status}`);
       const myrecords = await res.json();
       if (!myrecords.nextPage) {
@@ -55,7 +60,7 @@ export default function RecordsView() {
       console.error(err)
       setIsErrors(true)
     }
-  }, [page, values.debitOrCredit, values.category]);
+  }, [page, values.debitOrCredit, values.category, tokenKey]);
 
   /**
    * Calls the getRecords function once first render and whenver loading is true.

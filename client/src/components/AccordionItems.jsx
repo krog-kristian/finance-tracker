@@ -18,7 +18,7 @@ export default function AccordionItems({ records }) {
 
               <div className='my-auto'>
                 <Badge className='my-auto mx-1' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
-                  Total: ${r.totalSpent}
+                  Total: ${Number(r.totalSpent).toFixed(2)}
                 </Badge>
               </div>
 
@@ -50,7 +50,7 @@ function AccordionDropdown({ items }) {
         <h4 className='mx-1 my-auto flex-grow-1 text-start'>Item: {item.itemname}</h4>
         <p className='mx-1 fs-4 my-auto'>Category: {item.category}</p>
         <div>
-          <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${item.amount}</Badge>
+          <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${Number(item.amount).toFixed(2)}</Badge>
         </div>
       </div>
     </li>)

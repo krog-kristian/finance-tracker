@@ -7,7 +7,7 @@ import { Outlet, Link } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal'
 
 export default function Nav() {
-  const { isLargeScreen } = useContext(AppContext)
+  const { isLargeScreen, handleSignOut, user } = useContext(AppContext)
 
   return (
     <>
@@ -16,7 +16,7 @@ export default function Nav() {
             <div className=''>
             <Link to='/' className='.navbar-brand '>My Logo</Link>
             </div>
-            {isLargeScreen ? <NavDesktop /> : <NavMobile />}
+          {isLargeScreen ? <NavDesktop handleSignOut={handleSignOut} signedIn={user} /> : <NavMobile handleSignOut={handleSignOut}  signedIn={user}/>}
           </div>
         </div>
       <Outlet />
@@ -24,8 +24,27 @@ export default function Nav() {
   );
 }
 
-function NavMobile() {
+function NavMobile({ handleSignOut, signedIn }) {
   const [hamburgerOpen, setHamburgerOpen] = useState(false)
+  function signOutHamburger() {
+    handleSignOut();
+    setHamburgerOpen(false);
+  }
+
+  const signedInLinks = signedIn ? (<>
+                                      <li onClick={() => setHamburgerOpen(false)}>
+                                        <Link to='newrecord'>New Record</Link>
+                                      </li>
+                                      <li onClick={() => setHamburgerOpen(false)}>
+                                        <Link to='records'>Records</Link>
+                                      </li>
+                                      <li onClick={signOutHamburger}>
+                                        <Link to='/'>Sign Out</Link>
+                                      </li>
+                                    </>
+                                    ) : ''
+
+
   return (
     <>
       <div className='icon-holder'>
@@ -42,12 +61,7 @@ function NavMobile() {
             <li onClick={() => setHamburgerOpen(false)}>
               <Link to='/'>Home</Link>
             </li>
-            <li onClick={() => setHamburgerOpen(false)}>
-              <Link to='newrecord'>New Record</Link>
-            </li>
-            <li onClick={() => setHamburgerOpen(false)}>
-              <Link to='records'>Records</Link>
-            </li>
+            {signedInLinks}
           </ul>
         </Modal.Body>
       </Modal>
@@ -55,13 +69,19 @@ function NavMobile() {
   );
 }
 
-function NavDesktop() {
+function NavDesktop({ handleSignOut, signedIn }) {
+
+  const signedInLinks = signedIn ? (<>
+                                      < Link to = 'newrecord' className = "btn btn-primary mx-3" > Add Record</Link>
+                                      <Link to='records' className="btn btn-primary mx-3">Records</Link>
+                                      <Button variant='warning' className='ms-3' onClick={handleSignOut}>Sign Out</Button>{ ' ' }
+                                    </>
+   ) : ''
+
   return (
       <div className='d-flex justify-content-between'>
         <Link to='/' className="btn btn-primary mx-3">Home</Link>
-        <Link to='newrecord' className="btn btn-primary mx-3">Add Record</Link>
-        <Link to='records' className="btn btn-primary mx-3">Records</Link>
-        <Button variant='warning' className='ms-3'>Sign Out</Button>{' '}
+        {signedInLinks}
       </div>
   );
 }

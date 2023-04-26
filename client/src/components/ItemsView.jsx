@@ -25,7 +25,7 @@ export default function ItemsView({ allRecords }) {
 
           <div className='col'>
             <Badge className='my-auto mx-1' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
-              Total: ${r.totalSpent}
+              Total: ${Number(r.totalSpent).toFixed(2)}
             </Badge>
           </div>
 

@@ -5,6 +5,9 @@ import pg from 'pg';
 import ClientError from './lib/client-error.js';
 import { createItemsList, createItemsSql } from './lib/form-prepare.js';
 import { writeGetItemsSql, getRecordIds } from './lib/items-request.js';
+import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+import authorizationMiddleware from './lib/authorization-middleware.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -24,22 +27,60 @@ app.use(express.static(reactStaticDir));
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
-// Sign up post to insert a user, incomplete just for testing purposes.
-app.post('/api/user', async (req, res, next) => {
-  const upload = req.body;
+/**
+ * Registers a user, error middleware handles if username is not unique.
+ * All fields are required.
+ */
+app.post('/api/home/sign-up', async (req, res, next) => {
   try {
+    const { username, password, firstname, lastname, email } = req.body;
+    if (!username || !password || !firstname || !lastname || !email) {
+      throw new ClientError(400, 'all fields are required.');
+    }
     const sql = `
                 insert into "users" ("firstname", "lastname", "password", "username", "email")
                 values ($1, $2, $3, $4, $5)
-                returning *;
+                returning "username";
                 `;
-    const params = [upload.firstname, upload.lastname, upload.password, upload.username, upload.email];
+    const hashedPassword = await argon2.hash(password);
+    const params = [firstname, lastname, hashedPassword, username, email];
     const data = await db.query(sql, params);
+    if (!data.rows[0]) throw new ClientError(500, 'could not register user.');
     res.status(201).json(data.rows);
   } catch (err) {
     next(err);
   }
 });
+
+/**
+ * Authenticates a user and sends them a token for user specific requests.
+ */
+app.post('/api/home/sign-in', async (req, res, next) => {
+  try {
+    const { username, passwordVerify } = req.body;
+    if (!username || !passwordVerify) throw new ClientError(401, 'invalid login');
+    const sql = `
+                select "userId", "password"
+                from "users"
+                where "username" = $1
+                `;
+    const userData = await db.query(sql, [username]);
+    if (!userData.rows[0]) throw new ClientError(404, 'incorrect login');
+    const { userId, password } = userData.rows[0];
+    const auth = await argon2.verify(password, passwordVerify);
+    if (!auth) throw new ClientError(404, 'incorrect login');
+    const payload = {
+      userId,
+      username
+    };
+    const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+    res.status(200).json({ user: payload, token });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.use(authorizationMiddleware);
 
 /**
  * Determines the current and previous months,
@@ -48,7 +89,7 @@ app.post('/api/user', async (req, res, next) => {
  */
 app.get('/api/home', async (req, res, next) => {
   try {
-    const user = 1;
+    const { userId } = req.user;
     const date = new Date();
     const thisMonth = date.getMonth();
     const lastMonth = thisMonth - 1;
@@ -58,7 +99,7 @@ app.get('/api/home', async (req, res, next) => {
                 from "records"
                 where "userId" = $1 AND "year" = $2 AND "month" = $3 OR "month" = $4;
                 `;
-    const params = [user, thisYear, thisMonth, lastMonth];
+    const params = [userId, thisYear, thisMonth, lastMonth];
     const dataRecords = await db.query(sql, params);
     res.status(200).json({ records: dataRecords.rows, thisMonth, lastMonth });
   } catch (err) {
@@ -72,18 +113,19 @@ app.get('/api/home', async (req, res, next) => {
  * Requires userId, hard coded a demo userId into params for now.
  */
 app.post('/api/record', async (req, res, next) => {
-  const { isDebit, source, numberOfItems, total, date } = req.body;
-  const dateArray = date.split('-');
-  let [year, month, day] = dateArray;
-  month = month - 1;
-  day = day - 1;
   try {
+    const { userId } = req.user;
+    const { isDebit, source, numberOfItems, total, date } = req.body;
+    const dateArray = date.split('-');
+    let [year, month, day] = dateArray;
+    month = month - 1;
+    day = day - 1;
     const sql = `
               insert into "records" ("userId", "month", "day", "year", "source", "isDebit", "numberOfItems", "totalSpent")
               values ($1, $2, $3, $4, $5, $6, $7, $8)
               returning *;
               `;
-    const params = [1, month, day, year, source, isDebit, numberOfItems, total];
+    const params = [userId, month, day, year, source, isDebit, numberOfItems, total];
     if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Incomplete form.');
     const dataRecords = await db.query(sql, params);
     if (!dataRecords.rows[0]) throw new ClientError(500, 'Database failure, aborting.');
@@ -108,10 +150,10 @@ app.post('/api/record', async (req, res, next) => {
 app.get('/api/records/:page/:type/:category', async (req, res, next) => {
   try {
     let filter = '';
-    const user = 1;
+    const { userId } = req.user;
     const page = Number(req.params.page);
     const offset = page * 10;
-    const params = [user, offset];
+    const params = [userId, offset];
     const { type, category } = req.params;
     if (type !== 'null') {
       filter = 'AND "isDebit" = $3';
