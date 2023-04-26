@@ -7,7 +7,8 @@ import { createItemsList, createItemsSql } from './lib/form-prepare.js';
 import { writeGetItemsSql, getRecordIds } from './lib/items-request.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import authorizationMiddleware from './lib/authorization-middleware.js';
+// import authorizationMiddleware from './lib/authorization-middleware.js';
+import writeRecordsSql from './lib/search-sql.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -80,7 +81,7 @@ app.post('/api/home/sign-in', async (req, res, next) => {
   }
 });
 
-app.use(authorizationMiddleware);
+// app.use(authorizationMiddleware);
 
 /**
  * Determines the current and previous months,
@@ -140,6 +141,32 @@ app.post('/api/record', async (req, res, next) => {
   }
 });
 
+app.get('/api/test/:page/:itemsOnly/:type?/:category?/:search?', async (req, res, next) => {
+  try {
+    // const { userId } = req.user;
+    const userId = 1;
+    console.log('req params', req.params);
+    const page = Number(req.params.page);
+    const offset = page * 10;
+    const params = [userId, offset];
+    const { sql, queryParams } = writeRecordsSql(req.params);
+    console.log('the query params before request', queryParams);
+    const fullParams = params.concat(queryParams);
+    console.log('the params before request', fullParams);
+    if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
+    const records = await db.query(sql, fullParams);
+    console.log('records with new query', records.rows.length);
+    if (!records.rows.length) {
+      res.status(200).json({ nextPage: undefined });
+      return;
+    }
+    const response = { records: records.rows, nextPage: page + 1 };
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
 /**
  * Takes a page number from the request parameters and multiplies by 5 for the offset.
  * Requests a limit of 5 records and extracts records Ids to generate SQL
@@ -147,7 +174,7 @@ app.post('/api/record', async (req, res, next) => {
  * Returns records, items and next page to the client.
  * If end of database returns next page as undefined.
  */
-app.get('/api/records/:page/:type/:category', async (req, res, next) => {
+app.get('/api/records/:page/:type/:category?', async (req, res, next) => {
   try {
     let filter = '';
     const { userId } = req.user;
