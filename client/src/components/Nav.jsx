@@ -7,7 +7,7 @@ import { Outlet, Link } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal'
 
 export default function Nav() {
-  const { isLargeScreen } = useContext(AppContext)
+  const { isLargeScreen, handleSignOut } = useContext(AppContext)
 
   return (
     <>
@@ -16,7 +16,7 @@ export default function Nav() {
             <div className=''>
             <Link to='/' className='.navbar-brand '>My Logo</Link>
             </div>
-            {isLargeScreen ? <NavDesktop /> : <NavMobile />}
+          {isLargeScreen ? <NavDesktop handleSignOut={handleSignOut} /> : <NavMobile handleSignOut={handleSignOut} />}
           </div>
         </div>
       <Outlet />
@@ -24,8 +24,13 @@ export default function Nav() {
   );
 }
 
-function NavMobile() {
+function NavMobile({ handleSignOut }) {
   const [hamburgerOpen, setHamburgerOpen] = useState(false)
+  function signOutHamburger() {
+    handleSignOut();
+    setHamburgerOpen(false);
+  }
+
   return (
     <>
       <div className='icon-holder'>
@@ -48,6 +53,9 @@ function NavMobile() {
             <li onClick={() => setHamburgerOpen(false)}>
               <Link to='records'>Records</Link>
             </li>
+            <li onClick={signOutHamburger}>
+              <Link to='/'>Sign Out</Link>
+            </li>
           </ul>
         </Modal.Body>
       </Modal>
@@ -55,13 +63,13 @@ function NavMobile() {
   );
 }
 
-function NavDesktop() {
+function NavDesktop({ handleSignOut }) {
   return (
       <div className='d-flex justify-content-between'>
         <Link to='/' className="btn btn-primary mx-3">Home</Link>
         <Link to='newrecord' className="btn btn-primary mx-3">Add Record</Link>
         <Link to='records' className="btn btn-primary mx-3">Records</Link>
-        <Button variant='warning' className='ms-3'>Sign Out</Button>{' '}
+        <Button variant='warning' className='ms-3' onClick={handleSignOut}>Sign Out</Button>{' '}
       </div>
   );
 }

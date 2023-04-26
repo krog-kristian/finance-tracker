@@ -4,7 +4,7 @@ import Nav from './components/Nav';
 import AppContext from './components/AppContext';
 import RecordForm from './pages/RecordForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import RecordsView from './pages/RecordsView';
 import UserHome from './pages/UserHome';
 import Home from './pages/Home';
@@ -15,6 +15,7 @@ import jwtDecode from 'jwt-decode';
 
 function App() {
   const [user, setUser] = useState()
+  const navigate = useNavigate();
   const [isAuthorizing, setIsAuthorizing] = useState(true);
   const isLargeScreen = useMediaQuery({
     query: '(min-width: 900px)'
@@ -39,7 +40,9 @@ function App() {
   function handleSignOut() {
     localStorage.removeItem(tokenKey);
     setUser(undefined);
+    navigate('/')
   }
+
 
   const appState = { isLargeScreen, user, handleSignIn, handleSignOut, tokenKey }
 

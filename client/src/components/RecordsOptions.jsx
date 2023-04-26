@@ -5,7 +5,6 @@ import { categoriesOut, categoriesIn } from '../lib/catergory-data';
 
 export default function RecordsOptions({values, setValues, handleChange }) {
 
-
   return (
     <Card className='p-3 my-4'>
       <Form>
