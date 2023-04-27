@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
-import AppContext from "./AppContext";
+import { useContext, useState } from "react"
+import AppContext from "./AppContext"
 import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
-import Alert from 'react-bootstrap/Alert';
+import Alert from 'react-bootstrap/Alert'
 
 /**
  * Created the modal component and controls the request to sign a user in.
@@ -23,7 +23,7 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(Object.fromEntries(form.entries()))
-      });
+      })
       if (!response.ok) throw new Error(`Incorrect Login.`)
       const confirm = await response.json();
       handleSignIn(confirm)

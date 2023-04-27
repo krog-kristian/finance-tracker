@@ -1,7 +1,6 @@
 import Badge from 'react-bootstrap/Badge'
 /**
- * Takes the array of records and creates list elements for each item
- * in a single records array of items, using properties from the item and the record object.
+ * Takes an array of items and creates a list component with their values.
  * @param {array} allRecords is an array of record objects.
  * @returns a jsx list of items.
  */

@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { categoriesOut, categoriesIn } from '../lib/catergory-data';
 import { useState } from 'react';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 /**
  * Creates and option bar for different filtering options.
@@ -27,8 +28,9 @@ export default function RecordsOptions({values, handleItemView, handleChange, st
   return (
     <Card className='p-3 my-4'>
 
+
       <Form>
-        <div className='row d-flex align-items-center'>
+        <div className='row d-flex align-items-center justify-content-between'>
           <div className='col-sm-2'>
             <Form.Label> Items View
               <Form.Check
@@ -53,11 +55,12 @@ export default function RecordsOptions({values, handleItemView, handleChange, st
 
           {values.debitOrCredit !== 'null' && values.itemsView === true ? <CategoryViews handleChange={handleChange} categories={values.debitOrCredit === 'true' ? categoriesOut : categoriesIn} /> : ''}
 
-          <div className='col'>
-            <Form.Label> {`Search ${searchType}`}
-                <Form.Control type='text' value={search} onChange={e => setSearch(e.target.value)}/>
-            </Form.Label>
-            <Button variant="outline-secondary" name='search' onClick={() => startSearch(search)}>Search</Button>
+          <div className='col-sm col-lg-4 d-flex flex-column align-items-start pb-3'>
+            <Form.Label htmlFor='search'>{`Search ${searchType}`}</Form.Label>
+            <InputGroup>
+                  <Form.Control type='text' name='search' id='search' value={search} onChange={e => setSearch(e.target.value)}/>
+              <Button variant="outline-secondary" name='search' onClick={() => startSearch(search)}>Search</Button>
+            </InputGroup>
           </div>
 
         </div>
@@ -86,5 +89,3 @@ function CategoryViews({ categories, handleChange }) {
     </div>
   )
 }
-
-// (e) => setValues({ ...values, [e.target.name]: !values.itemsView })

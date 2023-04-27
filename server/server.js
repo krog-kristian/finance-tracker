@@ -141,27 +141,6 @@ app.post('/api/record', async (req, res, next) => {
   }
 });
 
-app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, next) => {
-  try {
-    const { userId } = req.user;
-    const page = Number(req.params.page);
-    const offset = page * 10;
-    const params = [userId, offset];
-    const { sql, queryParams } = writeRecordsSql(req.params);
-    const fullParams = params.concat(queryParams);
-    if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
-    const items = await db.query(sql, fullParams);
-    if (!items.rows.length) {
-      res.status(200).json({ nextPage: undefined });
-      return;
-    }
-    const response = { items: items.rows, nextPage: page + 1 };
-    res.status(200).json(response);
-  } catch (err) {
-    next(err);
-  }
-});
-
 /**
  * Takes a page number from the request parameters and multiplies by 5 for the offset.
  * Requests a limit of 5 records and extracts records Ids to generate SQL
@@ -174,27 +153,26 @@ app.get('/api/records/:page/:type/:search?', async (req, res, next) => {
     let filter = '';
     const { userId } = req.user;
     const page = Number(req.params.page);
-    const offset = page * 10;
+    const offset = page * 15;
     const params = [userId, offset];
     const { type, search } = req.params;
     if (type !== 'null') {
-      filter = ' AND ("isDebit" = $3) ';
+      filter = ' AND ("isDebit" = $3)';
       params.push(type);
     }
-    let searchSql = '';
     if (search !== undefined) {
-      searchSql = `AND ("source" LIKE '%' || $${type === 'null' ? '3' : '4'} || '%')`;
+      filter += ` AND ("source" ILIKE '%' || $${type === 'null' ? '3' : '4'} || '%')`;
       params.push(search);
     }
     const sql = `
                 select *
                 from "records"
-                where ("userId" = $1)${filter}${searchSql}
+                where ("userId" = $1)${filter}
                 order by "year" desc, "month" desc, "day" desc, "recordId" desc
-                limit 10
+                limit 15
                 offset $2;
                 `;
-    if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
+    if (params.includes(undefined)) throw new ClientError(400, 'Improper record request.');
     const records = await db.query(sql, params);
     const recordIds = getRecordIds(records.rows);
     if (!recordIds.length) {
@@ -204,6 +182,32 @@ app.get('/api/records/:page/:type/:search?', async (req, res, next) => {
     const getItemsSql = writeGetItemsSql(recordIds);
     const items = await db.query(getItemsSql, recordIds);
     const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * Endpoint for an items search, where records is joined with items.
+ * Calls a function to write the SQL with the parameters.
+ * Returns relevant items and if a next page is available.
+ */
+app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const page = Number(req.params.page);
+    const offset = page * 15;
+    const params = [userId, offset];
+    const { sql, queryParams } = writeRecordsSql(req.params);
+    const fullParams = params.concat(queryParams);
+    if (fullParams.includes(undefined)) throw new ClientError(400, 'Improper record request.');
+    const items = await db.query(sql, fullParams);
+    if (!items.rows.length) {
+      res.status(200).json({ nextPage: undefined });
+      return;
+    }
+    const response = { items: items.rows, nextPage: page + 1 };
     res.status(200).json(response);
   } catch (err) {
     next(err);
