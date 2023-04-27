@@ -7,7 +7,7 @@ import { createItemsList, createItemsSql } from './lib/form-prepare.js';
 import { writeGetItemsSql, getRecordIds } from './lib/items-request.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-// import authorizationMiddleware from './lib/authorization-middleware.js';
+import authorizationMiddleware from './lib/authorization-middleware.js';
 import writeRecordsSql from './lib/search-sql.js';
 
 const db = new pg.Pool({
@@ -81,7 +81,7 @@ app.post('/api/home/sign-in', async (req, res, next) => {
   }
 });
 
-// app.use(authorizationMiddleware);
+app.use(authorizationMiddleware);
 
 /**
  * Determines the current and previous months,
@@ -141,26 +141,21 @@ app.post('/api/record', async (req, res, next) => {
   }
 });
 
-app.get('/api/test/:page/:itemsOnly/:type?/:category?/:search?', async (req, res, next) => {
+app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, next) => {
   try {
-    // const { userId } = req.user;
-    const userId = 1;
-    console.log('req params', req.params);
+    const { userId } = req.user;
     const page = Number(req.params.page);
     const offset = page * 10;
     const params = [userId, offset];
     const { sql, queryParams } = writeRecordsSql(req.params);
-    console.log('the query params before request', queryParams);
     const fullParams = params.concat(queryParams);
-    console.log('the params before request', fullParams);
     if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
-    const records = await db.query(sql, fullParams);
-    console.log('records with new query', records.rows.length);
-    if (!records.rows.length) {
+    const items = await db.query(sql, fullParams);
+    if (!items.rows.length) {
       res.status(200).json({ nextPage: undefined });
       return;
     }
-    const response = { records: records.rows, nextPage: page + 1 };
+    const response = { items: items.rows, nextPage: page + 1 };
     res.status(200).json(response);
   } catch (err) {
     next(err);
@@ -174,37 +169,48 @@ app.get('/api/test/:page/:itemsOnly/:type?/:category?/:search?', async (req, res
  * Returns records, items and next page to the client.
  * If end of database returns next page as undefined.
  */
-app.get('/api/records/:page/:type/:category?', async (req, res, next) => {
+app.get('/api/records/:page/:type/:search?', async (req, res, next) => {
+  console.log('getting records');
   try {
     let filter = '';
     const { userId } = req.user;
     const page = Number(req.params.page);
     const offset = page * 10;
     const params = [userId, offset];
-    const { type, category } = req.params;
+    const { type, search } = req.params;
     if (type !== 'null') {
-      filter = 'AND "isDebit" = $3';
+      filter = ' AND ("isDebit" = $3) ';
       params.push(type);
+    }
+    console.log('search should be undefined', search);
+    let searchSql = '';
+    if (search !== undefined) {
+      searchSql = `AND ("source" LIKE '%' || $${type === 'null' ? '3' : '4'} || '%')`;
+      params.push(search);
     }
     const sql = `
                 select *
                 from "records"
-                where "userId" = $1 ${filter}
+                where ("userId" = $1)${filter}${searchSql}
                 order by "year" desc, "month" desc, "day" desc
                 limit 10
                 offset $2;
                 `;
     if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
+    console.log('bad query', { sql, params });
     const records = await db.query(sql, params);
+    console.log('got record ids');
     const recordIds = getRecordIds(records.rows);
+    console.log('sorted record ids', recordIds);
     if (!recordIds.length) {
       res.status(200).json({ nextPage: undefined });
       return;
     }
-    const getItemsSql = writeGetItemsSql(recordIds, category);
-    if (category !== 'null') recordIds.push(category);
+    const getItemsSql = writeGetItemsSql(recordIds);
+    console.log('got item sql');
     const items = await db.query(getItemsSql, recordIds);
     const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
+    console.log('response', response);
     res.status(200).json(response);
   } catch (err) {
     next(err);

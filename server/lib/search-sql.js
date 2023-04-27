@@ -1,7 +1,5 @@
 export default function writeRecordsSql(queries) {
-  console.log('writing sql params:', queries);
-  const { type, category, itemsOnly, search } = queries;
-  const join = itemsOnly === 'true' ? 'join "items" using ("recordId")' : '';
+  const { type, category, search } = queries;
   let filter = '';
   const queryParams = [];
   if (type !== 'null') {
@@ -13,29 +11,22 @@ export default function writeRecordsSql(queries) {
     queryParams.push(category);
   }
   if (search !== undefined) {
-    if (itemsOnly === 'true') {
-      filter += ` AND ("itemname" LIKE '%' || $${queryParams.length + 3} || '%')`;
-    } else {
-      filter += ` AND ("source" LIKE '%' || $${queryParams.length + 3} || '%')`;
-    }
+    filter += ` AND ("itemname" LIKE '%' || $${queryParams.length + 3} || '%') OR ("source" LIKE '%' || $${queryParams.length + 3} || '%')`;
     queryParams.push(search);
   }
   const sql = `
                 select *
                 from "records"
-                ${join}
+                join "items" using ("recordId")
                 where ("userId" = $1) ${filter}
                 order by "year" desc, "month" desc, "day" desc
                 limit 10
                 offset $2;
                 `;
-  console.log('the sql in write', sql);
-  console.log('the query params in write', queryParams);
   return { sql, queryParams };
 }
 
 // queries = {
-//   itemsOnly: Boolean,
 //   type: boolean or null,
 //   category: string,
 //   search: string

@@ -40,9 +40,10 @@ export default function RecordsView() {
    */
   const getRecords = useCallback(async () => {
     setLoading(true)
+    console.log('calling get request')
     try {
       const token = localStorage.getItem(tokenKey);
-      const res = await fetch(`/api/records/${page}/${values.debitOrCredit}/${values.category}`, {
+      const res = await fetch(`/api/records/${page}/${values.debitOrCredit}/`, {
         headers: { 'Authorization': `Bearer ${token}`}
       });
       if (!res.ok) throw new Error(`Could not load results ${res.status}`);
@@ -70,6 +71,7 @@ export default function RecordsView() {
     const fetchRecords = async () => {
       const newRecords = await getRecords();
       if (!newRecords) return
+      console.log('new records', newRecords)
       setRecords(r => r.concat(newRecords))
     }
     if(loading) fetchRecords();
