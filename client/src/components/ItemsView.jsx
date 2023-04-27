@@ -7,10 +7,8 @@ import Badge from 'react-bootstrap/Badge'
  */
 export default function ItemsView({ allRecords }) {
   const listItems = allRecords.map((r) => {
-    return r.items.map((i) => {
       return (
-        <li className='list-group-item d-flex flex-wrap' key={i.itemId}>
-
+        <li className='list-group-item d-flex flex-wrap' key={r.itemId}>
           <div className='col'>
             <h3 className='my-auto mx-1 text-start'>
               Source: {r.source}
@@ -19,13 +17,13 @@ export default function ItemsView({ allRecords }) {
 
           <div className='col'>
             <h4 className='my-auto flex-grow-1 mx-1 text-start'>
-              Item: {i.itemname}
+              Item: {r.itemname}
             </h4>
           </div>
 
           <div className='col'>
             <Badge className='my-auto mx-1' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
-              Total: ${Number(r.totalSpent).toFixed(2)}
+              Total: ${Number(r.amount).toFixed(2)}
             </Badge>
           </div>
 
@@ -35,8 +33,7 @@ export default function ItemsView({ allRecords }) {
             </p>
           </div>
         </li>)
-      })
-    }).flat();
+      });
 
   return (
     <ul className='list-group'>

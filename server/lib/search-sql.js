@@ -11,7 +11,7 @@ export default function writeRecordsSql(queries) {
     queryParams.push(category);
   }
   if (search !== undefined) {
-    filter += ` AND ("itemname" LIKE '%' || $${queryParams.length + 3} || '%') OR ("source" LIKE '%' || $${queryParams.length + 3} || '%')`;
+    filter += ` AND ("itemname" LIKE '%' || $${queryParams.length + 3} || '%')`;
     queryParams.push(search);
   }
   const sql = `
@@ -19,17 +19,9 @@ export default function writeRecordsSql(queries) {
                 from "records"
                 join "items" using ("recordId")
                 where ("userId" = $1) ${filter}
-                order by "year" desc, "month" desc, "day" desc
+                order by "year" desc, "month" desc, "day" desc, "itemId" desc
                 limit 10
                 offset $2;
                 `;
   return { sql, queryParams };
 }
-
-// queries = {
-//   type: boolean or null,
-//   category: string,
-//   search: string
-// }
-
-// '%' || $1 || '%'

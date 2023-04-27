@@ -170,7 +170,6 @@ app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, ne
  * If end of database returns next page as undefined.
  */
 app.get('/api/records/:page/:type/:search?', async (req, res, next) => {
-  console.log('getting records');
   try {
     let filter = '';
     const { userId } = req.user;
@@ -182,7 +181,6 @@ app.get('/api/records/:page/:type/:search?', async (req, res, next) => {
       filter = ' AND ("isDebit" = $3) ';
       params.push(type);
     }
-    console.log('search should be undefined', search);
     let searchSql = '';
     if (search !== undefined) {
       searchSql = `AND ("source" LIKE '%' || $${type === 'null' ? '3' : '4'} || '%')`;
@@ -192,25 +190,20 @@ app.get('/api/records/:page/:type/:search?', async (req, res, next) => {
                 select *
                 from "records"
                 where ("userId" = $1)${filter}${searchSql}
-                order by "year" desc, "month" desc, "day" desc
+                order by "year" desc, "month" desc, "day" desc, "recordId" desc
                 limit 10
                 offset $2;
                 `;
     if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
-    console.log('bad query', { sql, params });
     const records = await db.query(sql, params);
-    console.log('got record ids');
     const recordIds = getRecordIds(records.rows);
-    console.log('sorted record ids', recordIds);
     if (!recordIds.length) {
       res.status(200).json({ nextPage: undefined });
       return;
     }
     const getItemsSql = writeGetItemsSql(recordIds);
-    console.log('got item sql');
     const items = await db.query(getItemsSql, recordIds);
     const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
-    console.log('response', response);
     res.status(200).json(response);
   } catch (err) {
     next(err);
