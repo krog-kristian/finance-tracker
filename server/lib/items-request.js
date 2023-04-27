@@ -24,19 +24,15 @@ function getRecordIds(records) {
  *  where "recordId" = $1 or "recordId" = $2 //etc//;
  * "
  */
-function writeGetItemsSql(recordIds, category) {
+function writeGetItemsSql(recordIds) {
   const placeholders = [];
   for (let i = 0; i < recordIds.length; i++) {
     placeholders.push(`$${i + 1}`);
   }
-  let categoryChoice = '';
-  if (category !== 'null') {
-    categoryChoice = ` AND ("category" = $${placeholders.length + 1})`;
-  }
   const sql = `
                 select *
                 from "items"
-                where ("recordId" = ${placeholders.join(' OR "recordId" = ')})${categoryChoice};
+                where ("recordId" = ${placeholders.join(' OR "recordId" = ')});
                 `;
   return sql;
 }

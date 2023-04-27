@@ -1,7 +1,8 @@
-import { useContext } from "react";
-import AppContext from "./AppContext";
+import { useContext, useState } from "react"
+import AppContext from "./AppContext"
 import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
+import Alert from 'react-bootstrap/Alert'
 
 /**
  * Created the modal component and controls the request to sign a user in.
@@ -10,6 +11,7 @@ import Button from "react-bootstrap/Button"
  */
 export default function SignInModal({ showSignIn, setShowSignIn }) {
   const { handleSignIn } = useContext(AppContext)
+  const [alertShow, setAlertShow] = useState(false)
 
   async function signIn(e) {
     try {
@@ -21,12 +23,13 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(Object.fromEntries(form.entries()))
-      });
+      })
       if (!response.ok) throw new Error(`Incorrect Login.`)
       const confirm = await response.json();
       handleSignIn(confirm)
       setShowSignIn(false)
     } catch (err) {
+      setAlertShow(true)
       console.error(err)
     }
   }
@@ -38,6 +41,13 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
       </Modal.Header>
       <form onSubmit={e => signIn(e)}>
         <Modal.Body>
+          <Alert show={alertShow} variant="danger">
+            <Alert.Heading>Incorrect Login.</Alert.Heading>
+            <p>
+              Unable to log in try again.
+            </p>
+            <hr />
+          </Alert>
           <div className='row g-3'>
             <div className='col'>
               <label className='form-label'>Username

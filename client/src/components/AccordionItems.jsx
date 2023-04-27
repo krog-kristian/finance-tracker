@@ -11,6 +11,7 @@ export default function AccordionItems({ records }) {
     records.map((r, i) => {
       return (
         <Accordion.Item key={`${r.recordId}`} eventKey={i}>
+
           <Accordion.Header >
             <div className='d-flex w-100'>
 
@@ -45,14 +46,17 @@ export default function AccordionItems({ records }) {
  */
 function AccordionDropdown({ items }) {
   return (
-    items.map((item, index) => <li className='list-group-item' key={item.itemId}>
-      <div className='d-flex w-100 align-items-center'>
-        <h4 className='mx-1 my-auto flex-grow-1 text-start'>Item: {item.itemname}</h4>
-        <p className='mx-1 fs-4 my-auto'>Category: {item.category}</p>
-        <div>
-          <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${Number(item.amount).toFixed(2)}</Badge>
-        </div>
-      </div>
-    </li>)
-  )
+    items.map((item, index) => {
+      return (
+        <li className='list-group-item' key={item.itemId}>
+          <div className='d-flex w-100 align-items-center'>
+            <h4 className='mx-1 my-auto flex-grow-1 text-start'>Item: {item.itemname}</h4>
+            <p className='mx-1 fs-4 my-auto'>Category: {item.category}</p>
+            <div>
+              <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${Number(item.amount).toFixed(2)}</Badge>
+            </div>
+          </div>
+        </li>)
+    })
+  );
 }

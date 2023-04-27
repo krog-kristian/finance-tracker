@@ -9,6 +9,7 @@ import { useContext } from 'react';
  */
 export function MonthlyChart({ chartData }) {
   const { isLargeScreen } = useContext(AppContext)
+
   return (
     <div style={isLargeScreen ? { width: '75%', backgroundColor: 'white'} : { width: '100%', backgroundColor: 'white' }} className='pe-3 pb-3 pt-3 my-5 rounded'>
       <h3>Daily Totals</h3>

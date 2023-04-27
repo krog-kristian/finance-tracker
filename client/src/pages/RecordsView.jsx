@@ -18,19 +18,41 @@ export default function RecordsView() {
     debitOrCredit: 'null',
     category: 'null',
   });
-  const { tokenKey } = useContext(AppContext)
+  const { tokenKey } = useContext(AppContext);
+  const [search, setSearch] = useState('');
 
   /**
-   * Updates the values object when inputs are changed.
+   * Updates the values object when inputs are changed and sets up a new request.
    * @param {obect} e, the event of targeted input.
    */
   const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value })
+    setValues({ ...values, [e.target.name]: e.target.value });
+    setSearch('');
     setRecords([]);
-    setPage(0)
+    setPage(0);
     setLoading(true);
-    setEndOfRecords(false)
+    setEndOfRecords(false);
   };
+
+  /**
+   * Updates the itemView value and sets up a new request.
+   * @param {object} e, the event of the item view switch.
+   */
+  const handleItemView = (e) => {
+      setValues({ ...values, [e.target.name]: !values.itemsView });
+      setSearch('');
+      setRecords([]);
+      setPage(0);
+      setLoading(true);
+      setEndOfRecords(false);
+  }
+
+  function startSearch() {
+    setRecords([]);
+    setPage(0);
+    setLoading(true);
+    setEndOfRecords(false);
+  }
 
   /**
    * Callback function to request the current page from the api.
@@ -41,8 +63,11 @@ export default function RecordsView() {
   const getRecords = useCallback(async () => {
     setLoading(true)
     try {
+      const itemsEndpoint = `/api/records/items/${page}/${values.debitOrCredit}/${values.category}/${search}`;
+      const recordsEndpoint = `/api/records/${page}/${values.debitOrCredit}/${search}`;
+      const requestEndpoint = values.itemsView ? itemsEndpoint : recordsEndpoint;
       const token = localStorage.getItem(tokenKey);
-      const res = await fetch(`/api/records/${page}/${values.debitOrCredit}/${values.category}`, {
+      const res = await fetch(requestEndpoint, {
         headers: { 'Authorization': `Bearer ${token}`}
       });
       if (!res.ok) throw new Error(`Could not load results ${res.status}`);
@@ -53,14 +78,14 @@ export default function RecordsView() {
         return
       };
       setPage(myrecords.nextPage);
-      const sortedRecords = sortRecords(myrecords);
+      const sortedRecords = !values.itemsView ?  sortRecords(myrecords) : myrecords.items;
       setLoading(false);
       return sortedRecords;
     } catch (err) {
       console.error(err)
       setIsErrors(true)
     }
-  }, [page, values.debitOrCredit, values.category, tokenKey]);
+  }, [page, tokenKey, values, search]);
 
   /**
    * Calls the getRecords function once first render and whenver loading is true.
@@ -90,7 +115,7 @@ export default function RecordsView() {
     <h1>Your Records!</h1>
 
     <div className='container-xl'>
-        <RecordsOptions  values={values} setValues={setValues} handleChange={handleChange}/>
+        <RecordsOptions  values={values} handleItemView={handleItemView} handleChange={handleChange} startSearch={startSearch} search={search} setSearch={setSearch}/>
       <Accordion defaultActiveKey="0" alwaysOpen>
         {content}
       </Accordion>

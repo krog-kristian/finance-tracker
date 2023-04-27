@@ -8,6 +8,7 @@ import { writeGetItemsSql, getRecordIds } from './lib/items-request.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import authorizationMiddleware from './lib/authorization-middleware.js';
+import writeRecordsSql from './lib/search-sql.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -147,37 +148,66 @@ app.post('/api/record', async (req, res, next) => {
  * Returns records, items and next page to the client.
  * If end of database returns next page as undefined.
  */
-app.get('/api/records/:page/:type/:category', async (req, res, next) => {
+app.get('/api/records/:page/:type/:search?', async (req, res, next) => {
   try {
     let filter = '';
     const { userId } = req.user;
     const page = Number(req.params.page);
-    const offset = page * 10;
+    const offset = page * 15;
     const params = [userId, offset];
-    const { type, category } = req.params;
+    const { type, search } = req.params;
     if (type !== 'null') {
-      filter = 'AND "isDebit" = $3';
+      filter = ' AND ("isDebit" = $3)';
       params.push(type);
+    }
+    if (search !== undefined) {
+      filter += ` AND ("source" ILIKE '%' || $${type === 'null' ? '3' : '4'} || '%')`;
+      params.push(search);
     }
     const sql = `
                 select *
                 from "records"
-                where "userId" = $1 ${filter}
-                order by "year" desc, "month" desc, "day" desc
-                limit 10
+                where ("userId" = $1)${filter}
+                order by "year" desc, "month" desc, "day" desc, "recordId" desc
+                limit 15
                 offset $2;
                 `;
-    if (offset === null || offset === undefined) throw new ClientError(400, 'Improper record request.');
+    if (params.includes(undefined)) throw new ClientError(400, 'Improper record request.');
     const records = await db.query(sql, params);
     const recordIds = getRecordIds(records.rows);
     if (!recordIds.length) {
       res.status(200).json({ nextPage: undefined });
       return;
     }
-    const getItemsSql = writeGetItemsSql(recordIds, category);
-    if (category !== 'null') recordIds.push(category);
+    const getItemsSql = writeGetItemsSql(recordIds);
     const items = await db.query(getItemsSql, recordIds);
     const response = { records: records.rows, items: items.rows, nextPage: page + 1 };
+    res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * Endpoint for an items search, where records is joined with items.
+ * Calls a function to write the SQL with the parameters.
+ * Returns relevant items and if a next page is available.
+ */
+app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const page = Number(req.params.page);
+    const offset = page * 15;
+    const params = [userId, offset];
+    const { sql, queryParams } = writeRecordsSql(req.params);
+    const fullParams = params.concat(queryParams);
+    if (fullParams.includes(undefined)) throw new ClientError(400, 'Improper record request.');
+    const items = await db.query(sql, fullParams);
+    if (!items.rows.length) {
+      res.status(200).json({ nextPage: undefined });
+      return;
+    }
+    const response = { items: items.rows, nextPage: page + 1 };
     res.status(200).json(response);
   } catch (err) {
     next(err);

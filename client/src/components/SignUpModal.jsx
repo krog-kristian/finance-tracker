@@ -2,7 +2,7 @@ import { useState } from "react"
 import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
 import Form from 'react-bootstrap/Form'
-import Alert from 'react-bootstrap/Alert';
+import Alert from 'react-bootstrap/Alert'
 import { sendSignUp } from "../lib/api"
 
 /**
@@ -28,8 +28,8 @@ export default function SignUpModal({ showSignUp, setShowSignUp, setShowSignIn }
    */
   async function signUp(e) {
     e.preventDefault()
-    if (emailExists) setEmailExists(false);
-    if (usernameExists) setUsernameExists(false);
+    if (emailExists) setEmailExists(false)
+    if (usernameExists) setUsernameExists(false)
     if (password !== verifyPassword) return setPasswordMatch(false)
     setPasswordMatch(true)
     try {
