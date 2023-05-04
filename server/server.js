@@ -214,6 +214,28 @@ app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, ne
   }
 });
 
+app.get('api/records/budgets', async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const date = new Date();
+    const thisMonth = date.getMonth();
+    const lastMonth = thisMonth - 1;
+    const thisYear = date.getFullYear();
+    const sql = `
+                  select sum("amount"), "category", "month", "year"
+                  from "items"
+                  join "records" using ("recordId")
+                  where "year" = $1 and "userId = $2 ("month" = $3 or "month" = $4)
+                  group by "category", "month", "year";
+                  `;
+    const params = [thisYear, userId, thisMonth, lastMonth];
+    const dataRecords = await db.query(sql, params);
+    res.status(200).json({ records: dataRecords.rows, thisMonth, lastMonth });
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
