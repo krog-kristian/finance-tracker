@@ -41,12 +41,22 @@ app.post('/api/home/sign-up', async (req, res, next) => {
     const sql = `
                 insert into "users" ("firstName", "lastName", "password", "userName", "email")
                 values ($1, $2, $3, $4, $5)
-                returning "userName";
+                returning "userName", "userId";
                 `;
     const hashedPassword = await argon2.hash(password);
     const params = [firstName, lastName, hashedPassword, userName, email];
     const data = await db.query(sql, params);
     if (!data.rows[0]) throw new ClientError(500, 'could not register user.');
+    const budgetSql = `
+                        insert into "budgets"
+                        values ($1)
+                        returning *
+                        `;
+    const { userId } = data.rows[0];
+    const budgetCreate = await db.query(budgetSql, [userId]);
+    if (!budgetCreate.rows[0]) throw new ClientError(500, 'could not register user.');
+    console.log('made a budget table', budgetCreate.rows);
+    console.log('new user', data.rows);
     res.status(201).json(data.rows);
   } catch (err) {
     next(err);
@@ -209,6 +219,24 @@ app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, ne
     }
     const response = { items: items.rows, nextPage: page + 1 };
     res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/records/budgets/update', async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const { category, amount } = req.body;
+    const sql = `
+                  update "budgets"
+                  set ${category} = $1
+                  where "userId" = $2;
+                `;
+    const params = [amount, userId];
+    const data = await db.query(sql, params);
+    if (data.rowCount > 1) throw new ClientError(500, 'Database error, please contact support.');
+    res.status(200).json({ [category]: amount });
   } catch (err) {
     next(err);
   }

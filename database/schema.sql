@@ -108,18 +108,18 @@ CREATE TABLE "public"."items" (
 
 CREATE TABLE "public"."budgets" (
 	"userId" serial NOT NULL UNIQUE,
-	"food" DECIMAL NOT NULL,
-	"clothes" DECIMAL NOT NULL,
-	"fastFood" DECIMAL NOT NULL,
-	"cleaning" DECIMAL NOT NULL,
-	"toiletries" DECIMAL NOT NULL,
-	"furniture" DECIMAL NOT NULL,
-	"car" DECIMAL NOT NULL,
-	"utilities" DECIMAL NOT NULL,
-	"rent" DECIMAL NOT NULL,
-	"entertainment" DECIMAL NOT NULL,
-	"lending" DECIMAL NOT NULL,
-	"other" DECIMAL NOT NULL,
+	"food" DECIMAL NOT NULL DEFAULT '0',
+	"clothes" DECIMAL NOT NULL DEFAULT '0',
+	"fastFood" DECIMAL NOT NULL DEFAULT '0',
+	"cleaning" DECIMAL NOT NULL DEFAULT '0',
+	"toiletries" DECIMAL NOT NULL DEFAULT '0',
+	"furniture" DECIMAL NOT NULL DEFAULT '0',
+	"car" DECIMAL NOT NULL DEFAULT '0',
+	"utilities" DECIMAL NOT NULL DEFAULT '0',
+	"rent" DECIMAL NOT NULL DEFAULT '0',
+	"entertainment" DECIMAL NOT NULL DEFAULT '0',
+	"lending" DECIMAL NOT NULL DEFAULT '0',
+	"other" DECIMAL NOT NULL DEFAULT '0',
 	CONSTRAINT "budgets_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE
