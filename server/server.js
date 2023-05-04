@@ -34,17 +34,17 @@ app.use(express.json());
  */
 app.post('/api/home/sign-up', async (req, res, next) => {
   try {
-    const { username, password, firstname, lastname, email } = req.body;
-    if (!username || !password || !firstname || !lastname || !email) {
+    const { userName, password, firstName, lastName, email } = req.body;
+    if (!userName || !password || !firstName || !lastName || !email) {
       throw new ClientError(400, 'all fields are required.');
     }
     const sql = `
-                insert into "users" ("firstname", "lastname", "password", "username", "email")
+                insert into "users" ("firstName", "lastName", "password", "userName", "email")
                 values ($1, $2, $3, $4, $5)
-                returning "username";
+                returning "userName";
                 `;
     const hashedPassword = await argon2.hash(password);
-    const params = [firstname, lastname, hashedPassword, username, email];
+    const params = [firstName, lastName, hashedPassword, userName, email];
     const data = await db.query(sql, params);
     if (!data.rows[0]) throw new ClientError(500, 'could not register user.');
     res.status(201).json(data.rows);
@@ -58,21 +58,21 @@ app.post('/api/home/sign-up', async (req, res, next) => {
  */
 app.post('/api/home/sign-in', async (req, res, next) => {
   try {
-    const { username, passwordVerify } = req.body;
-    if (!username || !passwordVerify) throw new ClientError(401, 'invalid login');
+    const { userName, passwordVerify } = req.body;
+    if (!userName || !passwordVerify) throw new ClientError(401, 'invalid login');
     const sql = `
                 select "userId", "password"
                 from "users"
-                where "username" = $1
+                where "userName" = $1
                 `;
-    const userData = await db.query(sql, [username]);
+    const userData = await db.query(sql, [userName]);
     if (!userData.rows[0]) throw new ClientError(404, 'incorrect login');
     const { userId, password } = userData.rows[0];
     const auth = await argon2.verify(password, passwordVerify);
     if (!auth) throw new ClientError(404, 'incorrect login');
     const payload = {
       userId,
-      username
+      userName
     };
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);
     res.status(200).json({ user: payload, token });

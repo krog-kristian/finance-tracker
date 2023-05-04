@@ -38,7 +38,7 @@ function createItemsSql(numberOfItems) {
     return stringValues;
   };
   const sql = `
-              insert into "items" ("recordId", "itemname", "category", "amount")
+              insert into "items" ("recordId", "itemName", "category", "amount")
               values ${values(numberOfItems)}
               returning *;
               `;
