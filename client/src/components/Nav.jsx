@@ -40,6 +40,9 @@ function NavMobile({ handleSignOut, signedIn }) {
       <li onClick={() => setHamburgerOpen(false)}>
         <Link to='records'>Records</Link>
       </li>
+      <li onClick={() => setHamburgerOpen(false)}>
+        <Link to='budgets'>Budgets</Link>
+      </li>
       <li onClick={signOutHamburger}>
         <Link to='/'>Sign Out</Link>
       </li>
@@ -77,6 +80,7 @@ function NavDesktop({ handleSignOut, signedIn }) {
     <>
       < Link to = 'newrecord' className = "btn btn-primary mx-3" > Add Record</Link>
       <Link to='records' className="btn btn-primary mx-3">Records</Link>
+      <Link to='budgets' className="btn btn-primary mx-3">Budgets</Link>
       <Button variant='warning' className='ms-3' onClick={handleSignOut}>Sign Out</Button>{ ' ' }
     </>
    ) : ''

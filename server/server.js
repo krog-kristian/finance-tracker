@@ -55,8 +55,6 @@ app.post('/api/home/sign-up', async (req, res, next) => {
     const { userId } = data.rows[0];
     const budgetCreate = await db.query(budgetSql, [userId]);
     if (!budgetCreate.rows[0]) throw new ClientError(500, 'could not register user.');
-    console.log('made a budget table', budgetCreate.rows);
-    console.log('new user', data.rows);
     res.status(201).json(data.rows);
   } catch (err) {
     next(err);
@@ -243,7 +241,6 @@ app.post('/api/records/budgets/update', async (req, res, next) => {
 });
 
 app.get('/api/records/budgets', async (req, res, next) => {
-  console.log('received request.');
   try {
     const { userId } = req.user;
     const date = new Date();
@@ -251,16 +248,21 @@ app.get('/api/records/budgets', async (req, res, next) => {
     const lastMonth = thisMonth - 1;
     const thisYear = date.getFullYear();
     const sql = `
-                  select sum("i"."amount") as "totalSpent", "i"."category", "r"."month", "r"."year", "b".*
+                  select sum("i"."amount") as "totalSpent", "i"."category"
                   from "items" as "i"
                   join "records" as "r" using ("recordId")
-                  join "budgets" as "b" using ("userId")
                   where "r"."year" = $1 and "userId" = $2 and ("r"."month" = $3 or "r"."month" = $4)
-                  group by "i"."category", "r"."month", "r"."year", "b"."userId";
+                  group by "i"."category", "r"."month", "r"."year"
                 `;
     const params = [thisYear, userId, thisMonth, lastMonth];
     const dataRecords = await db.query(sql, params);
-    res.status(200).json({ records: dataRecords.rows, thisMonth, lastMonth });
+    const budgetSql = `
+                        select *
+                        from "budgets"
+                        where "userId" = $1
+                      `;
+    const budgets = await db.query(budgetSql, [userId]);
+    res.status(200).json({ records: dataRecords.rows, budgets: budgets.rows[0], thisMonth, lastMonth });
   } catch (err) {
     next(err);
   }

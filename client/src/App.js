@@ -10,6 +10,7 @@ import UserHome from './pages/UserHome';
 import Home from './pages/Home';
 import { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
+import Budgets from './pages/Budgets';
 
 
 
@@ -54,6 +55,7 @@ function App() {
             <Route index element={!user ? <Home /> : <UserHome />}/>
             <Route path='newrecord' element={<RecordForm />} />
             <Route path='records' element={<RecordsView />} />
+            <Route path='budgets' element={<Budgets />} />
           </Route>
         </Routes>
       </div>
