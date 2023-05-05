@@ -242,7 +242,8 @@ app.post('/api/records/budgets/update', async (req, res, next) => {
   }
 });
 
-app.get('api/records/budgets', async (req, res, next) => {
+app.get('/api/records/budgets', async (req, res, next) => {
+  console.log('received request.');
   try {
     const { userId } = req.user;
     const date = new Date();
@@ -250,12 +251,13 @@ app.get('api/records/budgets', async (req, res, next) => {
     const lastMonth = thisMonth - 1;
     const thisYear = date.getFullYear();
     const sql = `
-                  select sum("amount"), "category", "month", "year"
-                  from "items"
-                  join "records" using ("recordId")
-                  where "year" = $1 and "userId = $2 ("month" = $3 or "month" = $4)
-                  group by "category", "month", "year";
-                  `;
+                  select sum("i"."amount") as "totalSpent", "i"."category", "r"."month", "r"."year", "b".*
+                  from "items" as "i"
+                  join "records" as "r" using ("recordId")
+                  join "budgets" as "b" using ("userId")
+                  where "r"."year" = $1 and "userId" = $2 and ("r"."month" = $3 or "r"."month" = $4)
+                  group by "i"."category", "r"."month", "r"."year", "b"."userId";
+                `;
     const params = [thisYear, userId, thisMonth, lastMonth];
     const dataRecords = await db.query(sql, params);
     res.status(200).json({ records: dataRecords.rows, thisMonth, lastMonth });
