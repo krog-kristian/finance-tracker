@@ -18,7 +18,7 @@ export function getMonthlyTotals(monthsRecords, filteredMonths) {
   return { totals: allMonths, thisMonth: months[monthsRecords.thisMonth].name, lastMonth: months[monthsRecords.lastMonth].name};
 }
 
-const months = [{ name: 'January', length: 31 }, { name: 'February', length: 28 }, { name: 'March', length: 31 }, { name: 'April', length: 30 }, { name: 'May', length: 31 }, { name: 'June', length: 30 }, { name: 'Jul', length: 31 }, { name: "August", length: 31 }, { name: "September", length: 30 }, { name: "October", length: 31 }, { name: "November", length: 30 }, { name: "December", length: 31 }];
+export const months = [{ name: 'January', length: 31 }, { name: 'February', length: 28 }, { name: 'March', length: 31 }, { name: 'April', length: 30 }, { name: 'May', length: 31 }, { name: 'June', length: 30 }, { name: 'Jul', length: 31 }, { name: "August", length: 31 }, { name: "September", length: 30 }, { name: "October", length: 31 }, { name: "November", length: 30 }, { name: "December", length: 31 }];
 
 /**
  * Filters the two months into this month and last month and by debits or credits.

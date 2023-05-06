@@ -248,7 +248,7 @@ app.get('/api/records/budgets', async (req, res, next) => {
     const lastMonth = thisMonth - 1;
     const thisYear = date.getFullYear();
     const sql = `
-                  select sum("i"."amount") as "totalSpent", "i"."category"
+                  select sum("i"."amount") as "totalSpent", "i"."category", "r"."month"
                   from "items" as "i"
                   join "records" as "r" using ("recordId")
                   where "r"."year" = $1 and "userId" = $2 and ("r"."month" = $3 or "r"."month" = $4)
