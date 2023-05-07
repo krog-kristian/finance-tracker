@@ -119,7 +119,7 @@ CREATE TABLE "public"."budgets" (
 	"rent" DECIMAL NOT NULL DEFAULT '0',
 	"entertainment" DECIMAL NOT NULL DEFAULT '0',
 	"lending" DECIMAL NOT NULL DEFAULT '0',
-	"other" DECIMAL NOT NULL DEFAULT '0',
+	"otherOut" DECIMAL NOT NULL DEFAULT '0',
 	CONSTRAINT "budgets_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE

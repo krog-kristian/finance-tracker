@@ -228,7 +228,7 @@ app.post('/api/records/budgets/update', async (req, res, next) => {
     const { category, amount } = req.body;
     const sql = `
                   update "budgets"
-                  set ${category} = $1
+                  set "${category}" = $1
                   where "userId" = $2;
                 `;
     const params = [amount, userId];
