@@ -25,6 +25,8 @@ export default function Budgets() {
     }
   }, [tokenKey])
 
+
+
   useEffect(() => {
     const fetchBudgets = async () => {
       try{
@@ -44,7 +46,7 @@ export default function Budgets() {
 
   return (
     <Container>
-      <h1>Budgets!</h1>
+      <h1>Budgets</h1>
       <Row>
         {budgets ? <BudgetCards setBudgets={setBudgets} budgets={budgets} totalsSpent={totalsSpent} currentMonth={currentMonth} previousMonth={previousMonth}/> : <h2>LOADING!</h2>}
       </Row>

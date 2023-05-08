@@ -40,14 +40,14 @@ export default function SignUpModal({ showSignUp, setShowSignUp, setShowSignIn }
         setShowSignUp(false)
         setShowSignIn(true)
         setAlertShow(false)
-      }, 2000)
+      }, 1500)
     } catch (err) {
       if (err.cause) {
         const serverMessage = await err.cause.json()
         if (serverMessage?.error?.includes('userName')) setUserNameExists(true)
         if (serverMessage?.error?.includes('email')) setEmailExists(true)
       }
-      console.error('error signing up', err)
+      console.error('Error signing up', err)
     }
 }
 

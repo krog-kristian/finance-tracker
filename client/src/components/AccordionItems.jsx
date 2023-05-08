@@ -12,7 +12,7 @@ export default function AccordionItems({ records }) {
       return (
         <Accordion.Item key={`${r.recordId}`} eventKey={i}>
 
-          <Accordion.Header >
+          <Accordion.Header>
             <div className='d-flex w-100'>
 
               <h3 className='my-auto flex-grow-1 mx-1'>Source: {r.source}</h3>
@@ -27,7 +27,7 @@ export default function AccordionItems({ records }) {
             </div>
           </Accordion.Header>
 
-          <Accordion.Body >
+          <Accordion.Body className='bg-secondary border border-secondary rounded'>
             <ul className='list-group'>
               <AccordionDropdown items={r.items} />
             </ul>

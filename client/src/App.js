@@ -1,5 +1,4 @@
 import './App.css';
-import { useMediaQuery } from 'react-responsive';
 import Nav from './components/Nav';
 import AppContext from './components/AppContext';
 import RecordForm from './pages/RecordForm';
@@ -18,9 +17,6 @@ function App() {
   const [user, setUser] = useState()
   const navigate = useNavigate();
   const [isAuthorizing, setIsAuthorizing] = useState(true);
-  const isLargeScreen = useMediaQuery({
-    query: '(min-width: 900px)'
-  });
   const tokenKey = 'fireUser';
 
   useEffect(() => {
@@ -45,7 +41,7 @@ function App() {
   }
 
 
-  const appState = { isLargeScreen, user, handleSignIn, handleSignOut, tokenKey }
+  const appState = { user, handleSignIn, handleSignOut, tokenKey }
 
   return (
     <AppContext.Provider value={appState}>

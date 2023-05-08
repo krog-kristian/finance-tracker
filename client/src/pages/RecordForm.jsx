@@ -38,7 +38,7 @@ export default function RecordForm() {
   return (
     <>
       <h1>New Record</h1>
-      <form className='container-xl p-3' style={{ backgroundColor: '#595959', color: 'white'}} onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
+      <form className='container-xl p-5 rounded border border-dark bg-secondary text-white fs-4' onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
 
       <div className='row g-3'>
         <div className='mb-3 col'>
@@ -51,7 +51,7 @@ export default function RecordForm() {
         </div>
 
         <div className='mb-3 col'>
-          <label className='form-label'>Source:
+          <label className='form-label'>Source
             <input required type='text' id='source' name='source' className='form-control' placeholder='From where?' />
           </label>
         </div>
@@ -72,17 +72,17 @@ export default function RecordForm() {
 
         <div className='mb-3 col'>
           <label className='form-label'>Date
-            <input required className='form-control' type='date' name='date' id='date' />
+            <input required className='form-control' type='date' name='date' id='date'  />
           </label>
         </div>
       </div>
 
       <ItemsForm numberOfItems={items} isDebit={isDebit}/>
-      <div className='d-flex justify-content-evenly my-2'>
+        <div className='d-flex justify-content-around flex-wrap'>
 
-        <Button type='submit' size='lg' variant='success'>Save Record</Button>
+        <Button type='submit' size='lg' variant='success' className='my-2 m-5 mw-25'>Save Record</Button>
 
-        <Button type='reset' size='lg' variant='danger' style={{ whiteSpace: 'pre' }}>   Reset   </Button>
+        <Button type='reset' size='lg' variant='danger' className='my-2 m-5 mw-25'>Reset</Button>
 
       </div>
     </form>
