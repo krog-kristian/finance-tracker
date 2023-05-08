@@ -6,4 +6,4 @@
 -- insert into "users"
 --   ("firstname", "lastname", "password", "username", "email")
 --   values
---     ('John', 'Doe', 'cortana', 'MasterChief', 'email@gmail.com');
+--     ('John', 'Smith', 'password', 'Demo', 'example@email.com');

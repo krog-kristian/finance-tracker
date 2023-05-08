@@ -16,7 +16,7 @@ export default function ItemsView({ allRecords }) {
 
           <div className='col'>
             <h4 className='my-auto flex-grow-1 mx-1 text-start'>
-              Item: {r.itemname}
+              Item: {r.itemName}
             </h4>
           </div>
 

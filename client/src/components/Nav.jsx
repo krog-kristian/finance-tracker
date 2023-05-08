@@ -5,16 +5,24 @@ import Button from 'react-bootstrap/Button';
 import { FaBars } from 'react-icons/fa'
 import { Outlet, Link } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal'
+import { useMediaQuery } from 'react-responsive';
+import Image from 'react-bootstrap/Image'
 
 export default function Nav() {
-  const { isLargeScreen, handleSignOut, user } = useContext(AppContext)
+  const { handleSignOut, user } = useContext(AppContext)
+  const isLargeScreen = useMediaQuery({
+    query: '(min-width: 900px)'
+  });
 
   return (
     <>
       <div className='spacer'>
         <div className='Nav '>
-            <div className=''>
-            <Link to='/' className='.navbar-brand '>My Logo</Link>
+            <div>
+              <Link to='/' className='d-flex text-decoration-none'>
+                <Image width="80" fluid roundedCircle src='/Freedom.png' />
+                <h2 className='my-auto ms-2 text-white fs-2'>Freedom Financial</h2>
+              </Link>
             </div>
           {isLargeScreen ? <NavDesktop handleSignOut={handleSignOut} signedIn={user} /> : <NavMobile handleSignOut={handleSignOut}  signedIn={user}/>}
           </div>
@@ -39,6 +47,9 @@ function NavMobile({ handleSignOut, signedIn }) {
       </li>
       <li onClick={() => setHamburgerOpen(false)}>
         <Link to='records'>Records</Link>
+      </li>
+      <li onClick={() => setHamburgerOpen(false)}>
+        <Link to='budgets'>Budgets</Link>
       </li>
       <li onClick={signOutHamburger}>
         <Link to='/'>Sign Out</Link>
@@ -77,6 +88,7 @@ function NavDesktop({ handleSignOut, signedIn }) {
     <>
       < Link to = 'newrecord' className = "btn btn-primary mx-3" > Add Record</Link>
       <Link to='records' className="btn btn-primary mx-3">Records</Link>
+      <Link to='budgets' className="btn btn-primary mx-3">Budgets</Link>
       <Button variant='warning' className='ms-3' onClick={handleSignOut}>Sign Out</Button>{ ' ' }
     </>
    ) : ''

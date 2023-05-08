@@ -12,7 +12,7 @@ export default function AccordionItems({ records }) {
       return (
         <Accordion.Item key={`${r.recordId}`} eventKey={i}>
 
-          <Accordion.Header >
+          <Accordion.Header>
             <div className='d-flex w-100'>
 
               <h3 className='my-auto flex-grow-1 mx-1'>Source: {r.source}</h3>
@@ -27,7 +27,7 @@ export default function AccordionItems({ records }) {
             </div>
           </Accordion.Header>
 
-          <Accordion.Body >
+          <Accordion.Body className='bg-secondary border border-secondary rounded'>
             <ul className='list-group'>
               <AccordionDropdown items={r.items} />
             </ul>
@@ -50,7 +50,7 @@ function AccordionDropdown({ items }) {
       return (
         <li className='list-group-item' key={item.itemId}>
           <div className='d-flex w-100 align-items-center'>
-            <h4 className='mx-1 my-auto flex-grow-1 text-start'>Item: {item.itemname}</h4>
+            <h4 className='mx-1 my-auto flex-grow-1 text-start'>Item: {item.itemName}</h4>
             <p className='mx-1 fs-4 my-auto'>Category: {item.category}</p>
             <div>
               <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${Number(item.amount).toFixed(2)}</Badge>

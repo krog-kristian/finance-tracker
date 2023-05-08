@@ -1,5 +1,4 @@
 import './App.css';
-import { useMediaQuery } from 'react-responsive';
 import Nav from './components/Nav';
 import AppContext from './components/AppContext';
 import RecordForm from './pages/RecordForm';
@@ -10,6 +9,8 @@ import UserHome from './pages/UserHome';
 import Home from './pages/Home';
 import { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
+import Budgets from './pages/Budgets';
+import Unknown from './pages/Unknown';
 
 
 
@@ -17,9 +18,6 @@ function App() {
   const [user, setUser] = useState()
   const navigate = useNavigate();
   const [isAuthorizing, setIsAuthorizing] = useState(true);
-  const isLargeScreen = useMediaQuery({
-    query: '(min-width: 900px)'
-  });
   const tokenKey = 'fireUser';
 
   useEffect(() => {
@@ -44,7 +42,7 @@ function App() {
   }
 
 
-  const appState = { isLargeScreen, user, handleSignIn, handleSignOut, tokenKey }
+  const appState = { user, handleSignIn, handleSignOut, tokenKey }
 
   return (
     <AppContext.Provider value={appState}>
@@ -54,6 +52,8 @@ function App() {
             <Route index element={!user ? <Home /> : <UserHome />}/>
             <Route path='newrecord' element={<RecordForm />} />
             <Route path='records' element={<RecordsView />} />
+            <Route path='budgets' element={<Budgets />} />
+            <Route path='*' element={<Unknown />} />
           </Route>
         </Routes>
       </div>

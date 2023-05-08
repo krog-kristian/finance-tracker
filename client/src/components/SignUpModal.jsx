@@ -9,14 +9,14 @@ import { sendSignUp } from "../lib/api"
  * Function to create the signup modal and handle a user signing up.
 */
 export default function SignUpModal({ showSignUp, setShowSignUp, setShowSignIn }) {
-  const [username, setUsername] = useState('')
+  const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [verifyPassword, setVerifyPassword] = useState('')
-  const [firstname, setFirstname] = useState('')
-  const [lastname, setLastname] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [passwordMatch, setPasswordMatch] = useState()
-  const [usernameExists, setUsernameExists] = useState(false)
+  const [userNameExists, setUserNameExists] = useState(false)
   const [emailExists, setEmailExists] = useState(false)
   const [alertShow, setAlertShow] = useState(false)
 
@@ -29,25 +29,25 @@ export default function SignUpModal({ showSignUp, setShowSignUp, setShowSignIn }
   async function signUp(e) {
     e.preventDefault()
     if (emailExists) setEmailExists(false)
-    if (usernameExists) setUsernameExists(false)
+    if (userNameExists) setUserNameExists(false)
     if (password !== verifyPassword) return setPasswordMatch(false)
     setPasswordMatch(true)
     try {
-      const newUser = { username, password, firstname, lastname, email }
+      const newUser = { userName, password, firstName, lastName, email }
       await sendSignUp(newUser)
       setAlertShow(true)
       setTimeout(() => {
         setShowSignUp(false)
         setShowSignIn(true)
         setAlertShow(false)
-      }, 2000)
+      }, 1500)
     } catch (err) {
       if (err.cause) {
         const serverMessage = await err.cause.json()
-        if (serverMessage?.error?.includes('username')) setUsernameExists(true)
+        if (serverMessage?.error?.includes('userName')) setUserNameExists(true)
         if (serverMessage?.error?.includes('email')) setEmailExists(true)
       }
-      console.error('error signing up', err)
+      console.error('Error signing up', err)
     }
 }
 
@@ -70,7 +70,7 @@ return (
 
             <div className='col'>
               <label className='form-label'>Username
-                <Form.Control isInvalid={usernameExists} value={username} onChange={e => setUsername(e.target.value)} required className='form-control' type='text' name='username' id='username' placeholder='Username' />
+                <Form.Control isInvalid={userNameExists} value={userName} onChange={e => setUserName(e.target.value)} required className='form-control' type='text' name='userName' id='userName' placeholder='Username' />
                 <Form.Control.Feedback type="invalid">
                   Username already Exists.
                 </Form.Control.Feedback>
@@ -91,10 +91,10 @@ return (
 
             <div className='col'>
               <label className='form-label'>First Name
-                <input value={firstname} onChange={e => setFirstname(e.target.value)} required className='form-control' type='text' name='firstname' id='firstname' placeholder='First Name' />
+                <input value={firstName} onChange={e => setFirstName(e.target.value)} required className='form-control' type='text' name='firstname' id='firstname' placeholder='First Name' />
               </label>
               <label className='form-label'>Last Name
-                <input value={lastname} onChange={e => setLastname(e.target.value)} required className='form-control' type='text' name='lastname' id='lastname' placeholder='Last Name' />
+                <input value={lastName} onChange={e => setLastName(e.target.value)} required className='form-control' type='text' name='lastname' id='lastname' placeholder='Last Name' />
               </label>
               <label className='form-label'>Email
                 <Form.Control isInvalid={emailExists} value={email} onChange={e => setEmail(e.target.value)} required className='form-control' type='text' name='email' id='email' placeholder='email@email.com' />

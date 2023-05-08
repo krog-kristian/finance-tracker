@@ -2,11 +2,14 @@ import { useState, useContext } from 'react';
 import AppContext from '../components/AppContext';
 import Button from 'react-bootstrap/esm/Button';
 import { ItemsForm } from '../components/ItemsForm'
+import Alert from 'react-bootstrap/Alert'
 
 export default function RecordForm() {
   const [items, setItems] = useState(1);
   const [isDebit, setIsDebit] = useState(true);
   const { tokenKey } = useContext(AppContext);
+  const [isError, setIsError] = useState(false)
+  const [alertShow, setAlertShow] = useState(false)
 
   function handleItems (e) {
     const numberOfItems = e.target.value;
@@ -30,15 +33,29 @@ export default function RecordForm() {
       setItems(1);
       e.target.reset();
       setIsDebit(true)
+      setAlertShow(true)
+      window.scrollTo(0, 0)
+      setTimeout(() => {
+        setAlertShow(false)
+      }, 1500)
     } catch (err) {
       console.error(err)
+      setIsError(true)
+      window.scrollTo(0, 0)
+      setTimeout(() => {
+        setIsError(false)
+      }, 2000)
     }
   }
+
+
 
   return (
     <>
       <h1>New Record</h1>
-      <form className='container-xl p-3' style={{ backgroundColor: '#595959', color: 'white'}} onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
+      <Alert show={isError} variant="danger"><Alert.Heading>Failure.</Alert.Heading><p>Could not add record.</p><hr /></Alert> : ''
+      <Alert show={alertShow} variant="success"><Alert.Heading>Success!</Alert.Heading><p>New record added.</p><hr /></Alert>
+      <form className='container-xl p-5 rounded border border-dark bg-secondary text-white fs-4' onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
 
       <div className='row g-3'>
         <div className='mb-3 col'>
@@ -51,7 +68,7 @@ export default function RecordForm() {
         </div>
 
         <div className='mb-3 col'>
-          <label className='form-label'>Source:
+          <label className='form-label'>Source
             <input required type='text' id='source' name='source' className='form-control' placeholder='From where?' />
           </label>
         </div>
@@ -72,17 +89,17 @@ export default function RecordForm() {
 
         <div className='mb-3 col'>
           <label className='form-label'>Date
-            <input required className='form-control' type='date' name='date' id='date' />
+            <input required className='form-control' type='date' name='date' id='date'  />
           </label>
         </div>
       </div>
 
       <ItemsForm numberOfItems={items} isDebit={isDebit}/>
-      <div className='d-flex justify-content-evenly my-2'>
+        <div className='d-flex justify-content-around flex-wrap'>
 
-        <Button type='submit' size='lg' variant='success'>Save Record</Button>
+        <Button type='submit' size='lg' variant='success' className='my-2 m-5 mw-25'>Save Record</Button>
 
-        <Button type='reset' size='lg' variant='danger' style={{ whiteSpace: 'pre' }}>   Reset   </Button>
+        <Button type='reset' size='lg' variant='danger' className='my-2 m-5 mw-25'>Reset</Button>
 
       </div>
     </form>

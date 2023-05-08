@@ -11,7 +11,7 @@ export default function writeRecordsSql(queries) {
     queryParams.push(category);
   }
   if (search !== undefined) {
-    filter += ` AND ("itemname" ILIKE '%' || $${queryParams.length + 3} || '%')`;
+    filter += ` AND ("itemName" ILIKE '%' || $${queryParams.length + 3} || '%')`;
     queryParams.push(search);
   }
   const sql = `

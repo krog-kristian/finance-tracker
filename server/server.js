@@ -34,19 +34,27 @@ app.use(express.json());
  */
 app.post('/api/home/sign-up', async (req, res, next) => {
   try {
-    const { username, password, firstname, lastname, email } = req.body;
-    if (!username || !password || !firstname || !lastname || !email) {
+    const { userName, password, firstName, lastName, email } = req.body;
+    if (!userName || !password || !firstName || !lastName || !email) {
       throw new ClientError(400, 'all fields are required.');
     }
     const sql = `
-                insert into "users" ("firstname", "lastname", "password", "username", "email")
+                insert into "users" ("firstName", "lastName", "password", "userName", "email")
                 values ($1, $2, $3, $4, $5)
-                returning "username";
+                returning "userName", "userId";
                 `;
     const hashedPassword = await argon2.hash(password);
-    const params = [firstname, lastname, hashedPassword, username, email];
+    const params = [firstName, lastName, hashedPassword, userName, email];
     const data = await db.query(sql, params);
     if (!data.rows[0]) throw new ClientError(500, 'could not register user.');
+    const budgetSql = `
+                        insert into "budgets"
+                        values ($1)
+                        returning *
+                        `;
+    const { userId } = data.rows[0];
+    const budgetCreate = await db.query(budgetSql, [userId]);
+    if (!budgetCreate.rows[0]) throw new ClientError(500, 'could not register user.');
     res.status(201).json(data.rows);
   } catch (err) {
     next(err);
@@ -58,21 +66,21 @@ app.post('/api/home/sign-up', async (req, res, next) => {
  */
 app.post('/api/home/sign-in', async (req, res, next) => {
   try {
-    const { username, passwordVerify } = req.body;
-    if (!username || !passwordVerify) throw new ClientError(401, 'invalid login');
+    const { userName, passwordVerify } = req.body;
+    if (!userName || !passwordVerify) throw new ClientError(401, 'invalid login');
     const sql = `
                 select "userId", "password"
                 from "users"
-                where "username" = $1
+                where "userName" = $1
                 `;
-    const userData = await db.query(sql, [username]);
+    const userData = await db.query(sql, [userName]);
     if (!userData.rows[0]) throw new ClientError(404, 'incorrect login');
     const { userId, password } = userData.rows[0];
     const auth = await argon2.verify(password, passwordVerify);
     if (!auth) throw new ClientError(404, 'incorrect login');
     const payload = {
       userId,
-      username
+      userName
     };
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);
     res.status(200).json({ user: payload, token });
@@ -209,6 +217,52 @@ app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, ne
     }
     const response = { items: items.rows, nextPage: page + 1 };
     res.status(200).json(response);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/records/budgets/update', async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const { category, amount } = req.body;
+    const sql = `
+                  update "budgets"
+                  set "${category}" = $1
+                  where "userId" = $2;
+                `;
+    const params = [amount, userId];
+    const data = await db.query(sql, params);
+    if (data.rowCount > 1) throw new ClientError(500, 'Database error, please contact support.');
+    res.status(200).json({ [category]: amount });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/api/records/budgets', async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const date = new Date();
+    const thisMonth = date.getMonth();
+    const lastMonth = thisMonth - 1;
+    const thisYear = date.getFullYear();
+    const sql = `
+                  select sum("i"."amount") as "totalSpent", "i"."category", "r"."month"
+                  from "items" as "i"
+                  join "records" as "r" using ("recordId")
+                  where "r"."year" = $1 and "userId" = $2 and ("r"."month" = $3 or "r"."month" = $4)
+                  group by "i"."category", "r"."month", "r"."year"
+                `;
+    const params = [thisYear, userId, thisMonth, lastMonth];
+    const dataRecords = await db.query(sql, params);
+    const budgetSql = `
+                        select *
+                        from "budgets"
+                        where "userId" = $1
+                      `;
+    const budgets = await db.query(budgetSql, [userId]);
+    res.status(200).json({ records: dataRecords.rows, budgets: budgets.rows[0], thisMonth, lastMonth });
   } catch (err) {
     next(err);
   }

@@ -1,6 +1,5 @@
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer } from 'recharts';
-import AppContext from './AppContext';
-import { useContext } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 /**
  * Creates a line chart with four line for this month and the previous month.
@@ -8,7 +7,9 @@ import { useContext } from 'react';
  * @returns a chart component.
  */
 export function MonthlyChart({ chartData }) {
-  const { isLargeScreen } = useContext(AppContext)
+  const isLargeScreen = useMediaQuery({
+    query: '(min-width: 900px)'
+  });
 
   return (
     <div style={isLargeScreen ? { width: '75%', backgroundColor: 'white'} : { width: '100%', backgroundColor: 'white' }} className='pe-3 pb-3 pt-3 my-5 rounded'>

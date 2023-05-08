@@ -51,7 +51,7 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
           <div className='row g-3'>
             <div className='col'>
               <label className='form-label'>Username
-                <input required className='form-control' type='text' name='username' id='username' placeholder='Username' />
+                <input required className='form-control' type='text' name='userName' id='userName' placeholder='Username' />
               </label>
             </div>
             <div className='col'>

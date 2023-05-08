@@ -1,3 +1,4 @@
+import { months } from "./catergory-data";
 
 /**
  * Takes the records from the server and calcutlates the totals for each month and
@@ -17,8 +18,6 @@ export function getMonthlyTotals(monthsRecords, filteredMonths) {
   }
   return { totals: allMonths, thisMonth: months[monthsRecords.thisMonth].name, lastMonth: months[monthsRecords.lastMonth].name};
 }
-
-const months = [{ name: 'January', length: 31 }, { name: 'February', length: 28 }, { name: 'March', length: 31 }, { name: 'April', length: 30 }, { name: 'May', length: 31 }, { name: 'June', length: 30 }, { name: 'Jul', length: 31 }, { name: "August", length: 31 }, { name: "September", length: 30 }, { name: "October", length: 31 }, { name: "November", length: 30 }, { name: "December", length: 31 }];
 
 /**
  * Filters the two months into this month and last month and by debits or credits.
@@ -81,4 +80,39 @@ export function sortRecords(records) {
     newRecords[i].items = sortedItems;
   }
   return newRecords;
+}
+
+/**
+ * Formats the monthly budget goals into a useable object to create a card component.
+ * @param {object} budgets goals object for each category
+ * @param {number} currentMonth number provided from the server.
+ * @param {number} previousMonth number provided from the server.
+ * @returns a cardData object for each category with default monthly totals of 0.
+ */
+export function formatBudgetData(budgets, currentMonth, previousMonth) {
+  const cardData = {}
+  for (const [key, value] of Object.entries(budgets)) {
+    cardData[key] = {
+      goal: value,
+      [currentMonth]: 0,
+      [previousMonth]: 0
+    }
+  }
+  return cardData;
+}
+
+/**
+ * Combines the budget data with the monthly totals on a cardData object.
+ * @param {object} cardData object with keys for each category and values for, goal, and 2 months.
+ * @param {array} totalsSpent array of objects containing a number total for a category of a specified month.
+ * @param {number} currentMonth provided by the server.
+ * @param {number} previousMonth provided by the server.
+ * @returns The card data object with any matching data for monthly totals updated.
+ */
+export function combineBudgetTotals(cardData, totalsSpent, currentMonth, previousMonth) {
+  for (let i = 0; i < totalsSpent.length; i++) {
+    const month = currentMonth === totalsSpent[i].month ? currentMonth : previousMonth;
+    cardData[totalsSpent[i].category][month] = totalsSpent[i].totalSpent;
+  }
+  return cardData
 }
