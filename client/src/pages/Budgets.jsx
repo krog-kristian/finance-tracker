@@ -10,6 +10,7 @@ export default function Budgets() {
   const [currentMonth, setCurrentMonth] = useState();
   const [previousMonth, setPreviousMonth] = useState();
   const { tokenKey, user } = useContext(AppContext);
+  const [isError, setIsError] = useState(false)
 
   const getBudgets = useCallback(async () => {
     try {
@@ -39,16 +40,21 @@ export default function Budgets() {
       setPreviousMonth(lastMonth);
       } catch (err) {
         console.error(err);
+        setIsError(true)
       }
     };
     fetchBudgets();
   }, [getBudgets, user])
 
+  const errorMessage = <h3 style={{ color: 'white' }}>Error Loading.</h3>
+  const loadingMessage = <h3 style={{ color: 'white' }}>LOADING!</h3>
+  const tempMessage = isError ? errorMessage : loadingMessage
+
   return (
     <Container>
       <h1>Budgets</h1>
       <Row>
-        {budgets ? <BudgetCards setBudgets={setBudgets} budgets={budgets} totalsSpent={totalsSpent} currentMonth={currentMonth} previousMonth={previousMonth}/> : <h2>LOADING!</h2>}
+        {budgets ? <BudgetCards setBudgets={setBudgets} budgets={budgets} totalsSpent={totalsSpent} currentMonth={currentMonth} previousMonth={previousMonth}/> : tempMessage}
       </Row>
     </Container>
   )

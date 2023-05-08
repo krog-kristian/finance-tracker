@@ -49,7 +49,7 @@ export default function UserHome() {
       </div>
         <div className="row">
           <div className='col d-flex justify-content-center'>
-          {chartData ? <MonthlyChart chartData={chartData} /> : (error ? errorMessage : loadingMessage)}
+          {chartData ? <MonthlyChart chartData={chartData} /> : ''}
           </div>
         </div>
 

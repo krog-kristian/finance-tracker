@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import Budgets from './pages/Budgets';
+import Unknown from './pages/Unknown';
 
 
 
@@ -52,6 +53,7 @@ function App() {
             <Route path='newrecord' element={<RecordForm />} />
             <Route path='records' element={<RecordsView />} />
             <Route path='budgets' element={<Budgets />} />
+            <Route path='*' element={<Unknown />} />
           </Route>
         </Routes>
       </div>
