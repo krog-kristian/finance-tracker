@@ -7,9 +7,8 @@ import Badge from 'react-bootstrap/Badge'
  * @returns an array of accordion items.
  */
 export default function RecordsAccordion({ records }) {
-  return (
-    records.map((r, i) => (
-      <Accordion defaultActiveKey="0" alwaysOpen>
+
+    const recordItems = records.map((r, i) => (
         <Accordion.Item key={r.recordId} eventKey={i}>
 
           <Accordion.Header>
@@ -32,9 +31,12 @@ export default function RecordsAccordion({ records }) {
           </Accordion.Body>
 
         </Accordion.Item>
-      </Accordion>
       )
     )
+  return (
+    <Accordion defaultActiveKey="0" alwaysOpen>
+      {recordItems}
+    </Accordion>
   )
 }
 

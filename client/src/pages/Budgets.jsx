@@ -11,6 +11,7 @@ export default function Budgets() {
   const [previousMonth, setPreviousMonth] = useState();
   const { token, user } = useContext(UserContext)
   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState()
 
   const getBudgets = useCallback(async () => {
     try {
@@ -21,7 +22,7 @@ export default function Budgets() {
     const budgets = await res.json();
     return budgets;
     } catch (err) {
-      console.error('Could not retrieve users.', err)
+      console.error('Could not retrieve users.11111', err)
     }
   }, [token])
 
@@ -37,23 +38,24 @@ export default function Budgets() {
       setTotalsSpent(records);
       setCurrentMonth(thisMonth);
       setPreviousMonth(lastMonth);
+      setIsLoading(false);
       } catch (err) {
         console.error(err);
         setIsError(true)
       }
     };
-    fetchBudgets();
-  }, [getBudgets, user])
+    if (isLoading) fetchBudgets();
+    if (isLoading === undefined) setIsLoading(true)
+  }, [getBudgets, user, isLoading])
 
-  const errorMessage = <h3 style={{ color: 'white' }}>Error Loading.</h3>
-  const loadingMessage = <h3 style={{ color: 'white' }}>LOADING!</h3>
-  const tempMessage = isError ? errorMessage : loadingMessage
+  if (isError) return <h3 style={{ color: 'white' }}>Error Loading.</h3>
+  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>LOADING!</h3>
 
   return (
     <Container>
       <h1>Budgets</h1>
       <Row>
-        {budgets ? <BudgetCards setBudgets={setBudgets} budgets={budgets} totalsSpent={totalsSpent} currentMonth={currentMonth} previousMonth={previousMonth}/> : tempMessage}
+        <BudgetCards setBudgets={setBudgets} budgets={budgets} totalsSpent={totalsSpent} currentMonth={currentMonth} previousMonth={previousMonth}/>
       </Row>
     </Container>
   )

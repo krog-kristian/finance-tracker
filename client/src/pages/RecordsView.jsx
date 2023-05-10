@@ -9,7 +9,7 @@ import UserContext from '../components/UserContext';
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState();
+  const [isLoading, setIsLoading] = useState();
   const [endOfRecords, setEndOfRecords] = useState(false);
   const [isErrors, setIsErrors] = useState(false);
   const [values, setValues] = useState({
@@ -29,7 +29,7 @@ export default function RecordsView() {
     setSearch('');
     setRecords([]);
     setPage(0);
-    setLoading(true);
+    setIsLoading(true);
     setEndOfRecords(false);
   };
 
@@ -42,14 +42,14 @@ export default function RecordsView() {
       setSearch('');
       setRecords([]);
       setPage(0);
-      setLoading(true);
+      setIsLoading(true);
       setEndOfRecords(false);
   }
 
   function startSearch() {
     setRecords([]);
     setPage(0);
-    setLoading(true);
+    setIsLoading(true);
     setEndOfRecords(false);
   }
 
@@ -60,7 +60,7 @@ export default function RecordsView() {
    * If their are no more pages sets endOfRecords to true and ends loading.
    */
   const getRecords = useCallback(async () => {
-    setLoading(true)
+    setIsLoading(true)
     try {
       const itemsEndpoint = `/api/records/items/${page}/${values.debitOrCredit}/${values.category}/${search}`;
       const recordsEndpoint = `/api/records/${page}/${values.debitOrCredit}/${search}`;
@@ -72,12 +72,12 @@ export default function RecordsView() {
       const myrecords = await res.json();
       if (!myrecords.nextPage) {
         setEndOfRecords(true);
-        setLoading(false);
+        setIsLoading(false);
         return
       };
       setPage(myrecords.nextPage);
       const sortedRecords = !values.itemsView ?  sortRecords(myrecords) : myrecords.items;
-      setLoading(false);
+      setIsLoading(false);
       return sortedRecords;
     } catch (err) {
       console.error(err)
@@ -95,12 +95,12 @@ export default function RecordsView() {
       if (!newRecords) return
       setRecords(r => r.concat(newRecords))
     }
-    if(loading) fetchRecords();
-    if (loading === undefined) setLoading(() => !loading)
-  }, [getRecords, loading])
+    if(isLoading) fetchRecords();
+    if (isLoading === undefined) setIsLoading(() => !isLoading)
+  }, [getRecords, isLoading])
 
   function handleLoadMore() {
-    setLoading(true)
+    setIsLoading(true)
   }
 
   const loadingMessage = endOfRecords || <h3 style={{ color: 'white' }}>Loading!</h3>;

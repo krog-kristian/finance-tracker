@@ -20,6 +20,14 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
   const { token } = useContext(UserContext)
   const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    if (Object.keys(budgets).length > 1) {
+      setLoading(false)
+    }
+  }, [budgets])
+
+  if (loading) return <h2 style={{ color: 'white' }}>Loading</h2>
+
   const budgetData = formatBudgetData(budgets, currentMonth, previousMonth)
 
   const cardData = combineBudgetTotals(budgetData, totalsSpent, currentMonth, previousMonth)
@@ -57,16 +65,6 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
       console.err('Could not update', err)
     }
   }
-
-  useEffect(() => {
-    if (Object.keys(cardData).length > 1) {
-      setLoading(false)
-    }
-  }, [cardData])
-
-
-
-  if (loading) return <h2 style={{color: 'white'}}>Loading</h2>
 
   return (
     <BudgetCard obj={cardData} currentMonth={currentMonth} previousMonth={previousMonth} handleEdit={handleEdit} editing={editing} cancelEdit={cancelEdit} updateGoal={updateGoal} setGoal={setGoal} goal={goal} />
