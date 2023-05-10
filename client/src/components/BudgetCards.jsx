@@ -64,19 +64,19 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
     }
   }, [cardData])
 
+
+
+  if (loading) return <h2 style={{color: 'white'}}>Loading</h2>
+
   return (
-    <>
- {!loading ?
-  <MakeCards obj={cardData} currentMonth={currentMonth} previousMonth={previousMonth} handleEdit={handleEdit} editing={editing} cancelEdit={cancelEdit} updateGoal={updateGoal} setGoal={setGoal} goal={goal} /> :
-  <h2 style={{color: 'white'}}>Loading</h2>}
-    </>
+    <BudgetCard obj={cardData} currentMonth={currentMonth} previousMonth={previousMonth} handleEdit={handleEdit} editing={editing} cancelEdit={cancelEdit} updateGoal={updateGoal} setGoal={setGoal} goal={goal} />
   )
 }
 
 /**
  * Creates an array of budget cards with the data provided from a cardData object.
  */
-function MakeCards({ obj, handleEdit, editing, cancelEdit, updateGoal, setGoal, goal, currentMonth, previousMonth }) {
+function BudgetCard({ obj, handleEdit, editing, cancelEdit, updateGoal, setGoal, goal, currentMonth, previousMonth }) {
 
   const monthNow = months[currentMonth].name;
   const lastMonth = months[previousMonth].name;

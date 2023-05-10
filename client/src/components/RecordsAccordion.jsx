@@ -6,10 +6,10 @@ import Badge from 'react-bootstrap/Badge'
  * @param {array} records object to fill in content of an accordion items.
  * @returns an array of accordion items.
  */
-export default function AccordionItems({ records }) {
+export default function RecordsAccordion({ records }) {
   return (
-    records.map((r, i) => {
-      return (
+    records.map((r, i) => (
+      <Accordion defaultActiveKey="0" alwaysOpen>
         <Accordion.Item key={r.recordId} eventKey={i}>
 
           <Accordion.Header>
@@ -28,14 +28,13 @@ export default function AccordionItems({ records }) {
           </Accordion.Header>
 
           <Accordion.Body className='bg-secondary border border-secondary rounded'>
-            <ul className='list-group'>
-              <AccordionDropdown items={r.items} />
-            </ul>
+              <AccordionItems items={r.items} />
           </Accordion.Body>
 
         </Accordion.Item>
+      </Accordion>
       )
-    })
+    )
   )
 }
 
@@ -44,10 +43,9 @@ export default function AccordionItems({ records }) {
  * @param {array} items array for each record.
  * @returns an array of list items for individual accodion items content.
  */
-function AccordionDropdown({ items }) {
-  return (
-    items.map((item, index) => {
-      return (
+function AccordionItems({ items }) {
+
+    const itemsList = items.map((item, index) => (
         <li className='list-group-item' key={item.itemId}>
           <div className='d-flex flex-wrap justify-content-between w-100 align-items-center'>
             <h4 className='col mx-1 my-auto text-start'>Item: {item.itemName}</h4>
@@ -57,6 +55,8 @@ function AccordionDropdown({ items }) {
             </div>
           </div>
         </li>)
-    })
-  );
+    );
+
+  return <ul className='list-group'>{itemsList}</ul>
+
 }
