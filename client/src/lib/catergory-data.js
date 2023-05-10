@@ -13,10 +13,10 @@ export const categoriesOutObj = {
   cleaning: 'Cleaning Supplies',
   toiletries: 'Toiletries',
   furniture: 'Furniture',
-  car: 'Transportation/Car',
+  car: 'Transportation / Car',
   utilities: 'Utilities/Bills',
   rent: 'Rent / Maintenance',
-  entertainment: 'Entertainment/Subscriptions',
+  entertainment: 'Entertainment / Subscriptions',
   lending: 'Lent Money',
-  otherOut: 'Misc/Other'
+  otherOut: 'Misc / Other'
 }

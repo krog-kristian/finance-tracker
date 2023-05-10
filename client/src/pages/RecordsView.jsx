@@ -1,11 +1,11 @@
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/esm/Button';
 import { useState, useEffect, useCallback, useContext } from 'react'
-import AppContext from '../components/AppContext.jsx';
 import AccordionItems from '../components/AccordionItems.jsx';
 import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
+import UserContext from '../components/UserContext';
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
@@ -18,7 +18,7 @@ export default function RecordsView() {
     debitOrCredit: 'null',
     category: 'null',
   });
-  const { tokenKey } = useContext(AppContext);
+  const { token } = useContext(UserContext)
   const [search, setSearch] = useState('');
 
   /**
@@ -66,7 +66,6 @@ export default function RecordsView() {
       const itemsEndpoint = `/api/records/items/${page}/${values.debitOrCredit}/${values.category}/${search}`;
       const recordsEndpoint = `/api/records/${page}/${values.debitOrCredit}/${search}`;
       const requestEndpoint = values.itemsView ? itemsEndpoint : recordsEndpoint;
-      const token = localStorage.getItem(tokenKey);
       const res = await fetch(requestEndpoint, {
         headers: { 'Authorization': `Bearer ${token}`}
       });
@@ -85,7 +84,7 @@ export default function RecordsView() {
       console.error(err)
       setIsErrors(true)
     }
-  }, [page, tokenKey, values, search]);
+  }, [page, token, values, search]);
 
   /**
    * Calls the getRecords function once first render and whenver loading is true.

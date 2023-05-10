@@ -1,15 +1,15 @@
 import { useState, useContext } from 'react';
-import AppContext from '../components/AppContext';
 import Button from 'react-bootstrap/esm/Button';
 import { ItemsForm } from '../components/ItemsForm'
 import Alert from 'react-bootstrap/Alert'
+import UserContext from '../components/UserContext';
 
 export default function RecordForm() {
   const [items, setItems] = useState(1);
   const [isDebit, setIsDebit] = useState(true);
-  const { tokenKey } = useContext(AppContext);
   const [isError, setIsError] = useState(false)
   const [alertShow, setAlertShow] = useState(false)
+  const { token } = useContext(UserContext)
 
   function handleItems (e) {
     const numberOfItems = e.target.value;
@@ -17,7 +17,6 @@ export default function RecordForm() {
   }
 
   async function handleSubmit (e) {
-    const token = localStorage.getItem(tokenKey);
     try {
       e.preventDefault();
       const form = new FormData(e.target)
@@ -53,7 +52,7 @@ export default function RecordForm() {
   return (
     <>
       <h1>New Record</h1>
-      <Alert show={isError} variant="danger"><Alert.Heading>Failure.</Alert.Heading><p>Could not add record.</p><hr /></Alert> : ''
+      <Alert show={isError} variant="danger"><Alert.Heading>Failure.</Alert.Heading><p>Could not add record.</p><hr /></Alert>
       <Alert show={alertShow} variant="success"><Alert.Heading>Success!</Alert.Heading><p>New record added.</p><hr /></Alert>
       <form className='container-xl p-5 rounded border border-dark bg-secondary text-white fs-4' onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
 

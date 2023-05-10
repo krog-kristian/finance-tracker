@@ -3,7 +3,7 @@ import getMonthsRecords from "../lib/api";
 import { getMonthlyTotals, getChartData, filterMonths } from "../lib/dataSorting";
 import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
 import { MonthlyChart } from "../components/MonthlyChart";
-import AppContext from "../components/AppContext"
+import UserContext from '../components/UserContext';
 
 /**
  * Creates the users home page and displays their monthly totals.
@@ -13,7 +13,7 @@ export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
   const [chartData, setChartData] = useState();
   const [error, setError] = useState(false);
-  const { tokenKey } = useContext(AppContext)
+  const { token } = useContext(UserContext)
   /**
    * Calls a fetch request to the server then
    * calls two functions to format the data, and set
@@ -22,7 +22,7 @@ export default function UserHome() {
   useEffect(() => {
     const getMonthlyRecords = async () => {
       try {
-        const monthlyRecords = await getMonthsRecords(tokenKey);
+        const monthlyRecords = await getMonthsRecords(token);
         const filteredMonths = filterMonths(monthlyRecords)
         const monthsTotals = getMonthlyTotals(monthlyRecords, Object.assign({}, filteredMonths));
         setMonthlyTotals(monthsTotals);
@@ -34,7 +34,7 @@ export default function UserHome() {
       }
     }
     getMonthlyRecords();
-  }, [tokenKey]);
+  }, [token]);
 
   const loadingMessage = <h3 style={{ color: 'white' }}>Loading!</h3>;
   const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>

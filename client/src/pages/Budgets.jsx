@@ -1,20 +1,19 @@
 import { useEffect, useState, useContext, useCallback } from "react"
-import AppContext from '../components/AppContext.jsx';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { BudgetCards } from "../components/BudgetCards.jsx";
+import UserContext from '../components/UserContext';
 
 export default function Budgets() {
   const [budgets, setBudgets] = useState();
   const [totalsSpent, setTotalsSpent] = useState();
   const [currentMonth, setCurrentMonth] = useState();
   const [previousMonth, setPreviousMonth] = useState();
-  const { tokenKey, user } = useContext(AppContext);
+  const { token, user } = useContext(UserContext)
   const [isError, setIsError] = useState(false)
 
   const getBudgets = useCallback(async () => {
     try {
-    const token = localStorage.getItem(tokenKey);
     const res = await fetch('/api/records/budgets', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -22,9 +21,9 @@ export default function Budgets() {
     const budgets = await res.json();
     return budgets;
     } catch (err) {
-      console.error('RIP!!!!', err)
+      console.error('Could not retrieve users.', err)
     }
-  }, [tokenKey])
+  }, [token])
 
 
 

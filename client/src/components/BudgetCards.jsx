@@ -8,7 +8,7 @@ import Button from "react-bootstrap/esm/Button.js";
 import { useState, useContext, useEffect } from "react";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import AppContext from '../components/AppContext.jsx';
+import UserContext from './UserContext';
 
 /**
  * Handles the functionality of the budget cards which are provided by a component that returns an array of cards.
@@ -17,7 +17,7 @@ import AppContext from '../components/AppContext.jsx';
 export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth, setBudgets }) {
   const [editing, setEditing] = useState();
   const [goal, setGoal] = useState();
-  const { tokenKey } = useContext(AppContext);
+  const { token } = useContext(UserContext)
   const [loading, setLoading] = useState(true)
 
   const budgetData = formatBudgetData(budgets, currentMonth, previousMonth)
@@ -44,7 +44,6 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
 
   async function sendUpdatedGoal(goal) {
     try {
-      const token = localStorage.getItem(tokenKey);
       const res = await fetch('/api/records/budgets/update', {
         method: 'POST',
         headers: {
