@@ -56,9 +56,9 @@ export default function RecordsOptions({values, handleItemView, handleChange, st
           {values.debitOrCredit !== 'null' && values.itemsView === true ? <CategoryViews handleChange={handleChange} categories={values.debitOrCredit === 'true' ? categoriesOut : categoriesIn} /> : ''}
 
           <div className='col-sm col-lg-4 d-flex flex-column align-items-start pb-3'>
-            <Form.Label htmlFor='search'>{`Search ${searchType}`}</Form.Label>
+            <Form.Label htmlFor='search'>Search {searchType}</Form.Label>
             <InputGroup>
-                  <Form.Control type='text' name='search' id='search' value={search} onChange={e => setSearch(e.target.value)}/>
+                  <Form.Control type='text' name='search' value={search} onChange={e => setSearch(e.target.value)}/>
               <Button variant="outline-secondary" name='search' onClick={() => startSearch(search)}>Search</Button>
             </InputGroup>
           </div>

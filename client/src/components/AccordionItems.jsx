@@ -10,20 +10,20 @@ export default function AccordionItems({ records }) {
   return (
     records.map((r, i) => {
       return (
-        <Accordion.Item key={`${r.recordId}`} eventKey={i}>
+        <Accordion.Item key={r.recordId} eventKey={i}>
 
           <Accordion.Header>
-            <div className='d-flex w-100'>
+            <div className='d-flex flex-wrap w-100'>
 
-              <h3 className='my-auto flex-grow-1 mx-1'>Source: {r.source}</h3>
+              <h3 className='col my-auto mx-1'>Source: {r.source}</h3>
 
-              <div className='my-auto'>
+              <div className='col my-auto'>
                 <Badge className='my-auto mx-1' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
                   Total: ${Number(r.totalSpent).toFixed(2)}
                 </Badge>
               </div>
 
-              <p className='mx-2 my-auto'>Date: {`${r.month + 1}/${r.day + 1}/${r.year}`}</p>
+              <p className='col-2 me-3 ms-1 my-auto'>Date: {r.month + 1}/{r.day + 1}/{r.year}</p>
             </div>
           </Accordion.Header>
 
@@ -49,10 +49,10 @@ function AccordionDropdown({ items }) {
     items.map((item, index) => {
       return (
         <li className='list-group-item' key={item.itemId}>
-          <div className='d-flex w-100 align-items-center'>
-            <h4 className='mx-1 my-auto flex-grow-1 text-start'>Item: {item.itemName}</h4>
-            <p className='mx-1 fs-4 my-auto'>Category: {item.category}</p>
-            <div>
+          <div className='d-flex flex-wrap justify-content-between w-100 align-items-center'>
+            <h4 className='col mx-1 my-auto text-start'>Item: {item.itemName}</h4>
+            <p className='col mx-1 fs-4 text-start my-auto'>Category: {item.category}</p>
+            <div className='col d-flex justify-content-end'>
               <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${Number(item.amount).toFixed(2)}</Badge>
             </div>
           </div>

@@ -7,7 +7,7 @@ export function ItemsForm({ numberOfItems, isDebit }) {
       <li key={i} className='container-l list-group-item m-2'>
         <div className='row g-3'>
           <div className='col'>
-            <label className='form-label'>{`Item #${i + 1}`}
+            <label className='form-label'>Item #{i + 1}
               <input required className='form-control' type='text' name={`item${i}`} id={`item${i}`} placeholder='What?'/>
             </label>
           </div>
