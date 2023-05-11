@@ -20,6 +20,7 @@ export function useUsers() {
     const { user, token } = result;
     localStorage.setItem(tokenKey, JSON.stringify({ token, user }));
     setUser(user);
+    setToken(token)
   }
 
   function handleSignOut() {

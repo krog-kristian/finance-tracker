@@ -14,6 +14,8 @@ export default function UserHome() {
   const [chartData, setChartData] = useState();
   const [error, setError] = useState(false);
   const { token } = useContext(UserContext)
+
+
   /**
    * Calls a fetch request to the server then
    * calls two functions to format the data, and set
@@ -38,6 +40,7 @@ export default function UserHome() {
 
   const loadingMessage = <h3 style={{ color: 'white' }}>Loading!</h3>;
   const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+  console.log('monthly totals', monthlyTotals);
 
   return (
     <div className='container-fluid'>

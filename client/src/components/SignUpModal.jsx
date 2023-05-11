@@ -70,19 +70,19 @@ return (
 
             <div className='col'>
               <label className='form-label'>Username
-                <Form.Control isInvalid={userNameExists} value={userName} onChange={e => setUserName(e.target.value)} required className='form-control' type='text' name='userName' id='userName' placeholder='Username' />
+                <Form.Control isInvalid={userNameExists} autoComplete='username' value={userName} onChange={e => setUserName(e.target.value)} required className='form-control' type='text' name='userName' id='userName' placeholder='Username' />
                 <Form.Control.Feedback type="invalid">
                   Username already Exists.
                 </Form.Control.Feedback>
               </label>
               <label className='form-label'>Password
-                <Form.Control isValid={passwordMatch} value={password} onChange={e => setPassword(e.target.value)} required className='form-control' type='password' name='password' id='password' placeholder='Password' />
+                <Form.Control isValid={passwordMatch} value={password} onChange={e => setPassword(e.target.value)} required className='form-control' type='password' name='password' autoComplete="new-password" id='password' placeholder='Password' />
                 <Form.Control.Feedback type="valid">
                   Passwords Match.
                 </Form.Control.Feedback>
               </label>
               <label className='form-label'>Verify Password
-                <Form.Control isInvalid={passwordMatch === false ? true : false} type="password" required value={verifyPassword} onChange={e => setVerifyPassword(e.target.value)} placeholder='Verify Password' />
+                <Form.Control isInvalid={passwordMatch === false ? true : false} type="password" required value={verifyPassword} onChange={e => setVerifyPassword(e.target.value)} autoComplete="new-password" placeholder='Verify Password' />
                 <Form.Control.Feedback type="invalid">
                   Passwords do not match.
                 </Form.Control.Feedback>

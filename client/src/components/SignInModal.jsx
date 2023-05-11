@@ -51,12 +51,12 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
           <div className='row g-3'>
             <div className='col'>
               <label className='form-label'>Username
-                <input required className='form-control' type='text' name='userName' id='userName' placeholder='Username' />
+                <input required className='form-control' type='text' name='userName' id='userName' autoComplete='username' placeholder='Username' />
               </label>
             </div>
             <div className='col'>
               <label className='form-label'>Password
-                <input required className='form-control' type='password' name='passwordVerify' id='passwordVerify' placeholder='Password' />
+                <input required className='form-control' autoComplete="current-password" type='password' name='passwordVerify' id='passwordVerify' placeholder='Password' />
               </label>
             </div>
           </div>
