@@ -7,7 +7,6 @@ import { categoriesOutObj } from '../lib/catergory-data';
  * @returns a jsx list of items.
  */
 export default function ItemsView({ allRecords }) {
-  console.log('all records items', allRecords)
   const listItems = allRecords.map((r) => {
       return (
         <li className='list-group-item d-flex flex-wrap' key={r.itemId}>
