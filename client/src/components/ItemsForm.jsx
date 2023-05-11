@@ -8,7 +8,7 @@ export function ItemsForm({ numberOfItems, isDebit }) {
         <div className='row g-3'>
           <div className='col'>
             <label className='form-label'>Item #{i + 1}
-              <input required className='form-control' type='text' name={`item${i}`} id={`item${i}`} placeholder='What?'/>
+              <input required className='form-control' type='text' name={`item${i}`} placeholder='What?'/>
             </label>
           </div>
         </div>
@@ -16,7 +16,7 @@ export function ItemsForm({ numberOfItems, isDebit }) {
         <div className='row'>
           <div className='col'>
             <label className='form-label'>Category
-              <select className='form-select' name={`itemCat${i}`} id={`itemCat${i}`}>
+              <select className='form-select' name={`itemCat${i}`}>
                 <CreateOptions isDebit={isDebit} />
               </select>
             </label>
@@ -24,7 +24,7 @@ export function ItemsForm({ numberOfItems, isDebit }) {
 
           <div className='col'>
             <label className='form-label'>Amount
-              <input type='number' className='form-control' required id={`itemAmt${i}`} name={`itemAmt${i}`} placeholder='Amount $' step={0.01} />
+              <input type='number' className='form-control' required name={`itemAmt${i}`} placeholder='Amount $' step={0.01} />
             </label>
           </div>
         </div>

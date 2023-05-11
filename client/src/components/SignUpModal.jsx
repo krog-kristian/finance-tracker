@@ -70,13 +70,13 @@ return (
 
             <div className='col'>
               <label className='form-label'>Username
-                <Form.Control isInvalid={userNameExists} autoComplete='username' value={userName} onChange={e => setUserName(e.target.value)} required className='form-control' type='text' name='userName' id='userName' placeholder='Username' />
+                <Form.Control isInvalid={userNameExists} autoComplete='username' value={userName} onChange={e => setUserName(e.target.value)} required className='form-control' type='text' name='userName' placeholder='Username' />
                 <Form.Control.Feedback type="invalid">
                   Username already Exists.
                 </Form.Control.Feedback>
               </label>
               <label className='form-label'>Password
-                <Form.Control isValid={passwordMatch} value={password} onChange={e => setPassword(e.target.value)} required className='form-control' type='password' name='password' autoComplete="new-password" id='password' placeholder='Password' />
+                <Form.Control isValid={passwordMatch} value={password} onChange={e => setPassword(e.target.value)} required className='form-control' type='password' name='password' autoComplete="new-password" placeholder='Password' />
                 <Form.Control.Feedback type="valid">
                   Passwords Match.
                 </Form.Control.Feedback>
@@ -91,13 +91,13 @@ return (
 
             <div className='col'>
               <label className='form-label'>First Name
-                <input value={firstName} onChange={e => setFirstName(e.target.value)} required className='form-control' type='text' name='firstname' id='firstname' placeholder='First Name' />
+                <input value={firstName} onChange={e => setFirstName(e.target.value)} required className='form-control' type='text' name='firstname' placeholder='First Name' />
               </label>
               <label className='form-label'>Last Name
-                <input value={lastName} onChange={e => setLastName(e.target.value)} required className='form-control' type='text' name='lastname' id='lastname' placeholder='Last Name' />
+                <input value={lastName} onChange={e => setLastName(e.target.value)} required className='form-control' type='text' name='lastname' placeholder='Last Name' />
               </label>
               <label className='form-label'>Email
-                <Form.Control isInvalid={emailExists} value={email} onChange={e => setEmail(e.target.value)} required className='form-control' type='text' name='email' id='email' placeholder='email@email.com' />
+                <Form.Control isInvalid={emailExists} value={email} onChange={e => setEmail(e.target.value)} required className='form-control' type='text' name='email' placeholder='email@email.com' />
                 <Form.Control.Feedback type="invalid">
                   Email already Exists.
                 </Form.Control.Feedback>
