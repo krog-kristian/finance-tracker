@@ -5,7 +5,6 @@
  */
 export default async function getMonthsRecords (token) {
  try {
-  console.log('token', token)
   const res = await fetch('/api/home', { headers: { 'Authorization': `Bearer ${token}`} });
   if (!res.ok) throw new Error(`Could not load results ${res.status}`);
   const records = await res.json();

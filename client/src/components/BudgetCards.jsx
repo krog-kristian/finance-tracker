@@ -37,12 +37,12 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
     setGoal(value)
   }
 
-  function cancelEdit() {
+  function handleCancel() {
     setEditing()
     setGoal()
   }
 
-  function updateGoal(key) {
+  function handleUpdate(key) {
     const updatedGoal = { category: key, amount: Number(goal).toFixed(2) }
     setEditing()
     setGoal()
@@ -67,14 +67,14 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
   }
 
   return (
-    <BudgetCard obj={cardData} currentMonth={currentMonth} previousMonth={previousMonth} handleEdit={handleEdit} editing={editing} cancelEdit={cancelEdit} updateGoal={updateGoal} setGoal={setGoal} goal={goal} />
+    <BudgetCard obj={cardData} currentMonth={currentMonth} previousMonth={previousMonth} onEdit={handleEdit} editing={editing} onCancel={handleCancel} onUpdate={handleUpdate} setGoal={setGoal} goal={goal} />
   )
 }
 
 /**
  * Creates an array of budget cards with the data provided from a cardData object.
  */
-function BudgetCard({ obj, handleEdit, editing, cancelEdit, updateGoal, setGoal, goal, currentMonth, previousMonth }) {
+function BudgetCard({ obj, onEdit, editing, onCancel, onUpdate, setGoal, goal, currentMonth, previousMonth }) {
 
   const monthNow = months[currentMonth].name;
   const lastMonth = months[previousMonth].name;
@@ -90,8 +90,8 @@ function BudgetCard({ obj, handleEdit, editing, cancelEdit, updateGoal, setGoal,
           <ListGroup variant="flush">
             <ListGroup.Item>
               {editing !== key ?
-                <EditGoal handleEdit={handleEdit} category={key} value={value} /> :
-                <GoalEditInput cancelEdit={cancelEdit} category={key} value={value} setGoal={setGoal} updateGoal={updateGoal} />}
+                <EditGoal onEdit={onEdit} category={key} value={value} /> :
+                <GoalEditInput onCancel={onCancel} category={key} value={value} setGoal={setGoal} onUpdate={onUpdate} />}
             </ListGroup.Item>
             <ListGroup.Item>{monthNow} spending was ${Number(value[currentMonth]).toFixed(2)}</ListGroup.Item>
             <ListGroup.Item>{lastMonth} spending was ${Number(value[previousMonth]).toFixed(2)}</ListGroup.Item>
@@ -107,11 +107,11 @@ function BudgetCard({ obj, handleEdit, editing, cancelEdit, updateGoal, setGoal,
 /**
  * The default display of a budget goal with a button to enter editing mode.
  */
-function EditGoal({ handleEdit, category, value }) {
+function EditGoal({ onEdit, category, value }) {
 
   return (
     <p className='my-0 ms-4'>Goal: ${Number(value.goal).toFixed(2)}
-      <Button className="btn-sm ms-2 mr-0 py-0" id={category} onClick={(e) => handleEdit(e, value.goal)}>Edit</Button>
+      <Button className="btn-sm ms-2 mr-0 py-0" id={category} onClick={(e) => onEdit(e, value.goal)}>Edit</Button>
     </p>
   )
 }
@@ -119,14 +119,14 @@ function EditGoal({ handleEdit, category, value }) {
 /**
  * Creates an input component when editing a budget card.
  */
-function GoalEditInput({ cancelEdit, category, value, setGoal, updateGoal}) {
+function GoalEditInput({ onCancel, category, value, setGoal, onUpdate}) {
 
   return (
     <InputGroup>
       <InputGroup.Text >$</InputGroup.Text>
       <Form.Control type='number' step={0.01} name='search' id='search' placeholder={Number(value.goal).toFixed(2)} onChange={e => setGoal(e.target.value)} />
-      <Button className="btn-sm" variant="outline-success" name='search' onClick={() => updateGoal(category)}>Update</Button>
-      <Button className="btn-sm" variant="outline-danger" name='cancel' onClick={cancelEdit}>Cancel</Button>
+      <Button className="btn-sm" variant="outline-success" name='search' onClick={() => onUpdate(category)}>Update</Button>
+      <Button className="btn-sm" variant="outline-danger" name='cancel' onClick={onCancel}>Cancel</Button>
     </InputGroup>
   )
 }

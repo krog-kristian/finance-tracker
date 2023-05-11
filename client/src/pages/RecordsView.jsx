@@ -103,17 +103,17 @@ export default function RecordsView() {
     setIsLoading(true)
   }
 
-  const loadingMessage = endOfRecords || <h3 style={{ color: 'white' }}>Loading!</h3>;
-  const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
+  if (isErrors) <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
-  const accordionReady = records.length > 0 ? <RecordsAccordion records={records} /> : (isErrors ? errorMessage : loadingMessage)
-  const content = values.itemsView ? <ItemsView allRecords={records} /> : accordionReady
+  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} />
+
   return (
   <>
     <h1>Your Records!</h1>
 
     <div className='container-xl'>
-        <RecordsOptions  values={values} handleItemView={handleItemView} handleChange={handleChange} startSearch={startSearch} search={search} setSearch={setSearch}/>
+        <RecordsOptions  values={values} onItemView={handleItemView} onChange={handleChange} onSearch={startSearch} search={search} setSearch={setSearch}/>
         {content}
         <Button className={endOfRecords ? 'm-5 btn-danger' : 'm-5'} disabled={endOfRecords} onClick={handleLoadMore}>
           {endOfRecords ? 'No More Records' : 'Load More!'}

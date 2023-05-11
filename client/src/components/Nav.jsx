@@ -25,7 +25,7 @@ export default function Nav() {
                 <h2 className='my-auto ms-2 text-white fs-2'>Freedom Financial</h2>
               </Link>
             </div>
-          {isLargeScreen ? <NavDesktop handleSignOut={handleSignOut} signedIn={user} /> : <NavMobile handleSignOut={handleSignOut}  signedIn={user}/>}
+          {isLargeScreen ? <NavDesktop onSignOut={handleSignOut} signedIn={user} /> : <NavMobile onSignOut={handleSignOut}  signedIn={user}/>}
           </div>
         </div>
       <Outlet />
@@ -33,11 +33,11 @@ export default function Nav() {
   );
 }
 
-function NavMobile({ handleSignOut, signedIn }) {
+function NavMobile({ onSignOut, signedIn }) {
   const [hamburgerOpen, setHamburgerOpen] = useState(false)
 
   function signOutHamburger() {
-    handleSignOut();
+    onSignOut();
     setHamburgerOpen(false);
   }
 
@@ -93,14 +93,14 @@ function NavMobile({ handleSignOut, signedIn }) {
   );
 }
 
-function NavDesktop({ handleSignOut, signedIn }) {
+function NavDesktop({ onSignOut, signedIn }) {
 
   const signedInLinks = signedIn ? (
     <>
       <Link to = 'newrecord' className = "btn btn-primary mx-3" > Add Record</Link>
       <Link to='records' className="btn btn-primary mx-3">Records</Link>
       <Link to='budgets' className="btn btn-primary mx-3">Budgets</Link>
-      <Button variant='warning' className='ms-3' onClick={handleSignOut}>Sign Out</Button>{ ' ' }
+      <Button variant='warning' className='ms-3' onClick={onSignOut}>Sign Out</Button>{ ' ' }
     </>
    ) : ''
 

@@ -12,8 +12,9 @@ import UserContext from '../components/UserContext';
 export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
   const [chartData, setChartData] = useState();
-  const [error, setError] = useState(false);
+  const [isError, setIsError] = useState(false);
   const { token } = useContext(UserContext)
+  const [isLoading, setIsLoading] = useState()
 
 
   /**
@@ -30,24 +31,26 @@ export default function UserHome() {
         setMonthlyTotals(monthsTotals);
         const monthsChartData = getChartData(monthlyRecords, filteredMonths);
         setChartData(monthsChartData)
+        setIsLoading(false)
       } catch (err) {
-        setError(true)
+        setIsError(true)
         console.error(err)
       }
     }
-    getMonthlyRecords();
-  }, [token]);
+    if (isLoading) getMonthlyRecords();
+    if (isLoading === undefined) setIsLoading(true)
+  }, [token, isLoading]);
 
-  const loadingMessage = <h3 style={{ color: 'white' }}>Loading!</h3>;
-  const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
-  console.log('monthly totals', monthlyTotals);
+
+  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
+  if (isError) return <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
   return (
     <div className='container-fluid'>
     <h1>User's Home Page</h1>
       <div className='row'>
         <div className='col d-flex justify-content-center'>
-          {monthlyTotals ? <MonthlyTotalsCard monthlyTotals={monthlyTotals} /> : (error ? errorMessage : loadingMessage)}
+          <MonthlyTotalsCard monthlyTotals={monthlyTotals} />
         </div>
       </div>
         <div className="row">

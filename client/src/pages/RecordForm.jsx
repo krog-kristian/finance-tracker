@@ -43,7 +43,7 @@ export default function RecordForm() {
       window.scrollTo(0, 0)
       setTimeout(() => {
         setIsError(false)
-      }, 2000)
+      }, 5000)
     }
   }
 

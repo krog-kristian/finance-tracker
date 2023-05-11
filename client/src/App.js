@@ -16,10 +16,10 @@ import { useUsers } from './lib/useUsers';
 function App() {
 
   const { user, handleSignIn, handleSignOut, token } = useUsers()
-  const appState = { user, handleSignIn, handleSignOut, token }
+  const userInfo = { user, handleSignIn, handleSignOut, token }
 
   return (
-    <UserContext.Provider value={appState}>
+    <UserContext.Provider value={userInfo}>
       <div className="App">
         <Routes>
           <Route path='/' element={<Nav />}>
