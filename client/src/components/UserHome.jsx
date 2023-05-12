@@ -1,9 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import getMonthsRecords from "../lib/api";
 import { getMonthlyTotals, getChartData, filterMonths } from "../lib/dataSorting";
 import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
 import { MonthlyChart } from "../components/MonthlyChart";
-import UserContext from '../components/UserContext';
+import { useUserContext } from "./UserContext"
 
 /**
  * Creates the users home page and displays their monthly totals.
@@ -13,7 +13,7 @@ export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
   const [chartData, setChartData] = useState();
   const [isError, setIsError] = useState(false);
-  const { token } = useContext(UserContext)
+  const { token } = useUserContext()
   const [isLoading, setIsLoading] = useState()
 
 

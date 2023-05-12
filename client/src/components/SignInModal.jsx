@@ -1,8 +1,8 @@
-import { useContext, useState } from "react"
+import { useState } from "react"
 import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
 import Alert from 'react-bootstrap/Alert'
-import UserContext from './UserContext';
+import { useUserContext } from "./UserContext"
 
 /**
  * Created the modal component and controls the request to sign a user in.
@@ -10,7 +10,7 @@ import UserContext from './UserContext';
  * @returns the modal component for signing in.
  */
 export default function SignInModal({ showSignIn, setShowSignIn }) {
-  const { handleSignIn } = useContext(UserContext)
+  const { handleSignIn } = useUserContext()
   const [errorMessageShowing, setErrorMessageShowing] = useState(false)
 
   async function signIn(e) {

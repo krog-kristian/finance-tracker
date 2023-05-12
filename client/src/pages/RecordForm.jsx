@@ -1,15 +1,15 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { ItemsForm } from '../components/ItemsForm'
 import Alert from 'react-bootstrap/Alert'
-import UserContext from '../components/UserContext';
+import { useUserContext } from "../components/UserContext"
 
 export default function RecordForm() {
   const [items, setItems] = useState(1);
   const [isDebit, setIsDebit] = useState(true);
   const [isError, setIsError] = useState(false)
   const [showingSuccessAlert, setShowingSuccessAlert] = useState(false)
-  const { token } = useContext(UserContext)
+  const { token } = useUserContext()
 
   function handleItems (e) {
     const numberOfItems = e.target.value;

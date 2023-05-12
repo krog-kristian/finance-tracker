@@ -1,15 +1,15 @@
-import { useEffect, useState, useContext, useCallback } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { BudgetCards } from "../components/BudgetCards.jsx";
-import UserContext from '../components/UserContext';
+import { useUserContext } from "../components/UserContext"
 
 export default function Budgets() {
   const [budgets, setBudgets] = useState();
   const [totalsSpent, setTotalsSpent] = useState();
   const [currentMonth, setCurrentMonth] = useState();
   const [previousMonth, setPreviousMonth] = useState();
-  const { token, user } = useContext(UserContext)
+  const { token, user } = useUserContext()
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState()
 

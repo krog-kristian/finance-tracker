@@ -1,10 +1,10 @@
 import Button from 'react-bootstrap/esm/Button';
-import { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import RecordsAccordion from '../components/RecordsAccordion.jsx';
 import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
-import UserContext from '../components/UserContext';
+import { useUserContext } from "../components/UserContext"
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
@@ -17,7 +17,7 @@ export default function RecordsView() {
     debitOrCredit: 'null',
     category: 'null',
   });
-  const { token } = useContext(UserContext)
+  const { token } = useUserContext()
   const [search, setSearch] = useState('');
 
   /**

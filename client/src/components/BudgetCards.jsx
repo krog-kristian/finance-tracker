@@ -5,10 +5,10 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { categoriesOutObj } from "../lib/catergory-data.js";
 import Button from "react-bootstrap/esm/Button.js";
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import UserContext from './UserContext';
+import { useUserContext } from "./UserContext"
 
 /**
  * Handles the functionality of the budget cards which are provided by a component that returns an array of cards.
@@ -17,7 +17,7 @@ import UserContext from './UserContext';
 export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth, setBudgets }) {
   const [editing, setEditing] = useState();
   const [goal, setGoal] = useState();
-  const { token } = useContext(UserContext)
+  const { token } = useUserContext()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {

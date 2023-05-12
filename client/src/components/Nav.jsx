@@ -1,16 +1,16 @@
 import '../App.css';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { FaBars } from 'react-icons/fa'
 import { Outlet, Link } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal'
 import { useMediaQuery } from 'react-responsive';
 import Image from 'react-bootstrap/Image'
-import UserContext from './UserContext';
+import { useUserContext } from "./UserContext"
 
 
 export default function Nav() {
-  const { handleSignOut, user } = useContext(UserContext)
+  const { handleSignOut, user } = useUserContext()
   const isLargeScreen = useMediaQuery({
     query: '(min-width: 900px)'
   });

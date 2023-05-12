@@ -2,10 +2,15 @@ import { useState } from "react"
 import Button from "react-bootstrap/Button"
 import SignUpModal from "../components/SignUpModal"
 import SignInModal from "../components/SignInModal"
+import UserHome from "../components/UserHome"
+import { useUserContext } from "../components/UserContext"
 
 export default function Home() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const { user } = useUserContext()
+
+  if (user) return <UserHome />
 
   return (
     <div>
