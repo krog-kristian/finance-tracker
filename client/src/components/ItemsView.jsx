@@ -1,5 +1,5 @@
 import Badge from 'react-bootstrap/Badge'
-import { categoriesOutObj } from '../lib/catergory-data';
+import { categoriesOutObj, categoriesInObj } from '../lib/catergory-data';
 
 /**
  * Takes an array of items and creates a list component with their values.
@@ -7,6 +7,7 @@ import { categoriesOutObj } from '../lib/catergory-data';
  * @returns a jsx list of items.
  */
 export default function ItemsView({ allRecords }) {
+  console.log('all records', allRecords)
   const listItems = allRecords.map((r) => {
       return (
         <li className='list-group-item d-flex flex-wrap' key={r.itemId}>
@@ -24,7 +25,7 @@ export default function ItemsView({ allRecords }) {
 
           <div className='col'>
             <p className='my-auto text-start fs-6'>
-              Category: {categoriesOutObj[r.category]}
+              Category: {r.isDebit ? categoriesOutObj[r.category] : categoriesInObj[r.category]}
             </p>
           </div>
 

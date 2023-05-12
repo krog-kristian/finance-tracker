@@ -20,3 +20,12 @@ export const categoriesOutObj = {
   lending: 'Lent Money',
   otherOut: 'Misc / Other'
 }
+
+export const categoriesInObj = {
+  salary: 'Salary',
+  interest: 'Interest',
+  dividends: 'Dividends',
+  refund: 'Refunds/Returns',
+  gift: 'Gifts/Rewards',
+  OtherIn: 'Misc/Other'
+}
