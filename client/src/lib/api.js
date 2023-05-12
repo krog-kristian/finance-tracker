@@ -3,10 +3,8 @@
  * dates determined server side.
  * @returns the server response.
  */
-export default async function getMonthsRecords (tokenKey) {
-
+export default async function getMonthsRecords (token) {
  try {
-  const token = localStorage.getItem(tokenKey);
   const res = await fetch('/api/home', { headers: { 'Authorization': `Bearer ${token}`} });
   if (!res.ok) throw new Error(`Could not load results ${res.status}`);
   const records = await res.json();

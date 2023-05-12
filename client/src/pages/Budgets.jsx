@@ -1,20 +1,20 @@
-import { useEffect, useState, useContext, useCallback } from "react"
-import AppContext from '../components/AppContext.jsx';
+import { useEffect, useState, useCallback } from "react"
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { BudgetCards } from "../components/BudgetCards.jsx";
+import { useUserContext } from "../components/UserContext"
 
 export default function Budgets() {
   const [budgets, setBudgets] = useState();
   const [totalsSpent, setTotalsSpent] = useState();
   const [currentMonth, setCurrentMonth] = useState();
   const [previousMonth, setPreviousMonth] = useState();
-  const { tokenKey, user } = useContext(AppContext);
+  const { token, user } = useUserContext()
   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState()
 
   const getBudgets = useCallback(async () => {
     try {
-    const token = localStorage.getItem(tokenKey);
     const res = await fetch('/api/records/budgets', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -22,9 +22,9 @@ export default function Budgets() {
     const budgets = await res.json();
     return budgets;
     } catch (err) {
-      console.error('RIP!!!!', err)
+      console.error('Could not retrieve users.11111', err)
     }
-  }, [tokenKey])
+  }, [token])
 
 
 
@@ -38,23 +38,24 @@ export default function Budgets() {
       setTotalsSpent(records);
       setCurrentMonth(thisMonth);
       setPreviousMonth(lastMonth);
+      setIsLoading(false);
       } catch (err) {
         console.error(err);
         setIsError(true)
       }
     };
-    fetchBudgets();
-  }, [getBudgets, user])
+    if (isLoading) fetchBudgets();
+    if (isLoading === undefined) setIsLoading(true)
+  }, [getBudgets, user, isLoading])
 
-  const errorMessage = <h3 style={{ color: 'white' }}>Error Loading.</h3>
-  const loadingMessage = <h3 style={{ color: 'white' }}>LOADING!</h3>
-  const tempMessage = isError ? errorMessage : loadingMessage
+  if (isError) return <h3 style={{ color: 'white' }}>Error Loading.</h3>
+  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>LOADING!</h3>
 
   return (
     <Container>
       <h1>Budgets</h1>
       <Row>
-        {budgets ? <BudgetCards setBudgets={setBudgets} budgets={budgets} totalsSpent={totalsSpent} currentMonth={currentMonth} previousMonth={previousMonth}/> : tempMessage}
+        <BudgetCards setBudgets={setBudgets} budgets={budgets} totalsSpent={totalsSpent} currentMonth={currentMonth} previousMonth={previousMonth}/>
       </Row>
     </Container>
   )

@@ -1,9 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import getMonthsRecords from "../lib/api";
 import { getMonthlyTotals, getChartData, filterMonths } from "../lib/dataSorting";
 import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
 import { MonthlyChart } from "../components/MonthlyChart";
-import AppContext from "../components/AppContext"
+import { useUserContext } from "./UserContext"
 
 /**
  * Creates the users home page and displays their monthly totals.
@@ -12,8 +12,11 @@ import AppContext from "../components/AppContext"
 export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
   const [chartData, setChartData] = useState();
-  const [error, setError] = useState(false);
-  const { tokenKey } = useContext(AppContext)
+  const [isError, setIsError] = useState(false);
+  const { token } = useUserContext()
+  const [isLoading, setIsLoading] = useState()
+
+
   /**
    * Calls a fetch request to the server then
    * calls two functions to format the data, and set
@@ -22,29 +25,32 @@ export default function UserHome() {
   useEffect(() => {
     const getMonthlyRecords = async () => {
       try {
-        const monthlyRecords = await getMonthsRecords(tokenKey);
+        const monthlyRecords = await getMonthsRecords(token);
         const filteredMonths = filterMonths(monthlyRecords)
         const monthsTotals = getMonthlyTotals(monthlyRecords, Object.assign({}, filteredMonths));
         setMonthlyTotals(monthsTotals);
         const monthsChartData = getChartData(monthlyRecords, filteredMonths);
         setChartData(monthsChartData)
+        setIsLoading(false)
       } catch (err) {
-        setError(true)
+        setIsError(true)
         console.error(err)
       }
     }
-    getMonthlyRecords();
-  }, [tokenKey]);
+    if (isLoading) getMonthlyRecords();
+    if (isLoading === undefined) setIsLoading(true)
+  }, [token, isLoading]);
 
-  const loadingMessage = <h3 style={{ color: 'white' }}>Loading!</h3>;
-  const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+
+  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
+  if (isError) return <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
   return (
     <div className='container-fluid'>
     <h1>User's Home Page</h1>
       <div className='row'>
         <div className='col d-flex justify-content-center'>
-          {monthlyTotals ? <MonthlyTotalsCard monthlyTotals={monthlyTotals} /> : (error ? errorMessage : loadingMessage)}
+          <MonthlyTotalsCard monthlyTotals={monthlyTotals} />
         </div>
       </div>
         <div className="row">

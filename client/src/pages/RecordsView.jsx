@@ -1,24 +1,23 @@
-import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/esm/Button';
-import { useState, useEffect, useCallback, useContext } from 'react'
-import AppContext from '../components/AppContext.jsx';
-import AccordionItems from '../components/AccordionItems.jsx';
+import { useState, useEffect, useCallback } from 'react'
+import RecordsAccordion from '../components/RecordsAccordion.jsx';
 import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
+import { useUserContext } from "../components/UserContext"
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState();
+  const [isLoading, setIsLoading] = useState();
   const [endOfRecords, setEndOfRecords] = useState(false);
-  const [isErrors, setIsErrors] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [values, setValues] = useState({
     itemsView: false,
     debitOrCredit: 'null',
     category: 'null',
   });
-  const { tokenKey } = useContext(AppContext);
+  const { token } = useUserContext()
   const [search, setSearch] = useState('');
 
   /**
@@ -30,7 +29,7 @@ export default function RecordsView() {
     setSearch('');
     setRecords([]);
     setPage(0);
-    setLoading(true);
+    setIsLoading(true);
     setEndOfRecords(false);
   };
 
@@ -43,14 +42,14 @@ export default function RecordsView() {
       setSearch('');
       setRecords([]);
       setPage(0);
-      setLoading(true);
+      setIsLoading(true);
       setEndOfRecords(false);
   }
 
   function startSearch() {
     setRecords([]);
     setPage(0);
-    setLoading(true);
+    setIsLoading(true);
     setEndOfRecords(false);
   }
 
@@ -61,12 +60,11 @@ export default function RecordsView() {
    * If their are no more pages sets endOfRecords to true and ends loading.
    */
   const getRecords = useCallback(async () => {
-    setLoading(true)
+    setIsLoading(true)
     try {
       const itemsEndpoint = `/api/records/items/${page}/${values.debitOrCredit}/${values.category}/${search}`;
       const recordsEndpoint = `/api/records/${page}/${values.debitOrCredit}/${search}`;
       const requestEndpoint = values.itemsView ? itemsEndpoint : recordsEndpoint;
-      const token = localStorage.getItem(tokenKey);
       const res = await fetch(requestEndpoint, {
         headers: { 'Authorization': `Bearer ${token}`}
       });
@@ -74,18 +72,18 @@ export default function RecordsView() {
       const myrecords = await res.json();
       if (!myrecords.nextPage) {
         setEndOfRecords(true);
-        setLoading(false);
+        setIsLoading(false);
         return
       };
       setPage(myrecords.nextPage);
       const sortedRecords = !values.itemsView ?  sortRecords(myrecords) : myrecords.items;
-      setLoading(false);
+      setIsLoading(false);
       return sortedRecords;
     } catch (err) {
       console.error(err)
-      setIsErrors(true)
+      setIsError(true)
     }
-  }, [page, tokenKey, values, search]);
+  }, [page, token, values, search]);
 
   /**
    * Calls the getRecords function once first render and whenver loading is true.
@@ -97,28 +95,26 @@ export default function RecordsView() {
       if (!newRecords) return
       setRecords(r => r.concat(newRecords))
     }
-    if(loading) fetchRecords();
-    if (loading === undefined) setLoading(() => !loading)
-  }, [getRecords, loading])
+    if(isLoading) fetchRecords();
+    if (isLoading === undefined) setIsLoading(() => !isLoading)
+  }, [getRecords, isLoading])
 
   function handleLoadMore() {
-    setLoading(true)
+    setIsLoading(true)
   }
 
-  const loadingMessage = endOfRecords || <h3 style={{ color: 'white' }}>Loading!</h3>;
-  const errorMessage = <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
+  if (isError) <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
-  const accordionReady = records.length > 0 ? <AccordionItems records={records} /> : (isErrors ? errorMessage : loadingMessage)
-  const content = values.itemsView ? <ItemsView allRecords={records} /> : accordionReady
+  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} />
+
   return (
   <>
     <h1>Your Records!</h1>
 
     <div className='container-xl'>
-        <RecordsOptions  values={values} handleItemView={handleItemView} handleChange={handleChange} startSearch={startSearch} search={search} setSearch={setSearch}/>
-      <Accordion defaultActiveKey="0" alwaysOpen>
+        <RecordsOptions  values={values} onItemView={handleItemView} onChange={handleChange} onSearch={startSearch} search={search} setSearch={setSearch}/>
         {content}
-      </Accordion>
         <Button className={endOfRecords ? 'm-5 btn-danger' : 'm-5'} disabled={endOfRecords} onClick={handleLoadMore}>
           {endOfRecords ? 'No More Records' : 'Load More!'}
         </Button>

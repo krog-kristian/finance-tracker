@@ -1,15 +1,16 @@
 import '../App.css';
-import { useContext, useState } from 'react';
-import AppContext from './AppContext';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { FaBars } from 'react-icons/fa'
 import { Outlet, Link } from 'react-router-dom'
 import Modal from 'react-bootstrap/Modal'
 import { useMediaQuery } from 'react-responsive';
 import Image from 'react-bootstrap/Image'
+import { useUserContext } from "./UserContext"
+
 
 export default function Nav() {
-  const { handleSignOut, user } = useContext(AppContext)
+  const { handleSignOut, user } = useUserContext()
   const isLargeScreen = useMediaQuery({
     query: '(min-width: 900px)'
   });
@@ -24,7 +25,7 @@ export default function Nav() {
                 <h2 className='my-auto ms-2 text-white fs-2'>Freedom Financial</h2>
               </Link>
             </div>
-          {isLargeScreen ? <NavDesktop handleSignOut={handleSignOut} signedIn={user} /> : <NavMobile handleSignOut={handleSignOut}  signedIn={user}/>}
+          {isLargeScreen ? <NavDesktop onSignOut={handleSignOut} signedIn={user} /> : <NavMobile onSignOut={handleSignOut}  signedIn={user}/>}
           </div>
         </div>
       <Outlet />
@@ -32,27 +33,27 @@ export default function Nav() {
   );
 }
 
-function NavMobile({ handleSignOut, signedIn }) {
+function NavMobile({ onSignOut, signedIn }) {
   const [hamburgerOpen, setHamburgerOpen] = useState(false)
 
   function signOutHamburger() {
-    handleSignOut();
+    onSignOut();
     setHamburgerOpen(false);
   }
 
   const signedInLinks = signedIn ? (
     <>
-      <li onClick={() => setHamburgerOpen(false)}>
-        <Link to='newrecord'>New Record</Link>
+      <li className='list-group-item bg-secondary fs-5' onClick={() => setHamburgerOpen(false)}>
+        <Link className='text-decoration-none text-white' to='newrecord'>New Record</Link>
       </li>
-      <li onClick={() => setHamburgerOpen(false)}>
-        <Link to='records'>Records</Link>
+      <li className='list-group-item bg-secondary' onClick={() => setHamburgerOpen(false)}>
+        <Link className='text-decoration-none text-white fs-5' to='records'>Records</Link>
       </li>
-      <li onClick={() => setHamburgerOpen(false)}>
-        <Link to='budgets'>Budgets</Link>
+      <li className='list-group-item bg-secondary' onClick={() => setHamburgerOpen(false)}>
+        <Link className='text-decoration-none text-white fs-5' to='budgets'>Budgets</Link>
       </li>
-      <li onClick={signOutHamburger}>
-        <Link to='/'>Sign Out</Link>
+      <li className='list-group-item bg-warning' onClick={signOutHamburger}>
+        <Link className='text-decoration-none text-reset fs-5' to='/'>Sign Out</Link>
       </li>
     </>
     ) : ''
@@ -65,14 +66,24 @@ function NavMobile({ handleSignOut, signedIn }) {
           {" "}<FaBars className='visible' size={'2rem'} color={"#511f31"} />{" "}
         </button>
       </div >
-      <Modal show={hamburgerOpen} fullscreen={true} onHide={() => setHamburgerOpen(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal</Modal.Title>
+      <Modal show={hamburgerOpen} className="" fullscreen={true} onHide={() => setHamburgerOpen(false)}>
+        <Modal.Header closeButton closeVariant='white' style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#414535'
+        }}>
+          <Modal.Title>
+            <Link to='/' className='d-flex text-decoration-none'>
+              <Image width="80" fluid roundedCircle src='/Freedom.png' />
+              <h2 className='my-auto ms-2 text-white fs-2'>Freedom Financial</h2>
+            </Link>
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <ul>
-            <li onClick={() => setHamburgerOpen(false)}>
-              <Link to='/'>Home</Link>
+        <Modal.Body style={{ backgroundColor: '#414535' }}>
+          <ul className='list-group'>
+            <li className='list-group-item bg-secondary' onClick={() => setHamburgerOpen(false)}>
+              <Link className='text-decoration-none text-white fs-5' to='/'>Home</Link>
             </li>
             {signedInLinks}
           </ul>
@@ -82,14 +93,14 @@ function NavMobile({ handleSignOut, signedIn }) {
   );
 }
 
-function NavDesktop({ handleSignOut, signedIn }) {
+function NavDesktop({ onSignOut, signedIn }) {
 
   const signedInLinks = signedIn ? (
     <>
-      < Link to = 'newrecord' className = "btn btn-primary mx-3" > Add Record</Link>
+      <Link to = 'newrecord' className = "btn btn-primary mx-3" > Add Record</Link>
       <Link to='records' className="btn btn-primary mx-3">Records</Link>
       <Link to='budgets' className="btn btn-primary mx-3">Budgets</Link>
-      <Button variant='warning' className='ms-3' onClick={handleSignOut}>Sign Out</Button>{ ' ' }
+      <Button variant='warning' className='ms-3' onClick={onSignOut}>Sign Out</Button>{ ' ' }
     </>
    ) : ''
 

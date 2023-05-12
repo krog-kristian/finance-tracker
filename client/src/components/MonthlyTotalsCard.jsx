@@ -15,19 +15,19 @@ export default function MonthlyTotalsCard({ monthlyTotals }) {
         <Card.Title className='fs-2'>{`${monthlyTotals.thisMonth}`}</Card.Title>
 
         <Card.Text className='d-flex flex-wrap justify-content-center'>
-          <Badge bg='warning' text='dark' className='p-3 m-3 fs-3'>{`Total Debits: $${monthlyTotals.totals.thisMonthsDebits}`}</Badge>
-          <Badge bg='success' className='p-3 m-3 fs-3'>{`Total Credits: $${monthlyTotals.totals.thisMonthsCredits}`}</Badge>
+          <Badge bg='warning' text='dark' className='p-3 m-3 fs-3'>Total Debits: ${monthlyTotals.totals.thisMonthsDebits}</Badge>
+          <Badge bg='success' className='p-3 m-3 fs-3'>Total Credits: ${monthlyTotals.totals.thisMonthsCredits}</Badge>
         </Card.Text>
 
       </Card.Body>
 
       <Card.Footer className='bg-secondary text-light fs-3'>Last Month's Totals</Card.Footer>
       <Card.Body>
-        <Card.Title className='fs-2'>{`${monthlyTotals.lastMonth}`}</Card.Title>
+        <Card.Title className='fs-2'>{monthlyTotals.lastMonth}</Card.Title>
 
         <Card.Text className='d-flex flex-wrap justify-content-center'>
-          <Badge bg='warning' text='dark' className='p-3 m-3 fs-3'>{`Total Debits: $${monthlyTotals.totals.lastMonthsDebits}`}</Badge>
-          <Badge bg='success' className='p-3 m-3 fs-3'>{`Total Credits: $${monthlyTotals.totals.lastMonthsCredits}`}</Badge>
+          <Badge bg='warning' text='dark' className='p-3 m-3 fs-3'>Total Debits: ${monthlyTotals.totals.lastMonthsDebits}</Badge>
+          <Badge bg='success' className='p-3 m-3 fs-3'>Total Credits: ${monthlyTotals.totals.lastMonthsCredits}</Badge>
         </Card.Text>
 
       </Card.Body>

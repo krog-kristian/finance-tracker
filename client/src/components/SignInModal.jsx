@@ -1,8 +1,8 @@
-import { useContext, useState } from "react"
-import AppContext from "./AppContext"
+import { useState } from "react"
 import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
 import Alert from 'react-bootstrap/Alert'
+import { useUserContext } from "./UserContext"
 
 /**
  * Created the modal component and controls the request to sign a user in.
@@ -10,8 +10,8 @@ import Alert from 'react-bootstrap/Alert'
  * @returns the modal component for signing in.
  */
 export default function SignInModal({ showSignIn, setShowSignIn }) {
-  const { handleSignIn } = useContext(AppContext)
-  const [alertShow, setAlertShow] = useState(false)
+  const { handleSignIn } = useUserContext()
+  const [errorMessageShowing, setErrorMessageShowing] = useState(false)
 
   async function signIn(e) {
     try {
@@ -29,7 +29,7 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
       handleSignIn(confirm)
       setShowSignIn(false)
     } catch (err) {
-      setAlertShow(true)
+      setErrorMessageShowing(true)
       console.error(err)
     }
   }
@@ -41,7 +41,7 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
       </Modal.Header>
       <form onSubmit={e => signIn(e)}>
         <Modal.Body>
-          <Alert show={alertShow} variant="danger">
+          <Alert show={errorMessageShowing} variant="danger">
             <Alert.Heading>Incorrect Login.</Alert.Heading>
             <p>
               Unable to log in try again.
@@ -51,12 +51,12 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
           <div className='row g-3'>
             <div className='col'>
               <label className='form-label'>Username
-                <input required className='form-control' type='text' name='userName' id='userName' placeholder='Username' />
+                <input required className='form-control' type='text' name='userName' autoComplete='username' placeholder='Username' />
               </label>
             </div>
             <div className='col'>
               <label className='form-label'>Password
-                <input required className='form-control' type='password' name='passwordVerify' id='passwordVerify' placeholder='Password' />
+                <input required className='form-control' autoComplete="current-password" type='password' name='passwordVerify' placeholder='Password' />
               </label>
             </div>
           </div>
