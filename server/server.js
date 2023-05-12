@@ -251,7 +251,7 @@ app.get('/api/records/budgets', async (req, res, next) => {
                   select sum("i"."amount") as "totalSpent", "i"."category", "r"."month"
                   from "items" as "i"
                   join "records" as "r" using ("recordId")
-                  where "r"."year" = $1 and "userId" = $2 and ("r"."month" = $3 or "r"."month" = $4)
+                  where "r"."year" = $1 and "userId" = $2 and ("r"."month" = $3 or "r"."month" = $4) and "r"."isDebit" = 'true'
                   group by "i"."category", "r"."month", "r"."year"
                 `;
     const params = [thisYear, userId, thisMonth, lastMonth];
