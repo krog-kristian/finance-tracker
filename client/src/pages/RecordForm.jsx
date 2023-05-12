@@ -8,7 +8,7 @@ export default function RecordForm() {
   const [items, setItems] = useState(1);
   const [isDebit, setIsDebit] = useState(true);
   const [isError, setIsError] = useState(false)
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+  const [showingSuccessAlert, setShowingSuccessAlert] = useState(false)
   const { token } = useContext(UserContext)
 
   function handleItems (e) {
@@ -32,10 +32,10 @@ export default function RecordForm() {
       setItems(1);
       e.target.reset();
       setIsDebit(true)
-      setShowSuccessAlert(true)
+      setShowingSuccessAlert(true)
       window.scrollTo(0, 0)
       setTimeout(() => {
-        setShowSuccessAlert(false)
+        setShowingSuccessAlert(false)
       }, 1500)
     } catch (err) {
       console.error(err)
@@ -47,13 +47,11 @@ export default function RecordForm() {
     }
   }
 
-
-
   return (
     <>
       <h1>New Record</h1>
       <Alert show={isError} variant="danger"><Alert.Heading>Failure.</Alert.Heading><p>Could not add record.</p><hr /></Alert>
-      <Alert show={showSuccessAlert} variant="success"><Alert.Heading>Success!</Alert.Heading><p>New record added.</p><hr /></Alert>
+      <Alert show={showingSuccessAlert} variant="success"><Alert.Heading>Success!</Alert.Heading><p>New record added.</p><hr /></Alert>
       <form className='container-xl p-5 rounded border border-dark bg-secondary text-white fs-4' onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
 
       <div className='row g-3'>

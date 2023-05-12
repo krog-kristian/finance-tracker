@@ -11,7 +11,7 @@ import UserContext from './UserContext';
  */
 export default function SignInModal({ showSignIn, setShowSignIn }) {
   const { handleSignIn } = useContext(UserContext)
-  const [alertShow, setAlertShow] = useState(false)
+  const [errorMessageShowing, setErrorMessageShowing] = useState(false)
 
   async function signIn(e) {
     try {
@@ -29,7 +29,7 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
       handleSignIn(confirm)
       setShowSignIn(false)
     } catch (err) {
-      setAlertShow(true)
+      setErrorMessageShowing(true)
       console.error(err)
     }
   }
@@ -41,7 +41,7 @@ export default function SignInModal({ showSignIn, setShowSignIn }) {
       </Modal.Header>
       <form onSubmit={e => signIn(e)}>
         <Modal.Body>
-          <Alert show={alertShow} variant="danger">
+          <Alert show={errorMessageShowing} variant="danger">
             <Alert.Heading>Incorrect Login.</Alert.Heading>
             <p>
               Unable to log in try again.

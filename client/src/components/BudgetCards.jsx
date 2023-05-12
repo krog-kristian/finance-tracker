@@ -18,15 +18,15 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
   const [editing, setEditing] = useState();
   const [goal, setGoal] = useState();
   const { token } = useContext(UserContext)
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (Object.keys(budgets).length > 1) {
-      setLoading(false)
+      setIsLoading(false)
     }
   }, [budgets])
 
-  if (loading) return <h2 style={{ color: 'white' }}>Loading</h2>
+  if (isLoading) return <h2 style={{ color: 'white' }}>Loading</h2>
 
   const budgetData = formatBudgetData(budgets, currentMonth, previousMonth)
 

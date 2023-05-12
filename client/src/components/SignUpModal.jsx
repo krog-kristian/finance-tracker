@@ -18,7 +18,7 @@ export default function SignUpModal({ showSignUp, setShowSignUp, setShowSignIn }
   const [passwordMatch, setPasswordMatch] = useState()
   const [userNameExists, setUserNameExists] = useState(false)
   const [emailExists, setEmailExists] = useState(false)
-  const [alertShow, setAlertShow] = useState(false)
+  const [showingAlert, setShowingAlert] = useState(false)
 
   /**
    * Uses a controlled form variables to verify password matching and send a new user request to the server.
@@ -35,11 +35,11 @@ export default function SignUpModal({ showSignUp, setShowSignUp, setShowSignIn }
     try {
       const newUser = { userName, password, firstName, lastName, email }
       await sendSignUp(newUser)
-      setAlertShow(true)
+      setShowingAlert(true)
       setTimeout(() => {
         setShowSignUp(false)
         setShowSignIn(true)
-        setAlertShow(false)
+        setShowingAlert(false)
       }, 1500)
     } catch (err) {
       if (err.cause) {
@@ -59,7 +59,7 @@ return (
       </Modal.Header>
       <form onSubmit={e => signUp(e)}>
         <Modal.Body>
-          <Alert show={alertShow} variant="success">
+          <Alert show={showingAlert} variant="success">
             <Alert.Heading>Success!</Alert.Heading>
             <p>
               New User Created, please log in.

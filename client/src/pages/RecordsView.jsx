@@ -11,7 +11,7 @@ export default function RecordsView() {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState();
   const [endOfRecords, setEndOfRecords] = useState(false);
-  const [isErrors, setIsErrors] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [values, setValues] = useState({
     itemsView: false,
     debitOrCredit: 'null',
@@ -81,7 +81,7 @@ export default function RecordsView() {
       return sortedRecords;
     } catch (err) {
       console.error(err)
-      setIsErrors(true)
+      setIsError(true)
     }
   }, [page, token, values, search]);
 
@@ -104,7 +104,7 @@ export default function RecordsView() {
   }
 
   if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
-  if (isErrors) <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+  if (isError) <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
   const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} />
 
