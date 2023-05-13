@@ -130,6 +130,6 @@ CREATE TABLE "public"."budgets" (
 
 ALTER TABLE "records" ADD CONSTRAINT "records_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");
 
-ALTER TABLE "items" ADD CONSTRAINT "items_fk0" FOREIGN KEY ("recordId") REFERENCES "records"("recordId");
+ALTER TABLE "items" ADD CONSTRAINT "items_fk0" FOREIGN KEY ("recordId") REFERENCES "records"("recordId") ON DELETE CASCADE;
 
 ALTER TABLE "budgets" ADD CONSTRAINT "budgets_fk0" FOREIGN KEY ("userId") REFERENCES "users"("userId");

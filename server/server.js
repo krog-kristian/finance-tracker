@@ -268,6 +268,26 @@ app.get('/api/records/budgets', async (req, res, next) => {
   }
 });
 
+app.delete('/api/records/:recordId', async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    const { recordId } = req.params;
+    const params = [userId, recordId];
+    const sql = `
+                delete
+                from "records"
+                where "recordId" = $1 and "userId" = $2
+                returning *
+                `;
+    if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Improper Request.');
+    const deleteRequest = await db.query(sql, params);
+    if (!deleteRequest.rows[0]) throw new ClientError(500, 'Nothing to delete, database does not match client.');
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
