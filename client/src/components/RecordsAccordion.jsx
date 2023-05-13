@@ -1,5 +1,8 @@
 import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge'
+import Button from "react-bootstrap/esm/Button.js";
+import Card from 'react-bootstrap/Card';
+import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 
 /**
  * Creates the accordion items.
@@ -8,11 +11,18 @@ import Badge from 'react-bootstrap/Badge'
  */
 export default function RecordsAccordion({ records }) {
 
-    const recordItems = records.map((r, i) => (
+
+  function ToggleButton({ eventKey, children }) {
+    const handleToggleOpen = useAccordionButton(eventKey);
+    return <Button onClick={handleToggleOpen}>{children}</Button>
+  }
+
+  const recordItems = records.map((r, i) => (
         <Accordion.Item key={r.recordId} eventKey={i}>
 
-          <Accordion.Header>
-            <div className='d-flex flex-wrap w-100'>
+          <Card.Header className='p-2 d-flex flex-wrap justify-content-between'>
+
+            <Button onClick={console.log('delete')} className='me-2 px-3' size='sm' variant='danger'>X</Button>
 
               <h3 className='col my-auto mx-1'>Source: {r.source}</h3>
 
@@ -23,8 +33,10 @@ export default function RecordsAccordion({ records }) {
               </div>
 
               <p className='col-2 me-3 ms-1 my-auto'>Date: {r.month + 1}/{r.day + 1}/{r.year}</p>
-            </div>
-          </Accordion.Header>
+
+              <ToggleButton eventKey={i}>View Items</ToggleButton>
+
+          </Card.Header>
 
           <Accordion.Body className='bg-secondary border border-secondary rounded'>
               <AccordionItems items={r.items} />
