@@ -6,6 +6,7 @@ import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
 import { useUserContext } from "../components/UserContext";
 import { deleteRecord } from '../lib/api';
+import ConfirmationModal from '../components/ConfirmationModal.jsx';
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
@@ -20,6 +21,18 @@ export default function RecordsView() {
   });
   const { token } = useUserContext()
   const [search, setSearch] = useState('');
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState()
+
+  const handleClose = () => setConfirmVisible(false);
+  const handleShow = (recordId, index) => {
+    setConfirmVisible(true)
+    setRecordToDelete([recordId, index])
+    }
+  const handleConfirm = () => {
+    handleClose();
+    handleDelete(...recordToDelete)
+  }
 
   /**
    * Updates the values object when inputs are changed and sets up a new request.
@@ -120,11 +133,17 @@ export default function RecordsView() {
   if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
   if (isError) <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
-  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} onDelete={handleDelete} />
+  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} onDelete={handleShow} />
 
   return (
   <>
     <h1>Your Records!</h1>
+    <ConfirmationModal
+    onConfirm={handleConfirm}
+    confirmVisible={confirmVisible}
+    onHide={handleClose}>
+      Are you sure you wish to delete this record along with all items?
+    </ConfirmationModal>
 
     <div className='container-xl'>
         <RecordsOptions  values={values} onItemView={handleItemView} onChange={handleChange} onSearch={startSearch} search={search} setSearch={setSearch}/>
