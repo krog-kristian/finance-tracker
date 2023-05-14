@@ -5,6 +5,7 @@ import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
 import { useUserContext } from "../components/UserContext"
+import { deleteRecord } from '../lib/api';
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
@@ -103,10 +104,27 @@ export default function RecordsView() {
     setIsLoading(true)
   }
 
+  async function handleDelete(recordId) {
+    try {
+      const deletedrecord = await deleteRecord(recordId, token);
+      if (deletedrecord) {
+        for (let i = 0; i < records.length; i++) {
+          if (records[i].recordId === recordId) {
+            const deleteRecord = records.toSpliced(i, 1);
+            setRecords(deleteRecord);
+            return
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
   if (isError) <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
 
-  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} />
+  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} onDelete={handleDelete} />
 
   return (
   <>

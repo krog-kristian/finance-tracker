@@ -31,3 +31,12 @@ export async function sendSignUp(user) {
   const confirm = await response.json();
   return confirm;
 }
+
+export async function deleteRecord(recordId, token) {
+  const response = await fetch(`/api/records/${recordId}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+   });
+  if (!response.ok) throw new Error(`Invalid New User.`, { cause: response });
+  return true;
+}

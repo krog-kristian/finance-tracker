@@ -272,7 +272,7 @@ app.delete('/api/records/:recordId', async (req, res, next) => {
   try {
     const { userId } = req.user;
     const { recordId } = req.params;
-    const params = [userId, recordId];
+    const params = [recordId, userId];
     const sql = `
                 delete
                 from "records"
