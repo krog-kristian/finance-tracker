@@ -4,7 +4,7 @@ import RecordsAccordion from '../components/RecordsAccordion.jsx';
 import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
-import { useUserContext } from "../components/UserContext"
+import { useUserContext } from "../components/UserContext";
 import { deleteRecord } from '../lib/api';
 
 export default function RecordsView() {
@@ -104,18 +104,14 @@ export default function RecordsView() {
     setIsLoading(true)
   }
 
-  async function handleDelete(recordId) {
+  async function handleDelete(recordId, index) {
     try {
       const deletedrecord = await deleteRecord(recordId, token);
       if (deletedrecord) {
-        for (let i = 0; i < records.length; i++) {
-          if (records[i].recordId === recordId) {
-            const deleteRecord = records.toSpliced(i, 1);
+            const deleteRecord = records.toSpliced(index, 1);
             setRecords(deleteRecord);
             return
           }
-        }
-      }
     } catch (err) {
       console.error(err);
     }

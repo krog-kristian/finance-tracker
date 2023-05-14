@@ -27,7 +27,7 @@ export default function RecordsAccordion({ records, onDelete }) {
 
           <Card.Header className='p-2 d-flex flex-wrap justify-content-between'>
 
-          <Button onClick={() => onDelete(r.recordId)} className='me-2 px-3' size='sm' variant='danger'>X</Button>
+          <Button onClick={() => onDelete(r.recordId, i)} className='me-2 px-3' size='sm' variant='danger'>X</Button>
 
               <h3 className='col my-auto mx-1'>Source: {r.source}</h3>
 
