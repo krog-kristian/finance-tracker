@@ -22,7 +22,8 @@ export default function RecordsView() {
   const { token } = useUserContext()
   const [search, setSearch] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [recordToDelete, setRecordToDelete] = useState()
+  const [recordToDelete, setRecordToDelete] = useState();
+  const [scroll, setScroll] = useState(0)
 
   /**
    * Callback function to request the current page from the api.
@@ -68,10 +69,12 @@ export default function RecordsView() {
     }
     if(isLoading) fetchRecords();
     if (isLoading === undefined) setIsLoading(() => !isLoading)
-  }, [getRecords, isLoading])
+    window.scroll(0, scroll)
+  }, [getRecords, isLoading, scroll])
 
   function handleLoadMore() {
-    setIsLoading(true)
+    setScroll(scroll + 800);
+    setIsLoading(true);
   }
 
   async function handleDelete(recordId, index) {
@@ -80,6 +83,7 @@ export default function RecordsView() {
       if (deletedrecord) {
             const deleteRecord = records.toSpliced(index, 1);
             setRecords(deleteRecord);
+            setScroll(0);
             return
           }
     } catch (err) {
@@ -99,6 +103,7 @@ export default function RecordsView() {
     setPage(0);
     setIsLoading(true);
     setEndOfRecords(false);
+    setScroll(0);
   };
 
   /**
@@ -112,6 +117,7 @@ export default function RecordsView() {
     setPage(0);
     setIsLoading(true);
     setEndOfRecords(false);
+    setScroll(0);
   }
 
   function startSearch() {
@@ -119,6 +125,7 @@ export default function RecordsView() {
     setPage(0);
     setIsLoading(true);
     setEndOfRecords(false);
+    setScroll(0);
   }
 
   const handleClose = () => setConfirmVisible(false);
