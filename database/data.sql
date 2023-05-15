@@ -29,7 +29,7 @@ INSERT into "records"
     (1, 3, 2023, 12, 'Old Navy', true, 3, 38.23),
     (1, 3, 2023, 6, 'Work', false, 1, 856.21),
     (1, 3, 2023, 5, 'Albertsons', true, 4, 42.43),
-    (1, 3, 2023, 1, 'Irvine Company', true, 2, 780.21)
+    (1, 3, 2023, 1, 'Irvine Company', true, 2, 780.21),
     (1, 4, 2023, 8, 'Work', false, 1, 876.42);
 
 INSERT into "items"

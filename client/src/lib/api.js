@@ -40,3 +40,21 @@ export async function deleteRecord(recordId, token) {
   if (!response.ok) throw new Error(`Invalid New User.`, { cause: response });
   return true;
 }
+
+export async function demoSignIn(handleSignIn) {
+  try {
+
+    const response = await fetch('/api/home/sign-in', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userName: 'Demo', passwordVerify:'poiuyt123'})
+    })
+    if (!response.ok) throw new Error(`Incorrect Login.`)
+    const confirm = await response.json();
+    handleSignIn(confirm)
+  } catch (err) {
+    console.error(err)
+  }
+}

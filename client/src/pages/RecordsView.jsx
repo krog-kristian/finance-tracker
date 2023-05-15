@@ -81,8 +81,7 @@ export default function RecordsView() {
     try {
       const deletedrecord = await deleteRecord(recordId, token);
       if (deletedrecord) {
-            const deleteRecord = records.toSpliced(index, 1);
-            setRecords(deleteRecord);
+            setRecords(r => r.toSpliced(index,1));
             setScroll(0);
             return
           }
