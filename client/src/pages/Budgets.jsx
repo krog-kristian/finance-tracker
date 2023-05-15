@@ -38,10 +38,11 @@ export default function Budgets() {
       setTotalsSpent(records);
       setCurrentMonth(thisMonth);
       setPreviousMonth(lastMonth);
-      setIsLoading(false);
       } catch (err) {
         console.error(err);
-        setIsError(true)
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
     if (isLoading) fetchBudgets();

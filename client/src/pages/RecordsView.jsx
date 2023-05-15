@@ -4,7 +4,9 @@ import RecordsAccordion from '../components/RecordsAccordion.jsx';
 import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
-import { useUserContext } from "../components/UserContext"
+import { useUserContext } from "../components/UserContext";
+import { deleteRecord } from '../lib/api';
+import ConfirmationModal from '../components/ConfirmationModal.jsx';
 
 export default function RecordsView() {
   const [records, setRecords] = useState([]);
@@ -19,39 +21,8 @@ export default function RecordsView() {
   });
   const { token } = useUserContext()
   const [search, setSearch] = useState('');
-
-  /**
-   * Updates the values object when inputs are changed and sets up a new request.
-   * @param {obect} e, the event of targeted input.
-   */
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-    setSearch('');
-    setRecords([]);
-    setPage(0);
-    setIsLoading(true);
-    setEndOfRecords(false);
-  };
-
-  /**
-   * Updates the itemView value and sets up a new request.
-   * @param {object} e, the event of the item view switch.
-   */
-  const handleItemView = (e) => {
-      setValues({ ...values, [e.target.name]: !values.itemsView });
-      setSearch('');
-      setRecords([]);
-      setPage(0);
-      setIsLoading(true);
-      setEndOfRecords(false);
-  }
-
-  function startSearch() {
-    setRecords([]);
-    setPage(0);
-    setIsLoading(true);
-    setEndOfRecords(false);
-  }
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState()
 
   /**
    * Callback function to request the current page from the api.
@@ -72,16 +43,16 @@ export default function RecordsView() {
       const myrecords = await res.json();
       if (!myrecords.nextPage) {
         setEndOfRecords(true);
-        setIsLoading(false);
         return
       };
       setPage(myrecords.nextPage);
       const sortedRecords = !values.itemsView ?  sortRecords(myrecords) : myrecords.items;
-      setIsLoading(false);
       return sortedRecords;
     } catch (err) {
-      console.error(err)
-      setIsError(true)
+      setIsError(true);
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   }, [page, token, values, search]);
 
@@ -103,14 +74,76 @@ export default function RecordsView() {
     setIsLoading(true)
   }
 
-  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
-  if (isError) <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+  async function handleDelete(recordId, index) {
+    try {
+      const deletedrecord = await deleteRecord(recordId, token);
+      if (deletedrecord) {
+            const deleteRecord = records.toSpliced(index, 1);
+            setRecords(deleteRecord);
+            return
+          }
+    } catch (err) {
+      setIsError(true)
+      console.error(err);
+    }
+  }
 
-  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} />
+  /**
+ * Updates the values object when inputs are changed and sets up a new request.
+ * @param {obect} e, the event of targeted input.
+ */
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+    setSearch('');
+    setRecords([]);
+    setPage(0);
+    setIsLoading(true);
+    setEndOfRecords(false);
+  };
+
+  /**
+   * Updates the itemView value and sets up a new request.
+   * @param {object} e, the event of the item view switch.
+   */
+  const handleItemView = (e) => {
+    setValues({ ...values, [e.target.name]: !values.itemsView });
+    setSearch('');
+    setRecords([]);
+    setPage(0);
+    setIsLoading(true);
+    setEndOfRecords(false);
+  }
+
+  function startSearch() {
+    setRecords([]);
+    setPage(0);
+    setIsLoading(true);
+    setEndOfRecords(false);
+  }
+
+  const handleClose = () => setConfirmVisible(false);
+
+  const handleShow = (recordId, index) => {
+    setConfirmVisible(true)
+    setRecordToDelete([recordId, index])
+  }
+
+  const handleConfirm = () => {
+    handleClose();
+    handleDelete(...recordToDelete, token)
+  }
+
+  if (isLoading || isLoading === undefined) return <h3 style={{ color: 'white' }}>Loading!</h3>;
+  if (isError) return <h3 style={{ color: 'white' }}>Something went wrong, please try again.</h3>
+
+  const content = values.itemsView ? <ItemsView allRecords={records} /> : <RecordsAccordion records={records} onDelete={handleShow} />
 
   return (
   <>
     <h1>Your Records!</h1>
+    <ConfirmationModal onConfirm={handleConfirm} confirmVisible={confirmVisible} onHide={handleClose}>
+      Are you sure you wish to delete this record along with all items?
+    </ConfirmationModal>
 
     <div className='container-xl'>
         <RecordsOptions  values={values} onItemView={handleItemView} onChange={handleChange} onSearch={startSearch} search={search} setSearch={setSearch}/>
