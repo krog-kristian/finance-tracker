@@ -13,9 +13,8 @@ export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
   const [chartData, setChartData] = useState();
   const [isError, setIsError] = useState(false);
-  const { token } = useUserContext()
-  const [isLoading, setIsLoading] = useState()
-
+  const { token } = useUserContext();
+  const [isLoading, setIsLoading] = useState();
 
   /**
    * Calls a fetch request to the server then
@@ -31,10 +30,11 @@ export default function UserHome() {
         setMonthlyTotals(monthsTotals);
         const monthsChartData = getChartData(monthlyRecords, filteredMonths);
         setChartData(monthsChartData)
-        setIsLoading(false)
       } catch (err) {
         setIsError(true)
         console.error(err)
+      } finally {
+        setIsLoading(false)
       }
     }
     if (isLoading) getMonthlyRecords();

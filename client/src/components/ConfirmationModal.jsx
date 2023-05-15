@@ -11,7 +11,7 @@ export default function ConfirmationModal({ onConfirm, children, confirmVisible,
         <Modal.Body>{children}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onHide}>
-            Close
+            Cancel
           </Button>
           <Button variant="primary" onClick={onConfirm}>
             Confirm
