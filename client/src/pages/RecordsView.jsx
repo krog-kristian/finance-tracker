@@ -49,7 +49,6 @@ export default function RecordsView() {
       const sortedRecords = !values.itemsView ?  sortRecords(myrecords) : myrecords.items;
       return sortedRecords;
     } catch (err) {
-      console.log('getting records')
       setIsError(true);
       console.error(err);
     } finally {
