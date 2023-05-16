@@ -124,7 +124,7 @@ function GoalEditInput({ onCancel, category, value, setGoal, onUpdate}) {
   return (
     <InputGroup>
       <InputGroup.Text >$</InputGroup.Text>
-      <Form.Control type='number' step={0.01} name='search' placeholder={Number(value.goal).toFixed(2)} onChange={e => setGoal(e.target.value)} />
+      <Form.Control type='number' step={0.01} name='search' min={0} placeholder={Number(value.goal).toFixed(2)} onChange={e => setGoal(e.target.value)} />
       <Button className="btn-sm" variant="outline-success" name='search' onClick={() => onUpdate(category)}>Update</Button>
       <Button className="btn-sm" variant="outline-danger" name='cancel' onClick={onCancel}>Cancel</Button>
     </InputGroup>

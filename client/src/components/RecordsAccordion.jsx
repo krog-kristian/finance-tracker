@@ -2,6 +2,8 @@ import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge'
 import Button from "react-bootstrap/esm/Button.js";
 import Card from 'react-bootstrap/Card';
+import { categoriesInObj, categoriesOutObj } from '../lib/catergory-data';
+
 
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 
@@ -44,7 +46,7 @@ export default function RecordsAccordion({ records, onDelete }) {
           </Card.Header>
 
           <Accordion.Body className='bg-secondary border border-secondary rounded'>
-              <AccordionItems items={r.items} />
+              <AccordionItems items={r.items} isDebit={r.isDebit} />
           </Accordion.Body>
 
         </Accordion.Item>
@@ -62,13 +64,13 @@ export default function RecordsAccordion({ records, onDelete }) {
  * @param {array} items array for each record.
  * @returns an array of list items for individual accodion items content.
  */
-function AccordionItems({ items }) {
+function AccordionItems({ items, isDebit }) {
 
     const itemsList = items.map((item, index) => (
         <li className='list-group-item' key={item.itemId}>
           <div className='d-flex flex-wrap justify-content-between w-100 align-items-center'>
             <h4 className='col mx-1 my-auto text-start'>Item: {item.itemName}</h4>
-            <p className='col mx-1 fs-4 text-start my-auto'>Category: {item.category}</p>
+          <p className='col mx-1 fs-4 text-start my-auto'>Category: {isDebit ? categoriesOutObj[item.category] : categoriesInObj[item.category]}</p>
             <div className='col d-flex justify-content-end'>
               <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${Number(item.amount).toFixed(2)}</Badge>
             </div>

@@ -16,13 +16,14 @@ export default function RecordsView() {
   const [isError, setIsError] = useState(false);
   const [values, setValues] = useState({
     itemsView: false,
-    debitOrCredit: 'null',
+    isDebit: 'null',
     category: 'null',
   });
   const { token } = useUserContext()
   const [search, setSearch] = useState('');
   const [confirmVisible, setConfirmVisible] = useState(false);
-  const [recordToDelete, setRecordToDelete] = useState()
+  const [recordToDelete, setRecordToDelete] = useState();
+  const [scroll, setScroll] = useState(0)
 
   /**
    * Callback function to request the current page from the api.
@@ -33,8 +34,8 @@ export default function RecordsView() {
   const getRecords = useCallback(async () => {
     setIsLoading(true)
     try {
-      const itemsEndpoint = `/api/records/items/${page}/${values.debitOrCredit}/${values.category}/${search}`;
-      const recordsEndpoint = `/api/records/${page}/${values.debitOrCredit}/${search}`;
+      const itemsEndpoint = `/api/records/items/${page}/${values.isDebit}/${values.category}/${search}`;
+      const recordsEndpoint = `/api/records/${page}/${values.isDebit}/${search}`;
       const requestEndpoint = values.itemsView ? itemsEndpoint : recordsEndpoint;
       const res = await fetch(requestEndpoint, {
         headers: { 'Authorization': `Bearer ${token}`}
@@ -68,18 +69,20 @@ export default function RecordsView() {
     }
     if(isLoading) fetchRecords();
     if (isLoading === undefined) setIsLoading(() => !isLoading)
-  }, [getRecords, isLoading])
+    window.scroll(0, scroll)
+  }, [getRecords, isLoading, scroll])
 
   function handleLoadMore() {
-    setIsLoading(true)
+    setScroll(scroll + 800);
+    setIsLoading(true);
   }
 
   async function handleDelete(recordId, index) {
     try {
       const deletedrecord = await deleteRecord(recordId, token);
       if (deletedrecord) {
-            const deleteRecord = records.toSpliced(index, 1);
-            setRecords(deleteRecord);
+            setRecords(r => r.toSpliced(index,1));
+            setScroll(0);
             return
           }
     } catch (err) {
@@ -93,12 +96,17 @@ export default function RecordsView() {
  * @param {obect} e, the event of targeted input.
  */
   const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    if (e.target.name === 'isDebit') {
+      setValues({...values, isDebit: e.target.value, category: 'null'})
+    } else {
+      setValues({ ...values, [e.target.name]: e.target.value });
+    }
     setSearch('');
     setRecords([]);
     setPage(0);
     setIsLoading(true);
     setEndOfRecords(false);
+    setScroll(0);
   };
 
   /**
@@ -106,12 +114,13 @@ export default function RecordsView() {
    * @param {object} e, the event of the item view switch.
    */
   const handleItemView = (e) => {
-    setValues({ ...values, [e.target.name]: !values.itemsView });
+    setValues({ ...values, [e.target.name]: !values.itemsView, category: 'null' });
     setSearch('');
     setRecords([]);
     setPage(0);
     setIsLoading(true);
     setEndOfRecords(false);
+    setScroll(0);
   }
 
   function startSearch() {
@@ -119,6 +128,7 @@ export default function RecordsView() {
     setPage(0);
     setIsLoading(true);
     setEndOfRecords(false);
+    setScroll(0);
   }
 
   const handleClose = () => setConfirmVisible(false);

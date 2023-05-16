@@ -53,7 +53,7 @@ function NavMobile({ onSignOut, signedIn }) {
         <Link className='text-decoration-none text-white fs-5' to='budgets'>Budgets</Link>
       </li>
       <li className='list-group-item bg-warning' onClick={signOutHamburger}>
-        <Link className='text-decoration-none text-reset fs-5' to='/'>Sign Out</Link>
+        <Link className='text-decoration-none text-reset fs-5' to='/'>{signedIn.userId === 1 ? 'Exit Demo' : 'Sign Out'}</Link>
       </li>
     </>
     ) : ''
@@ -93,14 +93,14 @@ function NavMobile({ onSignOut, signedIn }) {
   );
 }
 
-function NavDesktop({ onSignOut, signedIn }) {
+function NavDesktop({ onSignOut, signedIn, userId }) {
 
   const signedInLinks = signedIn ? (
     <>
       <Link to = 'newrecord' className = "btn btn-primary mx-3" > Add Record</Link>
       <Link to='records' className="btn btn-primary mx-3">Records</Link>
       <Link to='budgets' className="btn btn-primary mx-3">Budgets</Link>
-      <Button variant='warning' className='ms-3' onClick={onSignOut}>Sign Out</Button>{ ' ' }
+      <Button variant='warning' className='ms-3' onClick={onSignOut}>{signedIn.userId === 1 ? 'Exit Demo' : 'Sign Out'}</Button>
     </>
    ) : ''
 

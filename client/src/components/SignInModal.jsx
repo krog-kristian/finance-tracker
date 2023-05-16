@@ -9,7 +9,7 @@ import { useUserContext } from "./UserContext"
  * @param {boolean, function} showSignIn, whether to be open or not, setShowSignIn to close the modal.
  * @returns the modal component for signing in.
  */
-export default function SignInModal({ showSignIn, setShowSignIn }) {
+export default function SignInModal({ showSignIn, setShowSignIn, demo }) {
   const { handleSignIn } = useUserContext()
   const [errorMessageShowing, setErrorMessageShowing] = useState(false)
 
