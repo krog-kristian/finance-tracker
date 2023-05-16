@@ -30,7 +30,7 @@ export default function RecordsOptions({values, onItemView, onChange, onSearch, 
 
           <div className='col-sm-2'>
             <Form.Label>Show Debit or Credits
-              <Form.Select className='my-1' name='debitOrCredit' defaultValue={values.debitOrCredit} onChange={onChange}>
+              <Form.Select className='my-1' name='isDebit' defaultValue={values.isDebit} onChange={onChange}>
                 <option  value='null'>Both</option>
                 <option  value='true'>Debits</option>
                 <option  value='false'>Credits</option>
@@ -38,7 +38,7 @@ export default function RecordsOptions({values, onItemView, onChange, onSearch, 
             </Form.Label>
           </div>
 
-          {values.debitOrCredit !== 'null' && values.itemsView === true ? <CategoryViews onChange={onChange} categories={values.debitOrCredit === 'true' ? categoriesOut : categoriesIn} /> : ''}
+          {values.isDebit !== 'null' && values.itemsView === true ? <CategoryViews onChange={onChange} currentCategory={values.category} categories={values.isDebit === 'true' ? categoriesOut : categoriesIn} /> : ''}
 
           <div className='col-sm col-lg-4 d-flex flex-column align-items-start pb-3'>
             <Form.Label htmlFor='search'>Search {searchType}</Form.Label>
@@ -60,13 +60,13 @@ export default function RecordsOptions({values, onItemView, onChange, onSearch, 
  * @param {array, function} categories a hard coded list of categories, onChange a function for on change event.
  * @returns a dropdown option component for categories.
  */
-function CategoryViews({ categories, onChange }) {
+function CategoryViews({ categories, onChange, currentCategory }) {
   const options = categories.map(c => <option key={c.value} value={c.value}>{c.category}</option>)
 
   return (
     <div className='col-sm-2'>
       <Form.Label>Category Options
-        <Form.Select className='m-2' name='category' onChange={onChange}>
+        <Form.Select className='m-2' defaultValue={currentCategory} name='category' onChange={onChange}>
           <option value='null'>Select Category</option>
           {options}
         </Form.Select>
