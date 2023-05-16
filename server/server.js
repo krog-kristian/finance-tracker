@@ -20,11 +20,11 @@ const db = new pg.Pool({
 const app = express();
 
 // Create paths for static directories
-const reactStaticDir = new URL('../client/', import.meta.url).pathname;
+const reactStaticDir = new URL('../client/build', import.meta.url).pathname;
 const uploadsStaticDir = new URL('public', import.meta.url).pathname;
 
+app.use(express.static(reactStaticDir));
 app.get('/*', express.static(reactStaticDir));
-
 // Static directory for file uploads server/public/
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
@@ -98,7 +98,6 @@ app.use(authorizationMiddleware);
  * returns a response with them aswell as the months 0 indexed number.
  */
 app.get('/api/home', async (req, res, next) => {
-  console.log('home', reactStaticDir);
   try {
     const { userId } = req.user;
     const date = new Date();
@@ -243,7 +242,6 @@ app.post('/api/records/budgets/update', async (req, res, next) => {
 });
 
 app.get('/api/records/budgets', async (req, res, next) => {
-  console.log('home', reactStaticDir);
   try {
     const { userId } = req.user;
     const date = new Date();
