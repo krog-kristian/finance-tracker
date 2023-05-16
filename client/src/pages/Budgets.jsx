@@ -12,6 +12,7 @@ export default function Budgets() {
   const { token, user } = useUserContext()
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState()
+  console.log('token', token)
 
   const getBudgets = useCallback(async () => {
     try {
