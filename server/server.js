@@ -24,7 +24,7 @@ const reactStaticDir = new URL('../client/build', import.meta.url).pathname;
 const uploadsStaticDir = new URL('public', import.meta.url).pathname;
 
 app.use(express.static(reactStaticDir));
-app.use(express.static('../client/build/'));
+
 // Static directory for file uploads server/public/
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
@@ -98,6 +98,7 @@ app.use(authorizationMiddleware);
  * returns a response with them aswell as the months 0 indexed number.
  */
 app.get('/api/home', async (req, res, next) => {
+  console.log('static', reactStaticDir);
   try {
     const { userId } = req.user;
     const date = new Date();
