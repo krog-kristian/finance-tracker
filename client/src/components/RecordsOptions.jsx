@@ -11,10 +11,18 @@ import InputGroup from 'react-bootstrap/InputGroup';
 export default function RecordsOptions({values, onItemView, onChange, onSearch, search, setSearch }) {
   const searchType = values.itemsView ? 'for items by name.' : 'for records by source.'
 
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
+
+  function handleEnter(e) {
+    if(e.key === 'Enter') onSearch(search);
+  }
+
   return (
     <Card className='p-3 my-4'>
 
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <div className='row d-flex align-items-center justify-content-between'>
           <div className='col-sm-2'>
             <Form.Label> Items View
@@ -43,7 +51,7 @@ export default function RecordsOptions({values, onItemView, onChange, onSearch, 
           <div className='col-sm col-lg-4 d-flex flex-column align-items-start pb-3'>
             <Form.Label htmlFor='search'>Search {searchType}</Form.Label>
             <InputGroup>
-                  <Form.Control type='text' name='search' value={search} onChange={e => setSearch(e.target.value)}/>
+                  <Form.Control type='text' name='search' value={search} onKeyUp={handleEnter} onChange={e => setSearch(e.target.value)}/>
               <Button variant="outline-secondary" name='search' onClick={() => onSearch(search)}>Search</Button>
             </InputGroup>
           </div>
