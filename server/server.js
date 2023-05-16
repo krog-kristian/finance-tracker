@@ -98,7 +98,7 @@ app.use(authorizationMiddleware);
  * returns a response with them aswell as the months 0 indexed number.
  */
 app.get('/api/home', async (req, res, next) => {
-  console.log('static', reactStaticDir);
+  console.log('home', reactStaticDir);
   try {
     const { userId } = req.user;
     const date = new Date();
@@ -243,6 +243,7 @@ app.post('/api/records/budgets/update', async (req, res, next) => {
 });
 
 app.get('/api/records/budgets', async (req, res, next) => {
+  console.log('home', reactStaticDir);
   try {
     const { userId } = req.user;
     const date = new Date();
