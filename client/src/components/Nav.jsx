@@ -7,7 +7,6 @@ import Modal from 'react-bootstrap/Modal'
 import { useMediaQuery } from 'react-responsive';
 import Image from 'react-bootstrap/Image'
 import { useUserContext } from "./UserContext"
-import Footer from './Footer';
 
 
 export default function Nav() {
@@ -30,7 +29,6 @@ export default function Nav() {
           </div>
         </div>
       <Outlet />
-      <Footer />
     </>
   );
 }

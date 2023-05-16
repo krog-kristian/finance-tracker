@@ -8,6 +8,7 @@ import RecordsView from './pages/RecordsView';
 import Home from './pages/Home';
 import Budgets from './pages/Budgets';
 import Unknown from './pages/Unknown';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
             <Route path='*' element={<Unknown />} />
           </Route>
         </Routes>
+        <Footer />
       </div>
     </UserContextProvider>
   );
