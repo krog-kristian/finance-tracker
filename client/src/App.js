@@ -18,10 +18,10 @@ function App() {
         <Routes>
           <Route path='/' element={<Nav />}>
             <Route index element={ <Home />}/>
-            <Route path='/newrecord' element={<RecordForm />} />
-            <Route path='/records' element={<RecordsView />} />
+            <Route path='newrecord' element={<RecordForm />} />
+            <Route path='records' element={<RecordsView />} />
             <Route path='budgets' element={<Budgets />} />
-            <Route path='/*' element={<Unknown />} />
+            <Route path='*' element={<Unknown />} />
           </Route>
         </Routes>
         <Footer />

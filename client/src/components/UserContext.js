@@ -10,7 +10,6 @@ const UserContextProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('getting token')
     if (localStorage.getItem(tokenKey)) {
       const userData = localStorage.getItem(tokenKey)
       const { user, token } = JSON.parse(userData);
