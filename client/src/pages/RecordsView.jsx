@@ -123,7 +123,7 @@ export default function RecordsView() {
     setScroll(0);
   }
 
-  function startSearch() {
+  function startSearch(e) {
     setRecords([]);
     setPage(0);
     setIsLoading(true);
