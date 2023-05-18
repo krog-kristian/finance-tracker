@@ -13,10 +13,11 @@ export default function RecordsOptions({values, onItemView, onChange, onSearch, 
 
   function handleSubmit(e) {
     e.preventDefault();
+    onSearch(search);
   }
 
   function handleEnter(e) {
-    if(e.key === 'Enter') onSearch(search);
+    if(e.key === 'Enter') handleSubmit(e);
   }
 
   return (
@@ -52,7 +53,7 @@ export default function RecordsOptions({values, onItemView, onChange, onSearch, 
             <Form.Label htmlFor='search'>Search {searchType}</Form.Label>
             <InputGroup>
                   <Form.Control type='text' name='search' value={search} onKeyUp={handleEnter} onChange={e => setSearch(e.target.value)}/>
-              <Button variant='outline-secondary' name='search' onClick={() => onSearch(search)}>Search</Button>
+              <Button variant='outline-secondary' name='search' type='submit' >Search</Button>
             </InputGroup>
           </div>
 
