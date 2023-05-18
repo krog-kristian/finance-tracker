@@ -10,10 +10,10 @@ export default function ConfirmationModal({ onConfirm, children, confirmVisible,
         </Modal.Header>
         <Modal.Body>{children}</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={onHide}>
+          <Button variant='secondary' onClick={onHide}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={onConfirm}>
+          <Button variant='primary' onClick={onConfirm}>
             Confirm
           </Button>
         </Modal.Footer>

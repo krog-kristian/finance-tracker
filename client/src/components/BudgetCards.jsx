@@ -1,14 +1,14 @@
-import { months } from "../lib/catergory-data.js";
-import { formatBudgetData, combineBudgetTotals } from "../lib/dataSorting.js";
+import { months } from '../lib/catergory-data.js';
+import { formatBudgetData, combineBudgetTotals } from '../lib/dataSorting.js';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { categoriesOutObj } from "../lib/catergory-data.js";
-import Button from "react-bootstrap/esm/Button.js";
-import { useState, useEffect } from "react";
+import { categoriesOutObj } from '../lib/catergory-data.js';
+import Button from 'react-bootstrap/esm/Button.js';
+import { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { useUserContext } from "./UserContext"
+import { useUserContext } from './UserContext'
 
 /**
  * Handles the functionality of the budget cards which are provided by a component that returns an array of cards.
@@ -84,10 +84,10 @@ function BudgetCard({ obj, onEdit, editing, onCancel, onUpdate, setGoal, goal, c
   for (const [key, value] of Object.entries(obj)) {
 
     cards.push(
-      <Col className="d-flex justify-content-start" key={key}>
+      <Col className='d-flex justify-content-start' key={key}>
         <Card style={{ width: '18rem' }} className='mx-auto my-3 border border-dark border-1'>
-          <Card.Header className="bg-secondary text-light fs-5">{categoriesOutObj[key]}</Card.Header>
-          <ListGroup variant="flush">
+          <Card.Header className='bg-secondary text-light fs-5'>{categoriesOutObj[key]}</Card.Header>
+          <ListGroup variant='flush'>
             <ListGroup.Item>
               {editing !== key ?
                 <EditGoal onEdit={onEdit} category={key} value={value} /> :

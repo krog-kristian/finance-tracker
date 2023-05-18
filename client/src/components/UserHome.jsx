@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import getMonthsRecords from "../lib/api";
-import { getMonthlyTotals, getChartData, filterMonths } from "../lib/dataSorting";
-import MonthlyTotalsCard from "../components/MonthlyTotalsCard";
-import { MonthlyChart } from "../components/MonthlyChart";
-import { useUserContext } from "./UserContext"
+import { useState, useEffect } from 'react';
+import getMonthsRecords from '../lib/api';
+import { getMonthlyTotals, getChartData, filterMonths } from '../lib/dataSorting';
+import MonthlyTotalsCard from '../components/MonthlyTotalsCard';
+import { MonthlyChart } from '../components/MonthlyChart';
+import { useUserContext } from './UserContext'
 
 /**
  * Creates the users home page and displays their monthly totals.
@@ -53,7 +53,7 @@ export default function UserHome() {
           <MonthlyTotalsCard monthlyTotals={monthlyTotals} />
         </div>
       </div>
-        <div className="row">
+        <div className='row'>
           <div className='col d-flex justify-content-center'>
           {chartData ? <MonthlyChart chartData={chartData} /> : ''}
           </div>

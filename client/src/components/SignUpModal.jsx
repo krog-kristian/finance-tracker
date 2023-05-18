@@ -1,9 +1,9 @@
-import { useState } from "react"
-import Modal from "react-bootstrap/Modal"
-import Button from "react-bootstrap/Button"
+import { useState } from 'react'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Alert from 'react-bootstrap/Alert'
-import { sendSignUp } from "../lib/api"
+import { sendSignUp } from '../lib/api'
 
 /**
  * Function to create the signup modal and handle a user signing up.
@@ -59,7 +59,7 @@ return (
       </Modal.Header>
       <form onSubmit={e => signUp(e)}>
         <Modal.Body>
-          <Alert show={showingAlert} variant="success">
+          <Alert show={showingAlert} variant='success'>
             <Alert.Heading>Success!</Alert.Heading>
             <p>
               New User Created, please log in.
@@ -71,19 +71,19 @@ return (
             <div className='col'>
               <label className='form-label'>Username
                 <Form.Control isInvalid={userNameExists} autoComplete='username' value={userName} onChange={e => setUserName(e.target.value)} required className='form-control' type='text' name='userName' placeholder='Username' />
-                <Form.Control.Feedback type="invalid">
+                <Form.Control.Feedback type='invalid'>
                   Username already Exists.
                 </Form.Control.Feedback>
               </label>
               <label className='form-label'>Password
-                <Form.Control isValid={passwordMatch} value={password} onChange={e => setPassword(e.target.value)} required className='form-control' type='password' name='password' autoComplete="new-password" placeholder='Password' />
-                <Form.Control.Feedback type="valid">
+                <Form.Control isValid={passwordMatch} value={password} onChange={e => setPassword(e.target.value)} required className='form-control' type='password' name='password' autoComplete='new-password' placeholder='Password' />
+                <Form.Control.Feedback type='valid'>
                   Passwords Match.
                 </Form.Control.Feedback>
               </label>
               <label className='form-label'>Verify Password
-                <Form.Control isInvalid={passwordMatch === false ? true : false} type="password" required value={verifyPassword} onChange={e => setVerifyPassword(e.target.value)} autoComplete="new-password" placeholder='Verify Password' />
-                <Form.Control.Feedback type="invalid">
+                <Form.Control isInvalid={passwordMatch === false ? true : false} type='password' required value={verifyPassword} onChange={e => setVerifyPassword(e.target.value)} autoComplete='new-password' placeholder='Verify Password' />
+                <Form.Control.Feedback type='invalid'>
                   Passwords do not match.
                 </Form.Control.Feedback>
               </label>
@@ -98,7 +98,7 @@ return (
               </label>
               <label className='form-label'>Email
                 <Form.Control isInvalid={emailExists} value={email} onChange={e => setEmail(e.target.value)} required className='form-control' type='text' name='email' placeholder='email@email.com' />
-                <Form.Control.Feedback type="invalid">
+                <Form.Control.Feedback type='invalid'>
                   Email already Exists.
                 </Form.Control.Feedback>
               </label>
@@ -107,10 +107,10 @@ return (
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" type="button" onClick={() => setShowSignUp(false)}>
+          <Button variant='secondary' type='button' onClick={() => setShowSignUp(false)}>
             Cancel
           </Button>
-          <Button variant="primary" type="submit">
+          <Button variant='primary' type='submit'>
             Sign Up
           </Button>
         </Modal.Footer>

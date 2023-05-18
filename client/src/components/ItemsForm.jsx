@@ -1,4 +1,4 @@
-import { categoriesOut, categoriesIn } from "../lib/catergory-data.js";
+import { categoriesOut, categoriesIn } from '../lib/catergory-data.js';
 export function ItemsForm({ numberOfItems, isDebit }) {
 
   const items = [];

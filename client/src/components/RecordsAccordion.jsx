@@ -1,6 +1,6 @@
 import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge'
-import Button from "react-bootstrap/esm/Button.js";
+import Button from 'react-bootstrap/esm/Button.js';
 import Card from 'react-bootstrap/Card';
 import { categoriesInObj, categoriesOutObj } from '../lib/catergory-data';
 
@@ -53,7 +53,7 @@ export default function RecordsAccordion({ records, onDelete }) {
       )
     )
   return (
-    <Accordion defaultActiveKey="0" alwaysOpen>
+    <Accordion defaultActiveKey='0' alwaysOpen>
       {recordItems}
     </Accordion>
   )

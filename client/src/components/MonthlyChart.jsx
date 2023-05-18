@@ -16,14 +16,14 @@ export function MonthlyChart({ chartData }) {
       <h3>Daily Totals</h3>
       <ResponsiveContainer aspect={2} width='100%'>
         <LineChart data={chartData}>
-          <CartesianGrid stroke="#ccc" />
+          <CartesianGrid stroke='#ccc' />
           <XAxis dataKey='day' minTickGap={40} />
-          <YAxis type="number" domain={[0, 'dataMax + 50']} />
+          <YAxis type='number' domain={[0, 'dataMax + 50']} />
           <Legend />
-          <Line type="monotone" name='This Months Debits' dataKey='thisMonthDebit' stroke="#eb7134" strokeWidth={2} dot={false} />
-          <Line type="monotone" name='This Months Credits' dataKey='thisMonthCredit' stroke="#37eb34" strokeWidth={2} dot={false} />
-          <Line type="monotone" name='Last Months Debits' dataKey='lastMonthDebit' stroke="#3f4704" strokeWidth={2} dot={false} />
-          <Line type="monotone" name='Last Months Credits' dataKey='lastMonthCredit' stroke="#3493eb" strokeWidth={2} dot={false} />
+          <Line type='monotone' name='This Months Debits' dataKey='thisMonthDebit' stroke='#eb7134' strokeWidth={2} dot={false} />
+          <Line type='monotone' name='This Months Credits' dataKey='thisMonthCredit' stroke='#37eb34' strokeWidth={2} dot={false} />
+          <Line type='monotone' name='Last Months Debits' dataKey='lastMonthDebit' stroke='#3f4704' strokeWidth={2} dot={false} />
+          <Line type='monotone' name='Last Months Credits' dataKey='lastMonthCredit' stroke='#3493eb' strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
