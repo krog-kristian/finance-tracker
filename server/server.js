@@ -109,7 +109,7 @@ app.get('/api/home', async (req, res, next) => {
     const sql = `
                 select "month", "year", "totalSpent", "isDebit", "day"
                 from "records"
-                where "userId" = $1 AND "year" = $2 AND "month" = $3 OR "month" = $4;
+                where "userId" = $1 AND "year" = $2 AND ("month" = $3 OR "month" = $4);
                 `;
     const params = [userId, thisYear, thisMonth, lastMonth];
     const dataRecords = await db.query(sql, params);
@@ -121,8 +121,7 @@ app.get('/api/home', async (req, res, next) => {
 
 /**
  * Inserts the record in the records table and uses the ID returned,
- * to insert aa varying amount of item rows into the items table.
- * Requires userId, hard coded a demo userId into params for now.
+ * to insert a varying amount of item rows into the items table.
  */
 app.post('/api/record', async (req, res, next) => {
   try {
@@ -153,8 +152,8 @@ app.post('/api/record', async (req, res, next) => {
 });
 
 /**
- * Takes a page number from the request parameters and multiplies by 5 for the offset.
- * Requests a limit of 5 records and extracts records Ids to generate SQL
+ * Takes a page number from the request parameters and multiplies by 15 for the offset.
+ * Requests a limit of 15 records and extracts records Ids to generate SQL
  * to request matching items.
  * Returns records, items and next page to the client.
  * If end of database returns next page as undefined.
