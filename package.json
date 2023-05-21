@@ -8,6 +8,7 @@
     "start": "NODE_ENV=production node server/server.js",
     "build": "npm run build --prefix client",
     "db:import": "npm run db:import --prefix database",
+    "db:import-prod": "sh database/import-prod.sh",
     "preinstall": "npm install --prefix client && npm install --prefix server",
     "postinstall": "run-s install:*",
     "prepare": "husky install"
