@@ -9,6 +9,7 @@
     "build": "npm run build --prefix client",
     "db:import": "npm run db:import --prefix database",
     "preinstall": "npm install --prefix client && npm install --prefix server",
+    "postinstall": "run-s install:*",
     "prepare": "husky install"
   },
   "devDependencies": {

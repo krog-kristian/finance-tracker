@@ -1,0 +1,11 @@
+{
+  "appService.showBuildDuringDeployPrompt": true,
+  "appService.zipIgnorePattern": [
+    "server/node_modules{,/**}",
+    "server/.env{,/**}",
+    "server/.env.prod{,/**}",
+    "client/node_modules{,/**}",
+    "node_modules{,/**}",
+    ".vscode{,/**}"
+  ]
+}
