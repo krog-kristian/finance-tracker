@@ -4,7 +4,7 @@ import RecordsAccordion from '../components/RecordsAccordion.jsx';
 import RecordsOptions from '../components/RecordsOptions.jsx';
 import ItemsView from '../components/ItemsView.jsx';
 import { sortRecords } from '../lib/dataSorting.js';
-import { useUserContext } from "../components/UserContext";
+import { useUserContext } from '../components/UserContext';
 import { deleteRecord } from '../lib/api';
 import ConfirmationModal from '../components/ConfirmationModal.jsx';
 

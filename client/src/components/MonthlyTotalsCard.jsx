@@ -1,5 +1,5 @@
 import Card from 'react-bootstrap/Card'
-import Badge from "react-bootstrap/esm/Badge";
+import Badge from 'react-bootstrap/esm/Badge';
 
 /**
  * Takes the monthly totals and renders a card with the info.

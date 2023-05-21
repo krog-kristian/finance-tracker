@@ -24,6 +24,9 @@ const reactStaticDir = new URL('../client/build', import.meta.url).pathname;
 const uploadsStaticDir = new URL('public', import.meta.url).pathname;
 
 app.use(express.static(reactStaticDir));
+// app.use('/records', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
+// app.use('/newrecord', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
+// app.use('/budgets', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
 // Static directory for file uploads server/public/
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
@@ -89,7 +92,7 @@ app.post('/api/home/sign-in', async (req, res, next) => {
   }
 });
 
-app.use(authorizationMiddleware);
+app.use('/api/*', authorizationMiddleware);
 
 /**
  * Determines the current and previous months,
@@ -287,6 +290,8 @@ app.delete('/api/records/:recordId', async (req, res, next) => {
     next(err);
   }
 });
+
+app.get('*', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
 
 app.use(errorMiddleware);
 

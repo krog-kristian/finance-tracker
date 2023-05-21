@@ -14,7 +14,7 @@ function App() {
 
   return (
     <UserContextProvider>
-      <div className="App">
+      <div className='App'>
         <Routes>
           <Route path='/' element={<Nav />}>
             <Route index element={ <Home />}/>

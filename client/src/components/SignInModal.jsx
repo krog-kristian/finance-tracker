@@ -1,8 +1,8 @@
-import { useState } from "react"
-import Modal from "react-bootstrap/Modal"
-import Button from "react-bootstrap/Button"
+import { useState } from 'react'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
-import { useUserContext } from "./UserContext"
+import { useUserContext } from './UserContext'
 
 /**
  * Created the modal component and controls the request to sign a user in.
@@ -41,7 +41,7 @@ export default function SignInModal({ showSignIn, setShowSignIn, demo }) {
       </Modal.Header>
       <form onSubmit={e => signIn(e)}>
         <Modal.Body>
-          <Alert show={errorMessageShowing} variant="danger">
+          <Alert show={errorMessageShowing} variant='danger'>
             <Alert.Heading>Incorrect Login.</Alert.Heading>
             <p>
               Unable to log in try again.
@@ -56,16 +56,16 @@ export default function SignInModal({ showSignIn, setShowSignIn, demo }) {
             </div>
             <div className='col'>
               <label className='form-label'>Password
-                <input required className='form-control' autoComplete="current-password" type='password' name='passwordVerify' placeholder='Password' />
+                <input required className='form-control' autoComplete='current-password' type='password' name='passwordVerify' placeholder='Password' />
               </label>
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" type="button" onClick={() => setShowSignIn(false)}>
+          <Button variant='secondary' type='button' onClick={() => setShowSignIn(false)}>
             Cancel
           </Button>
-          <Button variant="primary" type="submit">
+          <Button variant='primary' type='submit'>
             Sign In
           </Button>
         </Modal.Footer>

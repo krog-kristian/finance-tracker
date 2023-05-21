@@ -1,4 +1,4 @@
-import { months } from "./catergory-data";
+import { months } from './catergory-data';
 
 /**
  * Takes the records from the server and calcutlates the totals for each month and

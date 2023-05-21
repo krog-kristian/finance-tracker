@@ -15,7 +15,7 @@ INSERT into "records"
     (1, 4, 2023, 13, 'Costco', true, 5, 75.33),
     (1, 4, 2023, 8, 'Ralphs', true, 6, 80.77),
     (1, 4, 2023, 7, 'Ikea', true, 1, 35.25),
-    (1, 4, 2023, 7, 'Robibhood', false, 2, 33.23),
+    (1, 4, 2023, 7, 'Robinhood', false, 2, 33.23),
     (1, 4, 2023, 4, 'Circle K', true, 1, 45.60),
     (1, 4, 2023, 3, 'Olive Garden', true, 4, 67.32),
     (1, 4, 2023, 1, 'Albertsons', true, 5, 60.78),

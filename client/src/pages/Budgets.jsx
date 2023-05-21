@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback } from 'react'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import { BudgetCards } from "../components/BudgetCards.jsx";
-import { useUserContext } from "../components/UserContext"
+import { BudgetCards } from '../components/BudgetCards.jsx';
+import { useUserContext } from '../components/UserContext'
 
 export default function Budgets() {
   const [budgets, setBudgets] = useState();

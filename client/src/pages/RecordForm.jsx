@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import { ItemsForm } from '../components/ItemsForm'
 import Alert from 'react-bootstrap/Alert'
-import { useUserContext } from "../components/UserContext"
+import { useUserContext } from '../components/UserContext'
 
 export default function RecordForm() {
   const [items, setItems] = useState(1);
@@ -50,8 +50,8 @@ export default function RecordForm() {
   return (
     <>
       <h1>New Record</h1>
-      <Alert show={isError} variant="danger"><Alert.Heading>Failure.</Alert.Heading><p>Could not add record.</p><hr /></Alert>
-      <Alert show={showingSuccessAlert} variant="success"><Alert.Heading>Success!</Alert.Heading><p>New record added.</p><hr /></Alert>
+      <Alert show={isError} variant='danger'><Alert.Heading>Failure.</Alert.Heading><p>Could not add record.</p><hr /></Alert>
+      <Alert show={showingSuccessAlert} variant='success'><Alert.Heading>Success!</Alert.Heading><p>New record added.</p><hr /></Alert>
       <form className='container-xl p-5 rounded border border-dark bg-secondary text-white fs-4' onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
 
       <div className='row g-3'>
