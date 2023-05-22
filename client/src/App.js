@@ -1,30 +1,32 @@
-import { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Nav from './components/Nav';
+import { UserContextProvider } from './components/UserContext';
+import RecordForm from './pages/RecordForm';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Routes, Route} from 'react-router-dom';
+import RecordsView from './pages/RecordsView';
+import Home from './pages/Home';
+import Budgets from './pages/Budgets';
+import Unknown from './pages/Unknown';
+import Footer from './components/Footer';
 
 function App() {
-  const [serverData, setServerData] = useState("");
-
-  useEffect(() => {
-    async function getServerData() {
-      const resp = await fetch('/api/hello');
-      const data = await resp.json();
-
-      console.log('Data from server:', data);
-
-      setServerData(data.message);
-    }
-
-    getServerData();
-  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>{serverData}</h1>
-      </header>
-    </div>
+    <UserContextProvider>
+      <div className='App'>
+        <Routes>
+          <Route path='/' element={<Nav />}>
+            <Route index element={ <Home />}/>
+            <Route path='newrecord' element={<RecordForm />} />
+            <Route path='records' element={<RecordsView />} />
+            <Route path='budgets' element={<Budgets />} />
+            <Route path='*' element={<Unknown />} />
+          </Route>
+        </Routes>
+        <Footer />
+      </div>
+    </UserContextProvider>
   );
 }
 

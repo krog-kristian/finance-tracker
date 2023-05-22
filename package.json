@@ -4,13 +4,20 @@
   "private": true,
   "description": "A full stack JavaScript solo project.",
   "type": "module",
-  "scripts": {
-    "start": "NODE_ENV=production node server/server.js",
-    "build": "npm run build --prefix client",
-    "db:import": "npm run db:import --prefix database",
-    "preinstall": "npm install --prefix client && npm install --prefix server",
-    "prepare": "husky install"
-  },
+    "scripts": {
+      "start": "NODE_ENV=production node server/server.js",
+      "build": "npm run build --prefix client",
+      "db:import": "sh database/import.sh",
+      "db:import-prod": "sh database/import-prod.sh",
+      "dev:db": "pgweb --db=`awk 'BEGIN { FS = \"/\" } ; /DATABASE_URL=/ {print $NF}' server/.env`",
+      "dev:client": "npm run start --prefix client",
+      "dev:server": "npm run dev --prefix server",
+      "dev": "npm-run-all --parallel --print-label dev:*",
+      "install:client": "npm install --prefix client",
+      "install:server": "npm install --prefix server",
+      "install:env": "test -f server/.env || cp server/.env.example server/.env",
+      "postinstall": "npm run install:client && npm run install:server && npm run install:env"
+    },
   "devDependencies": {
     "eslint": "^8.26.0",
     "eslint-config-standard": "^17.0.0",
