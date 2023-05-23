@@ -34,7 +34,7 @@ Try the application live at firefinancial.azurewebsites.net .
 
 ## Preview
 
-![F.I.R.E. Financial](assets/records-demo.gif)<>
+![F.I.R.E. Financial](assets/records-demo.gif)
 
 ## Development
 

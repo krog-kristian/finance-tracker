@@ -1,3 +1,4 @@
+// Basic footer with links to Authors GitHub and LinkedIn
 export default function Footer() {
   return (
     <div className='w-100 mt-5' style={{ backgroundColor: '#100C08', height: '5rem'}}>

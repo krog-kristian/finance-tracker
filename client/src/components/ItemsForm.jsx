@@ -1,4 +1,10 @@
 import { categoriesOut, categoriesIn } from '../lib/catergory-data.js';
+
+/**
+ * Creates an item for depending on the number of items in a given record.
+ * @param {number, boolean} numberOfItems representing the number of forms, isDebit to decide the category dropdown content.
+ * @returns An array of record forms.
+ */
 export function ItemsForm({ numberOfItems, isDebit }) {
 
   const items = [];
