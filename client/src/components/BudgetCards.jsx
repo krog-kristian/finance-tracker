@@ -20,6 +20,7 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
   const { token } = useUserContext()
   const [isLoading, setIsLoading] = useState(true)
 
+  //Checks if a proper object has been passed down.
   useEffect(() => {
     if (Object.keys(budgets).length > 1) {
       setIsLoading(false)
@@ -32,16 +33,19 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
 
   const cardData = combineBudgetTotals(budgetData, totalsSpent, currentMonth, previousMonth)
 
+  //Opens editing for a budget card.
   function handleEdit(e, value) {
     setEditing(e.target.id)
     setGoal(value)
   }
 
+  //Cancels and closes editing for a budget card.
   function handleCancel() {
     setEditing()
     setGoal()
   }
 
+  //Updates the budgets goal locally and calls a server request to update in the database.
   function handleUpdate(key) {
     const updatedGoal = { category: key, amount: Number(goal).toFixed(2) }
     setEditing()
@@ -50,6 +54,10 @@ export function BudgetCards({ budgets, totalsSpent, currentMonth, previousMonth,
     sendUpdatedGoal(updatedGoal)
   }
 
+  /**
+   * @param {object} goal to be updated with a value.
+   * Sends a post request to the server to update a given budget goal.
+   */
   async function sendUpdatedGoal(goal) {
     try {
       const res = await fetch('/api/records/budgets/update', {

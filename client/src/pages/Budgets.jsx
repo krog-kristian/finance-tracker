@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import { BudgetCards } from '../components/BudgetCards.jsx';
 import { useUserContext } from '../components/UserContext'
 
+//Creates the page for the budgets feature.
 export default function Budgets() {
   const [budgets, setBudgets] = useState();
   const [totalsSpent, setTotalsSpent] = useState();
@@ -22,12 +23,14 @@ export default function Budgets() {
     const budgets = await res.json();
     return budgets;
     } catch (err) {
-      console.error('Could not retrieve users.11111', err)
+      console.error('Could not retrieve users budgets.', err)
     }
   }, [token])
 
 
-
+  /**
+   * On load retreives the budgets for the given user.
+   */
   useEffect(() => {
     const fetchBudgets = async () => {
       try{

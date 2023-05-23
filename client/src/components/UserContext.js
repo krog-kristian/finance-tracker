@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const UserContext = createContext();
 
+//Context provider to maintain the token and user states.
 const UserContextProvider = ({ children }) => {
   const tokenKey = 'fireUser';
   const [user, setUser] = useState();
@@ -41,6 +42,7 @@ const UserContextProvider = ({ children }) => {
   )
 }
 
+//Custom hook for easy access to UserContext.
 const useUserContext = () => {
 
   const userContext = useContext(UserContext)

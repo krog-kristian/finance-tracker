@@ -24,10 +24,6 @@ const reactStaticDir = new URL('../client/build', import.meta.url).pathname;
 const uploadsStaticDir = new URL('public', import.meta.url).pathname;
 
 app.use(express.static(reactStaticDir));
-// app.use('/records', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
-// app.use('/newrecord', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
-// app.use('/budgets', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
-// Static directory for file uploads server/public/
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
@@ -97,7 +93,7 @@ app.use('/api/*', authorizationMiddleware);
 /**
  * Determines the current and previous months,
  * and queries the database for all records and
- * returns a response with them aswell as the months 0 indexed number.
+ * returns a response with them as well as the relative months.
  */
 app.get('/api/home', async (req, res, next) => {
   try {
@@ -224,24 +220,33 @@ app.get('/api/records/items/:page/:type/:category/:search?', async (req, res, ne
   }
 });
 
-app.post('/api/records/budgets/update', async (req, res, next) => {
+/**
+ * The endpoint to delete a record and all items will be cascaded as a result.
+ */
+app.delete('/api/records/:recordId', async (req, res, next) => {
   try {
     const { userId } = req.user;
-    const { category, amount } = req.body;
+    const { recordId } = req.params;
+    const params = [recordId, userId];
     const sql = `
-                  update "budgets"
-                  set "${category}" = $1
-                  where "userId" = $2;
+                delete
+                from "records"
+                where "recordId" = $1 and "userId" = $2
+                returning *
                 `;
-    const params = [amount, userId];
-    const data = await db.query(sql, params);
-    if (data.rowCount > 1) throw new ClientError(500, 'Database error, please contact support.');
-    res.status(200).json({ [category]: amount });
+    if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Improper Request.');
+    const deleteRequest = await db.query(sql, params);
+    if (!deleteRequest.rows[0]) throw new ClientError(500, 'Nothing to delete, database does not match client.');
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
 });
 
+/**
+ * Endpoint for client to retreive all budgets
+ * and records for the current and previous months.
+ */
 app.get('/api/records/budgets', async (req, res, next) => {
   try {
     const { userId } = req.user;
@@ -270,26 +275,29 @@ app.get('/api/records/budgets', async (req, res, next) => {
   }
 });
 
-app.delete('/api/records/:recordId', async (req, res, next) => {
+/**
+ * Endpoint for a user to update a givent budget category and its value.
+ * Requires an object with a category value and amount value.
+ */
+app.post('/api/records/budgets/update', async (req, res, next) => {
   try {
     const { userId } = req.user;
-    const { recordId } = req.params;
-    const params = [recordId, userId];
+    const { category, amount } = req.body;
     const sql = `
-                delete
-                from "records"
-                where "recordId" = $1 and "userId" = $2
-                returning *
+                  update "budgets"
+                  set "${category}" = $1
+                  where "userId" = $2;
                 `;
-    if (params.includes(undefined) || params.includes(null)) throw new ClientError(400, 'Improper Request.');
-    const deleteRequest = await db.query(sql, params);
-    if (!deleteRequest.rows[0]) throw new ClientError(500, 'Nothing to delete, database does not match client.');
-    res.sendStatus(204);
+    const params = [amount, userId];
+    const data = await db.query(sql, params);
+    if (data.rowCount > 1) throw new ClientError(500, 'Database error, please contact support.');
+    res.status(200).json({ [category]: amount });
   } catch (err) {
     next(err);
   }
 });
 
+// Serves the index.html file to the client as a catch all.
 app.get('*', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
 
 app.use(errorMiddleware);

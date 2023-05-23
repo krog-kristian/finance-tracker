@@ -27,21 +27,25 @@ export default function RecordsAccordion({ records, onDelete }) {
   const recordItems = records.map((r, i) => (
         <Accordion.Item key={r.recordId} eventKey={i}>
 
-          <Card.Header className='p-2 d-flex flex-wrap justify-content-between'>
+          <Card.Header className='row p-2 d-flex flex-wrap'>
 
-          <Button onClick={() => onDelete(r.recordId, i)} className='me-2 px-3' size='sm' variant='danger'>X</Button>
+            <div className='col-1 d-flex align-items-center'>
+              <Button onClick={() => onDelete(r.recordId, i)} className='me-2 px-3' size='sm' variant='danger'>X</Button>
+            </div>
 
-              <h3 className='col my-auto mx-1'>Source: {r.source}</h3>
+              <h3 className='col-sm col-6 my-auto mx-auto'>Source: {r.source}</h3>
 
-              <div className='col my-auto'>
+              <div className='col-3 col-sm-2 my-auto ms-auto'>
                 <Badge className='my-auto mx-1' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
                   Total: ${Number(r.totalSpent).toFixed(2)}
                 </Badge>
               </div>
 
-              <p className='col-2 me-3 ms-1 my-auto'>Date: {r.month + 1}/{r.day + 1}/{r.year}</p>
+              <p className='col-4 col-sm-2 me-3 ms-auto my-auto'>Date: {r.month + 1}/{r.day + 1}/{r.year}</p>
 
+              <div className='col-sm-2 col-4 ms-auto d-flex align-items-center justify-content-end'>
               <ToggleButton eventKey={i}>View Items</ToggleButton>
+              </div>
 
           </Card.Header>
 
@@ -70,7 +74,7 @@ function AccordionItems({ items, isDebit }) {
         <li className='list-group-item' key={item.itemId}>
           <div className='d-flex flex-wrap justify-content-between w-100 align-items-center'>
             <h4 className='col mx-1 my-auto text-start'>Item: {item.itemName}</h4>
-          <p className='col mx-1 fs-4 text-start my-auto'>Category: {isDebit ? categoriesOutObj[item.category] : categoriesInObj[item.category]}</p>
+            <p className='col mx-1 fs-4 text-start my-auto'>Category: {isDebit ? categoriesOutObj[item.category] : categoriesInObj[item.category]}</p>
             <div className='col d-flex justify-content-end'>
               <Badge className='text-dark my-auto mx-1' bg='info'>Amount: ${Number(item.amount).toFixed(2)}</Badge>
             </div>

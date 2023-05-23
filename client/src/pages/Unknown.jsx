@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
+//Default page for unknown routes.
 export default function Unknown() {
   const navigate = useNavigate();
 
