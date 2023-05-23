@@ -13,7 +13,7 @@ export default function UserHome() {
   const [monthlyTotals, setMonthlyTotals] = useState();
   const [chartData, setChartData] = useState();
   const [isError, setIsError] = useState(false);
-  const { token } = useUserContext();
+  const { token, user } = useUserContext();
   const [isLoading, setIsLoading] = useState();
 
   /**
@@ -47,7 +47,7 @@ export default function UserHome() {
 
   return (
     <div className='container-fluid'>
-    <h1>User's Home Page</h1>
+    <h1>{user.userName}'s Home Page</h1>
       <div className='row'>
         <div className='col d-flex justify-content-center'>
           <MonthlyTotalsCard monthlyTotals={monthlyTotals} />
