@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <>
       <div className='container'>
-        <h1>Fire Financial</h1>
+        <h1>F.I.R.E. Financial</h1>
         <div className='row'>
           <div className='col'>
             <Button className='fs-5' onClick={() => setShowSignIn(true)}>Sign In</Button>

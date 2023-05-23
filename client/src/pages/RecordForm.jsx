@@ -16,6 +16,12 @@ export default function RecordForm() {
     setItems(numberOfItems);
   }
 
+  function customReset (e) {
+    e.target.reset();
+    setItems(1);
+    setIsDebit(true);
+  }
+
   async function handleSubmit (e) {
     try {
       e.preventDefault();
@@ -52,12 +58,12 @@ export default function RecordForm() {
       <h1>New Record</h1>
       <Alert show={isError} variant='danger'><Alert.Heading>Failure.</Alert.Heading><p>Could not add record.</p><hr /></Alert>
       <Alert show={showingSuccessAlert} variant='success'><Alert.Heading>Success!</Alert.Heading><p>New record added.</p><hr /></Alert>
-      <form className='container-xl p-5 rounded border border-dark bg-secondary text-white fs-4' onReset={(e) => e.target.reset()} onSubmit={handleSubmit}>
+      <form className='container-xl p-5 rounded border border-dark bg-secondary text-white fs-4' onReset={(e) => customReset(e)} onSubmit={handleSubmit}>
 
       <div className='row g-3'>
         <div className='mb-3 col'>
           <label className='form-label'>Select Type
-            <select className='form-select' required name='isDebit' id='isDebit' onChange={(e) => setIsDebit((e) => !e)}>
+            <select className='form-select' required name='isDebit' id='isDebit' onChange={() => setIsDebit((prev) => !prev)}>
               <option value={true}>Money Out</option>
               <option value={false}>Money In</option>
             </select>
