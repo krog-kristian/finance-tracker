@@ -23,7 +23,7 @@ I built this app to help me keep track of where and what I spend my money on.
 
 ## Live Demo
 
-Try the application live at <--- Change me!>
+Try the application live at firefinancial.azurewebsites.net .
 
 ## Features
 
@@ -34,7 +34,7 @@ Try the application live at <--- Change me!>
 
 ## Preview
 
-![SGT React](assets/sgt-react.gif)<>
+![F.I.R.E. Financial](assets/records-demo.gif)<>
 
 ## Development
 
