@@ -72,19 +72,19 @@ export default function RecordForm() {
       </div>
 
       <div className='row g-3'>
-        <div className='mb-3 col'>
+        <div className='m-3 col'>
           <label className='form-label'># of Items
             <input className='form-control' required type='number' name='numberOfItems' defaultValue={1} id='numberOfItems' min={1} max={20} onChange={(e) => handleItems(e)} />
           </label>
         </div>
 
-        <div className='mb-3 col'>
+        <div className='m-3 col'>
           <label className='form-label'>Total $
             <input type='number' placeholder='Total $' step={0.01} className='form-control' required id='total' name='total' />
           </label>
         </div>
 
-        <div className='mb-3 col'>
+        <div className='m-3 col'>
           <label className='form-label'>Date
             <input required className='form-control' type='date' name='date' id='date'  />
           </label>

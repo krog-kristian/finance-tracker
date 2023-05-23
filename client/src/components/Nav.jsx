@@ -22,7 +22,7 @@ export default function Nav() {
             <div>
               <Link to='/' className='d-flex text-decoration-none'>
                 <Image width='80' fluid roundedCircle src='/Freedom.png' />
-                <h2 className='my-auto ms-2 text-white fs-2'>Freedom Financial</h2>
+                <h2 className='my-auto ms-2 text-white fs-2'>Fire Financial</h2>
               </Link>
             </div>
           {isLargeScreen ? <NavDesktop onSignOut={handleSignOut} signedIn={user} /> : <NavMobile onSignOut={handleSignOut}  signedIn={user}/>}
