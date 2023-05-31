@@ -29,14 +29,14 @@ export default function RecordsAccordion({ records, onDelete }) {
 
           <Card.Header className='row p-2 d-flex flex-wrap'>
 
-            <div className='col-1 d-flex align-items-center'>
+            <div className='col-1 d-flex align-items-center mx-auto'>
               <Button onClick={() => onDelete(r.recordId, i)} className='me-2 px-3' size='sm' variant='danger'>X</Button>
             </div>
 
-              <h3 className='col-sm col-6 my-auto mx-auto'>Source: {r.source}</h3>
+              <h3 className='col-sm col-6 my-auto mx-3'>Source: {r.source}</h3>
 
-              <div className='col-3 col-sm-2 my-auto ms-auto'>
-                <Badge className='my-auto mx-1' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
+              <div className='col-3 col-sm-2 my-auto ms-auto me-3'>
+                <Badge className='my-auto' style={r.isDebit ? { color: 'black' } : { color: 'white' }} bg={r.isDebit ? 'warning' : 'success'}>
                   Total: ${Number(r.totalSpent).toFixed(2)}
                 </Badge>
               </div>

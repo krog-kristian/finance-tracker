@@ -150,7 +150,7 @@ export default function RecordsView() {
 
   return (
   <>
-    <h1>Your Records!</h1>
+    <h1>Your Records</h1>
     <ConfirmationModal onConfirm={handleConfirm} confirmVisible={confirmVisible} onHide={handleClose}>
       Are you sure you wish to delete this record along with all items?
     </ConfirmationModal>
