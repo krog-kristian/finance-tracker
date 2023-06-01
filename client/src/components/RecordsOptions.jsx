@@ -50,7 +50,7 @@ export default function RecordsOptions({values, onItemView, onChange, onSearch, 
           {values.isDebit !== 'null' && values.itemsView === true ? <CategoryViews onChange={onChange} currentCategory={values.category} categories={values.isDebit === 'true' ? categoriesOut : categoriesIn} /> : ''}
 
           <div className='col-sm col-lg-4 d-flex flex-column align-items-start pb-3'>
-            <Form.Label htmlFor='search'>Search {searchType}</Form.Label>
+            <Form.Label>Search {searchType}</Form.Label>
             <InputGroup>
                   <Form.Control type='text' name='search' value={search} onKeyUp={handleEnter} onChange={e => setSearch(e.target.value)}/>
               <Button variant='outline-secondary' name='search' type='submit' >Search</Button>

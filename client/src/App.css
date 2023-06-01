@@ -46,3 +46,11 @@ h1 {
   min-height: 75px;
   width: 100%;
 }
+
+.text-button {
+  border: none;
+  background: none;
+  color: aliceblue;
+  font-family: Roboto, 'Roboto Mono', monospace, sans-serif;
+  text-decoration: underline;
+}
