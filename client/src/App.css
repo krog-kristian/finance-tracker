@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background: linear-gradient(180deg, #100C08 10%, #618985 90%);
+  background: linear-gradient(180deg, #100C08 20%, #618985 80%);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -50,7 +50,9 @@ h1 {
 .text-button {
   border: none;
   background: none;
-  color: aliceblue;
+  color: #70EE9C;
+  font-size: 2rem;
+  font-weight: 500;
   font-family: Roboto, 'Roboto Mono', monospace, sans-serif;
   text-decoration: underline;
 }
