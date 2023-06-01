@@ -21,7 +21,7 @@ export default function Nav() {
         <div className='Nav '>
             <div>
               <Link to='/' className='d-flex text-decoration-none'>
-                <Image width='80' className='logo' fluid roundedCircle src='/Freedom.png' />
+                <Image width='80' className='logo' fluid roundedCircle src='/freedom.png' />
               <h2 className='my-auto ms-1 fs-2 nav-title'>F.I.R.E. Financial</h2>
               </Link>
             </div>

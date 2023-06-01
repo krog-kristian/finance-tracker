@@ -33,7 +33,7 @@ export default function Home() {
             <p className='text-white fs-3 text-start'>
               Welcome to Fire Financial, a site to help you keep track of your money.
               Track both your debits and credits. See your monthly totals and compare them to your budget.
-              See where and what you are spending your money on. Click on <em>'Enter Demo'</em> to try the website without an account; or <em>Sign Up</em> to create an account.
+              See where and what you are spending your money on. Click on <button className='text-button' onClick={() => demoSignIn(handleSignIn)}>Enter Demo</button> to try the website without an account; or <button className='text-button' onClick={() => setShowSignUp(true)}>Sign Up</button> to create an account.
             </p>
           </div>
         </div>
